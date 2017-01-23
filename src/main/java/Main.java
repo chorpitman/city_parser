@@ -7,8 +7,6 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         String path = "/Users/olegchorpita/Documents/WORKSPACE/LUNA_PROJECTS/src/main/resources/UA.txt";
         File filePath = new File(path);
-//        String cityUkrNamePattern = "([А-яіг]+(?:[^,][А-яіг]+)?)";
-
         Scanner scanner = new Scanner(filePath);
 
         ArrayList<Model> models = new ArrayList<Model>();
@@ -16,7 +14,6 @@ public class Main {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] splitLine = line.split("\\t");
-
             Model model = new Model();
 
             for (int i = 0; i < splitLine.length; i++) {
@@ -44,10 +41,10 @@ public class Main {
             }
             models.add(model);
         }
-        printToCondole(models);
+        printToConsole(models);
     }
 
-    private static void printToCondole(ArrayList<Model> models) {
+    private static void printToConsole(ArrayList<Model> models) {
         for (Model model : models) {
             System.out.println(model);
         }
