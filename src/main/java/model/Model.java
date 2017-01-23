@@ -1,3 +1,5 @@
+package model;
+
 /**
  * Created by olegchorpita on 1/20/17.
  */
@@ -59,7 +61,7 @@ public class Model {
 
     @Override
     public String toString() {
-        return "Model{" +
+        return "model.Model{" +
                 "id=" + id +
                 ", cityIndex=" + cityIndex +
                 ", name='" + name + '\'' +

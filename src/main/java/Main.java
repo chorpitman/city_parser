@@ -1,15 +1,17 @@
+import model.Model;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
-        String path = "/Users/olegchorpita/Documents/WORKSPACE/LUNA_PROJECTS/src/main/resources/UA.txt";
-        File filePath = new File(path);
+        final String PATH = "/Users/olegchorpita/Documents/WORKSPACE/LUNA_PROJECTS/src/main/resources/UA.txt";
+        File filePath = new File(PATH);
         Scanner scanner = new Scanner(filePath);
-
-        ArrayList<Model> models = new ArrayList<Model>();
+        List<Model> models = new ArrayList<Model>();
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
@@ -27,8 +29,8 @@ public class Main {
 
                 if (i == 3) {
                     String stringLine = splitLine[i];
-                    String[] splittedStrings = stringLine.split(",");
-                    model.setName(splittedStrings[splittedStrings.length - 1]);
+                    String[] splintedStrings = stringLine.split(",");
+                    model.setName(splintedStrings[splintedStrings.length - 1]);
                 }
 
                 if (i == 4) {
@@ -45,7 +47,7 @@ public class Main {
         printToConsole(models);
     }
 
-    private static void printToConsole(ArrayList<Model> models) {
+    private static void printToConsole(List<Model> models) {
         for (Model model : models) {
             System.out.println(model);
         }
