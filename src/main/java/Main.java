@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
-        String path = "/Users/olegchorpita/Downloads/UA/UA.txt";
+        String path = "/Users/olegchorpita/Documents/WORKSPACE/LUNA_PROJECTS/src/main/resources/UA.txt";
         File filePath = new File(path);
         String cityUkrNamePattern = "([А-яіг]+(?:[^,][А-яіг]+)?)\\s";
         String cityEngNamePattern = "-|\\n";
