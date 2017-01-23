@@ -14,8 +14,8 @@ public class ScannerUtilsImpl implements ScannerUtils {
     private final static String TABULATION = "\\t";
     private final static String COMA = ",";
     private final static int CITY_INDEX = 0;
-    private final static int NAME = 2;
-    private final static int INTERNATIONAL_NAME = 3;
+    private final static int INTERNATIONAL_NAME = 2;
+    private final static int NAME = 3;
     private final static int LATITUDE = 4;
     private final static int LONGITUDE = 5;
 
