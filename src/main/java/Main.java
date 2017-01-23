@@ -2,31 +2,54 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         String path = "/Users/olegchorpita/Documents/WORKSPACE/LUNA_PROJECTS/src/main/resources/UA.txt";
         File filePath = new File(path);
-        String cityUkrNamePattern = "([А-яіг]+(?:[^,][А-яіг]+)?)";
-        String cityEngNamePattern = "[abc]";
-        String cityIndexPattern = "";
-        String latitudePattern = "";
-        String longitudePattern = "";
+//        String cityUkrNamePattern = "([А-яіг]+(?:[^,][А-яіг]+)?)";
 
         Scanner scanner = new Scanner(filePath);
+
+        ArrayList<Model> models = new ArrayList<Model>();
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] splitLine = line.split("\\t");
+
+            Model model = new Model();
+
             for (int i = 0; i < splitLine.length; i++) {
-                String s = splitLine[i];
-                if (s.matches(cityUkrNamePattern)) {
-                    System.out.println(s);
-                } else {
-                    System.out.println("her");
+                if (i == 0) {
+                    model.setCityIndex(Integer.parseInt(splitLine[i]));
+                }
+
+                if (i == 2) {
+                    model.setInternationalName(splitLine[i]);
+                }
+
+                if (i == 3) {
+                    String stringLine = splitLine[i];
+                    String[] splittedStrings = stringLine.split(",");
+                    model.setName(splittedStrings[splittedStrings.length - 1]);
+                }
+
+                if (i == 4) {
+                    model.setLatitude(Double.parseDouble(splitLine[i]));
+                }
+
+                if (i == 5) {
+                    model.setLongtitude(Double.parseDouble(splitLine[i]));
                 }
             }
+            models.add(model);
+        }
+        printToCondole(models);
+    }
+
+    private static void printToCondole(ArrayList<Model> models) {
+        for (Model model : models) {
+            System.out.println(model);
         }
     }
 }
