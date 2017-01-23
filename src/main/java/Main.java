@@ -39,6 +39,7 @@ public class Main {
                     model.setLongtitude(Double.parseDouble(splitLine[i]));
                 }
             }
+            scanner.close();
             models.add(model);
         }
         printToConsole(models);
