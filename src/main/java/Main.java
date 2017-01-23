@@ -8,18 +8,26 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         String path = "/Users/olegchorpita/Documents/WORKSPACE/LUNA_PROJECTS/src/main/resources/UA.txt";
         File filePath = new File(path);
-        String cityUkrNamePattern = "([А-яіг]+(?:[^,][А-яіг]+)?)\\s";
-        String cityEngNamePattern = "-|\\n";
+        String cityUkrNamePattern = "([А-яіг]+(?:[^,][А-яіг]+)?)";
+        String cityEngNamePattern = "[abc]";
         String cityIndexPattern = "";
         String latitudePattern = "";
         String longitudePattern = "";
 
         Scanner scanner = new Scanner(filePath);
 
-        ArrayList<Model> models = new ArrayList<Model>();
-
-        while (scanner.hasNext()) {
-            System.out.println(scanner.hasNext(Pattern.compile(cityEngNamePattern)));
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            String[] splitLine = line.split("\\t");
+            for (int i = 0; i < splitLine.length; i++) {
+                String s = splitLine[i];
+                if (s.matches(cityUkrNamePattern)) {
+                    System.out.println(s);
+                } else {
+                    System.out.println("her");
+                }
+            }
         }
     }
 }
+
