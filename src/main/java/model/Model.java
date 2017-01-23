@@ -1,15 +1,18 @@
 package model;
 
-/**
- * Created by olegchorpita on 1/20/17.
- */
 public class Model {
+    private static long NEXT_ID = 0;
+
     private Long id;
     private int cityIndex;
     private String name;
     private String internationalName;
     private Double latitude;
-    private Double longtitude;
+    private Double longitude;
+
+    public Model() {
+        this.id = ++Model.NEXT_ID;
+    }
 
     public Long getId() {
         return id;
@@ -51,12 +54,12 @@ public class Model {
         this.latitude = latitude;
     }
 
-    public Double getLongtitude() {
-        return longtitude;
+    public Double getLongitude() {
+        return longitude;
     }
 
-    public void setLongtitude(Double longtitude) {
-        this.longtitude = longtitude;
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     @Override
@@ -67,7 +70,7 @@ public class Model {
                 ", name='" + name + '\'' +
                 ", internationalName='" + internationalName + '\'' +
                 ", latitude=" + latitude +
-                ", longtitude=" + longtitude +
+                ", longitude=" + longitude +
                 '}';
     }
 }

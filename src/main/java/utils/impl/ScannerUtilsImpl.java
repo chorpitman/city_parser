@@ -50,7 +50,7 @@ public class ScannerUtilsImpl implements ScannerUtils {
                 }
 
                 if (i == 5) {
-                    model.setLongtitude(Double.parseDouble(splitLine[i]));
+                    model.setLongitude(Double.parseDouble(splitLine[i]));
                 }
             }
             models.add(model);
