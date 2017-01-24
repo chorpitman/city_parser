@@ -4,7 +4,7 @@ import model.Model;
 
 import java.util.List;
 
-public interface ScannerUtils {
+public interface ScannerFile {
     List<Model> scanPath(String filepath);
 
     void print(List<Model> modelList);

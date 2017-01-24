@@ -2,7 +2,7 @@ package utils.impl;
 
 import model.Model;
 import org.apache.commons.collections.CollectionUtils;
-import utils.ScannerUtils;
+import utils.ScannerFile;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class ScannerUtilsImpl implements ScannerUtils {
+public class ScannerFileImpl implements ScannerFile {
     private final static String TABULATION = "\\t";
     private final static String COMA = ",";
     private final static int CITY_INDEX = 0;
