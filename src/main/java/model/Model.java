@@ -9,6 +9,8 @@ public class Model {
     private String internationalName;
     private Double latitude;
     private Double longitude;
+    private String regionId;
+    private String region;
 
     public Model() {
         this.id = ++Model.NEXT_ID;
@@ -62,15 +64,24 @@ public class Model {
         this.longitude = longitude;
     }
 
+    public String getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
+    }
+
     @Override
     public String toString() {
-        return "model.Model{" +
+        return "Model{" +
                 "id=" + id +
                 ", cityIndex=" + cityIndex +
                 ", name='" + name + '\'' +
                 ", internationalName='" + internationalName + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
+                ", regionId='" + regionId + '\'' +
                 '}';
     }
 }

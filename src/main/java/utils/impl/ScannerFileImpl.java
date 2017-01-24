@@ -18,6 +18,7 @@ public class ScannerFileImpl implements ScannerFile {
     private final static int NAME = 3;
     private final static int LATITUDE = 4;
     private final static int LONGITUDE = 5;
+    private final static int REGION_ID = 10;
 
     public List<Model> scanPath(String filepath) {
         File file = new File(filepath);
@@ -33,31 +34,18 @@ public class ScannerFileImpl implements ScannerFile {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] splitLine = line.split(TABULATION);
+
             Model model = new Model();
 
-            for (int i = 0; i < splitLine.length; i++) {
-                if (i == CITY_INDEX) {
-                    model.setCityIndex(Integer.parseInt(splitLine[i]));
-                }
-                // TODO: 23.01.2017 think how to resolve fields name with  = ""
-                if (i == INTERNATIONAL_NAME) {
-                    model.setInternationalName(splitLine[i]);
-                }
+            model.setCityIndex(Integer.parseInt(splitLine[CITY_INDEX]));
+            model.setInternationalName((splitLine[INTERNATIONAL_NAME]));
 
-                if (i == NAME) {
-                    String stringLine = splitLine[i];
-                    String[] splintedStrings = stringLine.split(COMA);
-                    model.setName(splintedStrings[splintedStrings.length - 1]);
-                }
-
-                if (i == LATITUDE) {
-                    model.setLatitude(Double.parseDouble(splitLine[i]));
-                }
-
-                if (i == LONGITUDE) {
-                    model.setLongitude(Double.parseDouble(splitLine[i]));
-                }
-            }
+            String stringLine = splitLine[NAME];
+            String[] splintedStrings = stringLine.split(COMA);
+            model.setName(splintedStrings[splintedStrings.length - 1]);
+            model.setLatitude(Double.parseDouble(splitLine[LATITUDE]));
+            model.setLongitude(Double.parseDouble(splitLine[LONGITUDE]));
+            model.setRegionId(splitLine[REGION_ID]);
             models.add(model);
         }
         scanner.close();
