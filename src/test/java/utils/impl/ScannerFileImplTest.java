@@ -6,7 +6,8 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class ScannerFileImplTest {
     private final static String EMPTY_FILE_PATH = "src/main/resources/UA_empty.txt";
@@ -26,5 +27,13 @@ public class ScannerFileImplTest {
         //THEN
         assertNotNull(models);
         assertTrue(models.isEmpty());
+    }
+
+    @Test
+    public void should_except_china_chars() throws Exception {
+        //GIVEN
+        final String s = "xxx已下架xxx";
+        //WHEN
+        //THEN
     }
 }
