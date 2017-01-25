@@ -10,7 +10,8 @@ public class Model {
     private Double latitude;
     private Double longitude;
     private String regionId;
-    private String region;
+    private String regionName;
+    private String regionNameInternational;
 
     public Model() {
         this.id = ++Model.NEXT_ID;
@@ -72,12 +73,20 @@ public class Model {
         this.regionId = regionId;
     }
 
-    public String getRegion() {
-        return region;
+    public String getRegionName() {
+        return regionName;
     }
 
-    public void setRegion(String region) {
-        this.region = region;
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
+    }
+
+    public String getRegionNameInternational() {
+        return regionNameInternational;
+    }
+
+    public void setRegionNameInternational(String regionNameInternational) {
+        this.regionNameInternational = regionNameInternational;
     }
 
     @Override
@@ -90,7 +99,8 @@ public class Model {
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", regionId='" + regionId + '\'' +
-                ", region='" + region + '\'' +
+                ", regionName='" + regionName + '\'' +
+                ", regionNameInternational='" + regionNameInternational + '\'' +
                 '}';
     }
 }
