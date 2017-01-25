@@ -72,6 +72,14 @@ public class Model {
         this.regionId = regionId;
     }
 
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
     @Override
     public String toString() {
         return "Model{" +
@@ -82,6 +90,7 @@ public class Model {
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", regionId='" + regionId + '\'' +
+                ", region='" + region + '\'' +
                 '}';
     }
 }
