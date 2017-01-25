@@ -1,14 +1,4 @@
-import model.Model;
-import model.ModelTest;
-import utils.DownloadFile;
-import utils.ScannerFile;
-import utils.UnzipFIle;
-import utils.impl.DownloadFileImpl;
-import utils.impl.ScannerFileImpl;
-import utils.impl.UnzipFIleImpl;
-
 import java.io.IOException;
-import java.util.List;
 
 public class Main {
 
@@ -19,12 +9,37 @@ public class Main {
         final String DOWNLOAD_DIRECTORY = "src/main/resources/downloads";
         final String ZIP_FILE_PATH = "src/main/resources/downloads/UA.zip";
         final String UNZIP_FILEPATH = "src/main/resources/";
+        final String COMMA = ",";
 
-        String s = "xxx已下架xxx";
+        //languages
+        final String CHINESE = "xxx已下架xxx";
+        final String korean = "드니프로페트로우시크";
+        final String chinese = "第聂伯罗彼得罗夫斯克";
+        final String japanise = "ドニプロペトロウシク";
+        final String georgian = "დნეპროპეტროვსკი";
+        final String tai = "ดนีโปรเปตรอฟสค์";
+        final String hindi = "द्नेप्रोपेत्रोव्स्क";
+        final String ukr = "Дніпропетровська область";
 
-        System.out.println(containsHanScript(s));
+        System.out.println("CHINESE ETALON ->" + containsHanScript(CHINESE));
+        System.out.println("korean ->" + containsHanScript(korean));
+        System.out.println("chinese ->" + containsHanScript(chinese));
+        System.out.println("japanise ->" + containsHanScript(japanise));
+        System.out.println("georgian ->" + containsHanScript(georgian));
+        System.out.println("tai ->" + containsHanScript(tai));
+        System.out.println("hindi ->" + containsHanScript(hindi));
+        System.out.println("ukr ->" + containsHanScript(ukr));
 
+        System.out.println("=======================================");
 
+        System.out.println("CHINESE ETALON ->" + containsHanScriptStream(CHINESE, COMMA));
+        System.out.println("korean ->" + containsHanScriptStream(korean, COMMA));
+        System.out.println("chinese ->" + containsHanScriptStream(chinese, COMMA));
+        System.out.println("japanise ->" + containsHanScriptStream(japanise, COMMA));
+        System.out.println("georgian ->" + containsHanScriptStream(georgian, COMMA));
+        System.out.println("tai ->" + containsHanScriptStream(tai, COMMA));
+        System.out.println("hindi ->" + containsHanScriptStream(hindi, COMMA));
+        System.out.println("ukr ->" + containsHanScriptStream(ukr, COMMA));
 
         //DOWNLOAD FILE
 //        DownloadFile downloadFile = new DownloadFileImpl();
@@ -51,9 +66,8 @@ public class Main {
 //        System.out.println("List size = " + size);
 
 
-
-
     }
+
     public static boolean containsHanScript(String s) {
         for (int i = 0; i < s.length(); ) {
             int codepoint = s.codePointAt(i);
@@ -61,6 +75,16 @@ public class Main {
             if (Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.HAN) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    public static boolean containsHanScriptStream(String s, String split) {
+        String[] splittedLine = s.split(split);
+        String INFO = "";
+        for (int i = 0; i < splittedLine.length; i++) {
+            if (splittedLine[i].codePoints().anyMatch(
+                    c -> Character.UnicodeScript.of(c) == Character.UnicodeScript.HAN)) return true;
         }
         return false;
     }
