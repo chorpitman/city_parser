@@ -1,16 +1,22 @@
 package model;
 
 public class RegionInfo {
-    private int id;
+    private static long NEXT_ID = 0;
+
+    private long id;
     private String regionId;
     private String regionName;
     private String regionNameInternational;
 
-    public int getId() {
+    public RegionInfo() {
+        this.id = ++RegionInfo.NEXT_ID;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

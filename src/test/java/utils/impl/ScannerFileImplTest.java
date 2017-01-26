@@ -1,19 +1,18 @@
 package utils.impl;
 
 import model.Model;
+import model.RegionInfo;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ScannerFileImplTest {
-    private final static String EMPTY_FILE_PATH = "src/main/resources/UA_empty.txt";
-    final String FILE_PATH = "src/main/resources/UA.txt";
+    private final static String COMMA = ",";
 
-    ScannerFileImpl utils;
+    private ScannerFileImpl utils;
 
     @Before
     public void setUp() throws Exception {
@@ -22,6 +21,8 @@ public class ScannerFileImplTest {
 
     @Test
     public void should_return_empty_list() throws Exception {
+        //GIVEN
+        final String EMPTY_FILE_PATH = "src/main/resources/UA_empty.txt";
         //WHEN
         List<Model> models = utils.scanPath(EMPTY_FILE_PATH);
         //THEN
@@ -30,10 +31,60 @@ public class ScannerFileImplTest {
     }
 
     @Test
-    public void should_except_china_chars() throws Exception {
+    public void should_return_region_info() throws Exception {
         //GIVEN
-        final String s = "xxx已下架xxx";
+        String FILE_PATH_TEST = "src/main/resources/UA_test.txt";
+        //WHEN
+        List<RegionInfo> regionCodes = ScannerFileImpl.findRegionCodes(FILE_PATH_TEST);
+        //THEN
+        assertEquals("04", regionCodes.get(0).getRegionId());
+        assertEquals("Дніпропетровська область", regionCodes.get(0).getRegionName());
+        assertEquals("Dnipropetrovska Oblast'", regionCodes.get(0).getRegionNameInternational());
+
+    }
+
+    @Test
+    public void should_return_false_for_non_cyrillic_chars() throws Exception {
+        //GIVEN
+        final String CHINESE = "xxx已下架xxx";
+        final String korean = "드니프로페트로우시크";
+        final String chinese = "第聂伯罗彼得罗夫斯克";
+        final String japanise = "ドニプロペトロウシク";
+        final String georgian = "დნეპროპეტროვსკი";
+        final String tai = "ดนีโปรเปตรอฟสค์";
+        final String hindi = "द्नेप्रोपेत्रोव्स्क";
+        final String ukr = "Дніпропетровська область";
         //WHEN
         //THEN
+        assertEquals(false, containsHanScriptStream(CHINESE, COMMA));
+        assertEquals(false, containsHanScriptStream(korean, COMMA));
+        assertEquals(false, containsHanScriptStream(chinese, COMMA));
+        assertEquals(false, containsHanScriptStream(japanise, COMMA));
+        assertEquals(false, containsHanScriptStream(georgian, COMMA));
+        assertEquals(false, containsHanScriptStream(tai, COMMA));
+        assertEquals(false, containsHanScriptStream(hindi, COMMA));
+        assertEquals(true, containsHanScriptStream(ukr, COMMA));
+    }
+
+    private static boolean containsHanScriptStream(String s, String split) {
+        String[] splittedLine = s.split(split);
+        String INFO = "";
+        for (int i = 0; i < splittedLine.length; i++) {
+            if (splittedLine[i].codePoints().anyMatch(
+                    c -> Character.UnicodeScript.of(c) == Character.UnicodeScript.CYRILLIC)) return true;
+        }
+        return false;
+    }
+
+    // TODO: 1/26/17 remove redundant method
+    public static boolean containsHanScript(String s) {
+        for (int i = 0; i < s.length(); ) {
+            int codepoint = s.codePointAt(i);
+            i += Character.charCount(codepoint);
+            if (Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.CYRILLIC) {
+                return true;
+            }
+        }
+        return false;
     }
 }

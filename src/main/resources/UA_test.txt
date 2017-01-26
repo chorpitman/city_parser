@@ -21,3 +21,12 @@
 709949	Dneprovskiye Plavni	Dneprovskiye Plavni		47.45	34.25	T	PLN	UA		00				0		13	Europe/Zaporozhye	1994-03-08
 709950	Dniprovs’ke	Dniprovs'ke	Dneprovskiy,Dneprovskoye,Dniprovs'ke,Dniprovs’ke,Дніпровське	48.21076	35.6077	P	PPL	UA		04				0		156	Europe/Kiev	2015-11-08
 709951	Dneprovskiy	Dneprovskiy		47.48333	37.05	P	PPL	UA		26				0		157	Europe/Zaporozhye	1994-03-08
+706084	Petrivka	Petrivka	Imeni Petrovkogo,Khutor Imeni Petrovskogo,Petrivka,Petrovka,Петрівка	47.39895	29.80316	P	PPL	UA		17				0		176	Europe/Kiev	2014-10-01
+706085	Khutor Imeni Lyuksemburg	Khutor Imeni Lyuksemburg		47.21667	32.4	P	PPL	UA		16				0		67	Europe/Kiev	1994-03-08
+706086	Khutor Ideya	Khutor Ideya	Ideya	47.58056	29.65639	P	PPL	UA	UA	17				0		208	Europe/Kiev	2007-05-30
+706087	Khutor Griniv	Khutor Griniv	Grinev,Griniv,Khutor Griniv	50.7	33.6	P	PPL	UA	UA	21				0		140	Europe/Kiev	2012-01-18
+706088	Hrezlya	Hrezlya	Grezlja,Grezlya,Hrezlya,Khutor Grezlya,Грезля	51.33245	29.27251	P	PPL	UA		27				0		136	Europe/Kiev	2012-09-06
+706089	Khutor Greki	Khutor Greki	Greki,Khutor Greki	51.53065	28.4209	P	PPL	UA		27				0		157	Europe/Kiev	2012-01-18
+706090	Khutor Grabok	Khutor Grabok	Grabok,Khutor Grabok	50.76667	29.96667	P	PPL	UA	UA	13				0		156	Europe/Kiev	2012-01-18
+706091	Khutor Goshov	Khutor Goshov	Khutor Goshov,Nemtsy	51.15	28.65	P	PPL	UA	UA	27				0		169	Europe/Kiev	2012-01-18
+706092	Khutor Gor’koye Ozero	Khutor Gor'koye Ozero	Gor'koye Ozero,Gor’koye Ozero,Khutor Gor'koye Ozero,Khutor Gor’koye Ozero	51.3	32.73333	P	PPL	UA		02				0		134	Europe/Kiev	2012-01-18
