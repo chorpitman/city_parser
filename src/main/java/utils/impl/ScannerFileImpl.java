@@ -111,11 +111,9 @@ public class ScannerFileImpl implements ScannerFile {
             RegionInfo model = new RegionInfo();
             if (splitLine[FEATURE_CODE].equals(GEO_NAME_ADMINISTRATE_DIVISION_CODE)) {
                 model.setRegionId(splitLine[REGION_ID]);
-                String stringLine = splitLine[NAME];
-                String[] splintedStrings = stringLine.split(COMMA);
-                String languageCheckedName = languageCheck(splintedStrings);
-                model.setRegionCyrillicName(languageCheckedName);
                 model.setRegionInternationalName(splitLine[INTERNATIONAL_NAME]);
+                String[] splitedStrings = splitLine[NAME].split(COMMA);
+                model.setRegionCyrillicName(languageCheck(splitedStrings));
             }
             //check for non null model
             if (nonNull(model.getRegionCyrillicName())) {
