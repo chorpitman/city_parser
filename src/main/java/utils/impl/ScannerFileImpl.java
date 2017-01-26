@@ -54,21 +54,34 @@ public class ScannerFileImpl implements ScannerFile {
             Model model = new Model();
             model.setCityIndex(Integer.parseInt(splitLine[CITY_INDEX]));
             model.setInternationalName((splitLine[INTERNATIONAL_NAME]));
-            //create method which will check each element of array
             String stringLine = splitLine[NAME];
             String[] split = stringLine.split(COMMA);
-            String languageCheckedModelName = languageCheck(split);
-            model.setName(languageCheckedModelName);
-            model.setLatitude(Double.parseDouble(splitLine[LATITUDE]));
-            model.setLongitude(Double.parseDouble(splitLine[LONGITUDE]));
-            model.setRegionId(splitLine[REGION_ID]);
-            for (RegionInfo element : regionCodes) {
-                if (Objects.equals(model.getRegionId(), element.getRegionId())) {
-                    model.setRegionName(element.getRegionName());
-                    model.setRegionNameInternational(element.getRegionNameInternational());
+            if (splitLine.length == 0) {
+                model.setName(languageCheck(split));
+                model.setLatitude(Double.parseDouble(splitLine[LATITUDE]));
+                model.setLongitude(Double.parseDouble(splitLine[LONGITUDE]));
+                model.setRegionId(splitLine[REGION_ID]);
+                for (RegionInfo element : regionCodes) {
+                    if (Objects.equals(model.getRegionId(), element.getRegionId())) {
+                        model.setRegionName(element.getRegionName());
+                        model.setRegionNameInternational(element.getRegionNameInternational());
+                    }
                 }
+                models.add(model);
+            } else {
+                model.setLatitude(Double.parseDouble(splitLine[LATITUDE]));
+                model.setLongitude(Double.parseDouble(splitLine[LONGITUDE]));
+                model.setRegionId(splitLine[REGION_ID]);
+                for (RegionInfo element : regionCodes) {
+                    if (Objects.equals(model.getRegionId(), element.getRegionId())) {
+                        model.setRegionName(element.getRegionName());
+                        model.setRegionNameInternational(element.getRegionNameInternational());
+                        model.setName(element.getRegionName());
+                    }
+                }
+                models.add(model);
             }
-            models.add(model);
+
         }
         scanner.close();
         return models;
