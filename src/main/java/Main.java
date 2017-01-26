@@ -7,8 +7,8 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-//        final String SCANNER_PATH = "src/main/resources/UA.txt";
-        final String SCANNER_PATH = "src/main/resources/UA_test.txt";
+        final String SCANNER_PATH = "src/main/resources/UA.txt";
+//        final String SCANNER_PATH = "src/main/resources/UA_test.txt";
 //        final String SCANNER_PATH = "src/main/resources/UA_test_test.txt";
 //        final String SCANNER_PATH = "src/main/resources/UA_test_test_test.txt";
         final String DOWNLOAD_URL = "http://download.geonames.org/export/dump/UA.zip";
@@ -29,11 +29,11 @@ public class Main {
         ScannerFileImpl scannerfile = new ScannerFileImpl();
         List<Model> models = scannerfile.scanPath(SCANNER_PATH);
         scannerfile.print(models);
+        int size = models.size();
+        System.out.println("List size ===== " + size);
 
         //Sorting
 //        models.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
-        int size = models.size();
-        System.out.println("List size ===== " + size);
     }
 }
 
