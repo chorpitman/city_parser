@@ -42,9 +42,12 @@ public class ScannerFileImpl implements ScannerFile {
 
 
     public List<Model> scanPath(String filepath) {
-        nonNull(filepath);
+        if (!nonNull(filepath)) throw new IllegalArgumentException("Filepath can not be null");
         Scanner scanner = getScanner(filepath);
         List<RegionInfo> regionCodes = ScannerFileImpl.findRegionCodes(SCANNER_PATH);
+
+//        print(regionCodes);
+//        System.out.println("=========================");
 
         List<Model> models = new ArrayList<>();
         while (scanner.hasNextLine()) {
@@ -53,30 +56,26 @@ public class ScannerFileImpl implements ScannerFile {
 
             Model model = new Model();
             model.setCityIndex(Integer.parseInt(splitLine[CITY_INDEX]));
+            model.setLatitude(Double.parseDouble(splitLine[LATITUDE]));
+            model.setLongitude(Double.parseDouble(splitLine[LONGITUDE]));
+            model.setRegionId(splitLine[REGION_ID]);
             model.setInternationalName((splitLine[INTERNATIONAL_NAME]));
-            String stringLine = splitLine[NAME];
-            String[] split = stringLine.split(COMMA);
-            if (splitLine.length == 0) {
-                model.setName(languageCheck(split));
-                model.setLatitude(Double.parseDouble(splitLine[LATITUDE]));
-                model.setLongitude(Double.parseDouble(splitLine[LONGITUDE]));
-                model.setRegionId(splitLine[REGION_ID]);
+            String[] splitedName = splitLine[NAME].split(COMMA);
+            if (splitedName.length <= 1) {
                 for (RegionInfo element : regionCodes) {
                     if (Objects.equals(model.getRegionId(), element.getRegionId())) {
-                        model.setRegionName(element.getRegionName());
-                        model.setRegionNameInternational(element.getRegionNameInternational());
+                        model.setCityCyrillicName(element.getRegionCyrillicName());
+                        model.setCityInternationalName(element.getRegionInternationalName());
+                        model.setName(element.getRegionCyrillicName());
                     }
                 }
                 models.add(model);
             } else {
-                model.setLatitude(Double.parseDouble(splitLine[LATITUDE]));
-                model.setLongitude(Double.parseDouble(splitLine[LONGITUDE]));
-                model.setRegionId(splitLine[REGION_ID]);
+                model.setName(languageCheck(splitedName));
                 for (RegionInfo element : regionCodes) {
                     if (Objects.equals(model.getRegionId(), element.getRegionId())) {
-                        model.setRegionName(element.getRegionName());
-                        model.setRegionNameInternational(element.getRegionNameInternational());
-                        model.setName(element.getRegionName());
+                        model.setCityCyrillicName(element.getRegionCyrillicName());
+                        model.setCityInternationalName(element.getRegionInternationalName());
                     }
                 }
                 models.add(model);
@@ -115,11 +114,11 @@ public class ScannerFileImpl implements ScannerFile {
                 String stringLine = splitLine[NAME];
                 String[] splintedStrings = stringLine.split(COMMA);
                 String languageCheckedName = languageCheck(splintedStrings);
-                model.setRegionName(languageCheckedName);
-                model.setRegionNameInternational(splitLine[INTERNATIONAL_NAME]);
+                model.setRegionCyrillicName(languageCheckedName);
+                model.setRegionInternationalName(splitLine[INTERNATIONAL_NAME]);
             }
             //check for non null model
-            if (nonNull(model.getRegionName())) {
+            if (nonNull(model.getRegionCyrillicName())) {
                 models.add(model);
             }
         }
@@ -128,14 +127,16 @@ public class ScannerFileImpl implements ScannerFile {
     }
 
     public static String languageCheck(String[] splittedLine) {
-        nonNull(splittedLine);
-        String INFO = "";
+        if (!nonNull(splittedLine)) throw new IllegalArgumentException("String for language check can not be null");
+        String a = "";
         for (int i = splittedLine.length - 1; i >= 0; i--) {
             if (splittedLine[i].codePoints().anyMatch(
                     c -> Character.UnicodeScript.of(c) == Character.UnicodeScript.CYRILLIC))
-                return INFO = splittedLine[i];
+                a = splittedLine[i];
+            return a;
         }
-        return INFO;
+        // TODO: 26.01.2017 think
+        return a;
     }
 
     public void print(List<?> modelList) {

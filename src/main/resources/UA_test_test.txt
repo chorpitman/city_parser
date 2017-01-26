@@ -8,3 +8,4 @@
 9957877	Khreschatik Hotel	Khreschatik Hotel		50.45137	30.52524	S	HTL	UA		13				0		160	Europe/Kiev	2015-01-13
 9972176	Chernoe More Panteleymonovskaya	Chernoe More Panteleymonovskaya		46.46915	30.74812	S	HTL	UA		17				0		54	Europe/Kiev	2015-01-24
 10129273	Grand Pettine	Grand Pettine		47.474	32.24129	S	HTL	UA		16				0		86	Europe/Kiev	2015-03-09
+10871352	Aleksandrovskoye	Aleksandrovskoye	Aleksandrovskoye,Alexsandovskiy	48.05759	35.34345	P	PPL	UA		26				0		135	Europe/Zaporozhye	2015-11-10

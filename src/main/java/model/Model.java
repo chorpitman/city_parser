@@ -10,8 +10,8 @@ public class Model {
     private Double latitude;
     private Double longitude;
     private String regionId;
-    private String regionName;
-    private String regionNameInternational;
+    private String cityCyrillicName;
+    private String cityInternationalName;
 
     public Model() {
         this.id = ++Model.NEXT_ID;
@@ -73,20 +73,20 @@ public class Model {
         this.regionId = regionId;
     }
 
-    public String getRegionName() {
-        return regionName;
+    public String getCityCyrillicName() {
+        return cityCyrillicName;
     }
 
-    public void setRegionName(String regionName) {
-        this.regionName = regionName;
+    public void setCityCyrillicName(String cityCyrillicName) {
+        this.cityCyrillicName = cityCyrillicName;
     }
 
-    public String getRegionNameInternational() {
-        return regionNameInternational;
+    public String getCityInternationalName() {
+        return cityInternationalName;
     }
 
-    public void setRegionNameInternational(String regionNameInternational) {
-        this.regionNameInternational = regionNameInternational;
+    public void setCityInternationalName(String cityInternationalName) {
+        this.cityInternationalName = cityInternationalName;
     }
 
     @Override
@@ -99,8 +99,8 @@ public class Model {
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", regionId='" + regionId + '\'' +
-                ", regionName='" + regionName + '\'' +
-                ", regionNameInternational='" + regionNameInternational + '\'' +
+                ", cityCyrillicName='" + cityCyrillicName + '\'' +
+                ", cityInternationalName='" + cityInternationalName + '\'' +
                 '}';
     }
 }

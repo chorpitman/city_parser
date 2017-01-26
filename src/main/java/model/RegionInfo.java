@@ -5,8 +5,8 @@ public class RegionInfo {
 
     private long id;
     private String regionId;
-    private String regionName;
-    private String regionNameInternational;
+    private String regionCyrillicName;
+    private String regionInternationalName;
 
     public RegionInfo() {
         this.id = ++RegionInfo.NEXT_ID;
@@ -28,20 +28,20 @@ public class RegionInfo {
         this.regionId = regionId;
     }
 
-    public String getRegionName() {
-        return regionName;
+    public String getRegionCyrillicName() {
+        return regionCyrillicName;
     }
 
-    public void setRegionName(String regionName) {
-        this.regionName = regionName;
+    public void setRegionCyrillicName(String regionCyrillicName) {
+        this.regionCyrillicName = regionCyrillicName;
     }
 
-    public String getRegionNameInternational() {
-        return regionNameInternational;
+    public String getRegionInternationalName() {
+        return regionInternationalName;
     }
 
-    public void setRegionNameInternational(String regionNameInternational) {
-        this.regionNameInternational = regionNameInternational;
+    public void setRegionInternationalName(String regionInternationalName) {
+        this.regionInternationalName = regionInternationalName;
     }
 
     @Override
@@ -49,8 +49,8 @@ public class RegionInfo {
         return "RegionInfo{" +
                 "id=" + id +
                 ", regionId='" + regionId + '\'' +
-                ", regionName='" + regionName + '\'' +
-                ", regionNameInternational='" + regionNameInternational + '\'' +
+                ", regionCyrillicName='" + regionCyrillicName + '\'' +
+                ", regionInternationalName='" + regionInternationalName + '\'' +
                 '}';
     }
 }

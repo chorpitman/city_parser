@@ -1,24 +1,16 @@
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import model.Model;
-import model.RegionInfo;
-import utils.DownloadFile;
-import utils.ScannerFile;
-import utils.UnzipFIle;
-import utils.impl.DownloadFileImpl;
 import utils.impl.ScannerFileImpl;
-import utils.impl.UnzipFIleImpl;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        final String SCANNER_PATH = "src/main/resources/UA.txt";
-//        final String SCANNER_PATH = "src/main/resources/UA_test.txt";
+//        final String SCANNER_PATH = "src/main/resources/UA.txt";
+        final String SCANNER_PATH = "src/main/resources/UA_test.txt";
 //        final String SCANNER_PATH = "src/main/resources/UA_test_test.txt";
+//        final String SCANNER_PATH = "src/main/resources/UA_test_test_test.txt";
         final String DOWNLOAD_URL = "http://download.geonames.org/export/dump/UA.zip";
         final String DOWNLOAD_DIRECTORY = "src/main/resources/downloads";
         final String ZIP_FILE_DIRECTORY = "src/main/resources/downloads/UA.zip";

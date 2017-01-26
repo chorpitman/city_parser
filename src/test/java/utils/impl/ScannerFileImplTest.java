@@ -38,8 +38,8 @@ public class ScannerFileImplTest {
         List<RegionInfo> regionCodes = ScannerFileImpl.findRegionCodes(FILE_PATH_TEST);
         //THEN
         assertEquals("04", regionCodes.get(0).getRegionId());
-        assertEquals("Дніпропетровська область", regionCodes.get(0).getRegionName());
-        assertEquals("Dnipropetrovska Oblast'", regionCodes.get(0).getRegionNameInternational());
+        assertEquals("Дніпропетровська область", regionCodes.get(0).getRegionCyrillicName());
+        assertEquals("Dnipropetrovska Oblast'", regionCodes.get(0).getRegionInternationalName());
 
     }
 
@@ -54,6 +54,7 @@ public class ScannerFileImplTest {
         final String tai = "ดนีโปรเปตรอฟสค์";
         final String hindi = "द्नेप्रोपेत्रोव्स्क";
         final String ukr = "Дніпропетровська область";
+        final String ukr1 = "DNK,Dnepr,Dnepropetrovsk,Dnepropetrovska,Dnepropetrowsk,Dnetropetrovsk,Dniepropetrovsk,Dniepropetrovskas,Dniepropetrowsk,Dnipro,Dnipropetrovs'k,Dnipropetrovsk,Dnipropetrovsko,Dnipropetrovs’k,Dnipropetrowsk,Dnjepropetrovsk,Dnjepropetrowsk,Dnjipropetrovsk,Dnyipropetrovszk,Dněpropetrovsk,Dņepropetrovska,Ekaterinoslav,Ekaṭerinoslav,Gorad Dneprapjatrousk,Iekaterinoslav,Katerynoslav,Ntnipropetrofsk,Yekaterinoslav,Yekaterinovslav,d ni por pet rxfskh,deunipeulopeteulousikeu,di nie bo luo bi de luo fu si ke,dnepropetrovska,dnybrwbtrwfsk,dnyprwptrwbsq,dnyprwptrwfsk,dnyprwptrwwsk,donipuropetoroushiku,Ντνιπροπετρόφσκ,Горад Днепрапятроўск,Днепр,Днепропетровск,Дніпро,Дніпропетровськ,Днїпропетровск,Дњепропетровск,Екатеринослав,Դնեպրոպետրովսկ,דניפרופטרובסק,دنيبروبتروفسك,دنیپروپتروفسک,دنیپروپترووسک,द्नेप्रोपेत्रोव्स्क,ดนีโปรเปตรอฟสค์,დნეპროპეტროვსკი,ドニプロペトロウシク,第聂伯罗彼得罗夫斯克,드니프로페트로우시크";
         //WHEN
         //THEN
         assertEquals(false, containsHanScriptStream(CHINESE, COMMA));
@@ -64,6 +65,7 @@ public class ScannerFileImplTest {
         assertEquals(false, containsHanScriptStream(tai, COMMA));
         assertEquals(false, containsHanScriptStream(hindi, COMMA));
         assertEquals(true, containsHanScriptStream(ukr, COMMA));
+        assertEquals(true, containsHanScriptStream(ukr1, COMMA));
     }
 
     private static boolean containsHanScriptStream(String s, String split) {
