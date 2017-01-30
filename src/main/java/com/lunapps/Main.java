@@ -2,12 +2,8 @@ package com.lunapps;
 
 import com.lunapps.configuration.AppConfig;
 import com.lunapps.model.Model;
-import com.lunapps.repository.ModelRepoository;
-import com.lunapps.sevice.DownloadFile;
-import com.lunapps.sevice.UnzipFIle;
-import com.lunapps.sevice.impl.DownloadFileImpl;
+import com.lunapps.repository.ModelRepository;
 import com.lunapps.sevice.impl.ScannerFileImpl;
-import com.lunapps.sevice.impl.UnzipFIleImpl;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.IOException;
@@ -27,23 +23,23 @@ public class Main {
 
 
         //DOWNLOAD FILE
-        DownloadFile downloadFile = new DownloadFileImpl();
-        downloadFile.downloadFile(DOWNLOAD_URL, DOWNLOAD_DIRECTORY);
+//        DownloadFile downloadFile = new DownloadFileImpl();
+//        downloadFile.downloadFile(DOWNLOAD_URL, DOWNLOAD_DIRECTORY);
 
         //UNZIP FILE
-        UnzipFIle unzipFIle = new UnzipFIleImpl();
-        unzipFIle.unzip(ZIP_FILE_DIRECTORY, UNZIP_DIRECTORY);
+//        UnzipFIle unzipFIle = new UnzipFIleImpl();
+//        unzipFIle.unzip(ZIP_FILE_DIRECTORY, UNZIP_DIRECTORY);
 
-        //PARSE FILE 1
-        ScannerFileImpl scannerfile = new ScannerFileImpl();
-        List<Model> models = scannerfile.scanPath(SCANNER_PATH);
-        scannerfile.print(models);
-        int size = models.size();
-        System.out.println("List size ===== " + size);
+        //PARSE FILE
+//        ScannerFileImpl scannerfile = new ScannerFileImpl();
+//        List<Model> models = scannerfile.scanPath(SCANNER_PATH);
+//        scannerfile.print(models);
+//        int size = models.size();
+//        System.out.println("List size ===== " + size);
 
         //SPRING START
-//        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-//        ModelRepoository cityDao = (ModelRepoository) context.getBean("cityDao");
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        ModelRepository cityDao = (ModelRepository) context.getBean("modelRepository");
 //        cityDao.save(models);
     }
 }
