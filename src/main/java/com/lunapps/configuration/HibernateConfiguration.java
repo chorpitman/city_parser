@@ -22,9 +22,9 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
+@EnableJpaRepositories("com.lunapps.repository")
 @EnableTransactionManagement
-@EnableJpaRepositories()
-@ComponentScan({"com.lunapps.configuration"})
+@ComponentScan({"com.lunapps"})
 @PropertySource(value = {"classpath:application.properties"})
 public class HibernateConfiguration {
 
