@@ -1,5 +1,11 @@
-import model.Model;
-import utils.impl.ScannerFileImpl;
+package com.lunapps;
+
+import com.lunapps.model.Model;
+import com.lunapps.sevice.DownloadFile;
+import com.lunapps.sevice.UnzipFIle;
+import com.lunapps.sevice.impl.DownloadFileImpl;
+import com.lunapps.sevice.impl.ScannerFileImpl;
+import com.lunapps.sevice.impl.UnzipFIleImpl;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,14 +22,13 @@ public class Main {
         final String ZIP_FILE_DIRECTORY = "src/main/resources/downloads/UA.zip";
         final String UNZIP_DIRECTORY = "src/main/resources/";
 
-
         //DOWNLOAD FILE
-//        DownloadFile downloadFile = new DownloadFileImpl();
-//        downloadFile.downloadFile(DOWNLOAD_URL, DOWNLOAD_DIRECTORY);
+        DownloadFile downloadFile = new DownloadFileImpl();
+        downloadFile.downloadFile(DOWNLOAD_URL, DOWNLOAD_DIRECTORY);
 
         //UNZIP FILE
-//        UnzipFIle unzipFIle = new UnzipFIleImpl();
-//        unzipFIle.unzip(ZIP_FILE_DIRECTORY, UNZIP_DIRECTORY);
+        UnzipFIle unzipFIle = new UnzipFIleImpl();
+        unzipFIle.unzip(ZIP_FILE_DIRECTORY, UNZIP_DIRECTORY);
 
         //PARSE FILE 1
         ScannerFileImpl scannerfile = new ScannerFileImpl();
@@ -31,9 +36,6 @@ public class Main {
         scannerfile.print(models);
         int size = models.size();
         System.out.println("List size ===== " + size);
-
-        //Sorting
-//        models.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
     }
 }
 
