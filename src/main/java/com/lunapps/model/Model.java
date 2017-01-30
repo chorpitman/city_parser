@@ -6,6 +6,7 @@ import javax.persistence.*;
 @Table(name = "geo_names")
 public class Model {
     private static long NEXT_ID = 0;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
