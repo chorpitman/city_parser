@@ -1,16 +1,29 @@
-package model;
+package com.lunapps.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "geo_names")
 public class Model {
     private static long NEXT_ID = 0;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column
     private int cityIndex;
+    @Column
     private String name;
+    @Column
     private String internationalName;
+    @Column
     private Double latitude;
+    @Column
     private Double longitude;
+    @Column
     private String regionId;
+    @Column
     private String cityCyrillicName;
+    @Column
     private String cityInternationalName;
 
     public Model() {
@@ -88,7 +101,6 @@ public class Model {
     public void setCityInternationalName(String cityInternationalName) {
         this.cityInternationalName = cityInternationalName;
     }
-
     @Override
     public String toString() {
         return "Model{" +
