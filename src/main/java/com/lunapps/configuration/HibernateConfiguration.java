@@ -22,6 +22,8 @@ import java.util.Properties;
 @ComponentScan({"com.lunapps.configuration"})
 @PropertySource(value = {"classpath:application.properties"})
 public class HibernateConfiguration {
+
+    @Autowired
     private Environment environment;
 
     @Bean
