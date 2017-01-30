@@ -1,6 +1,6 @@
-package utils.impl;
+package com.lunapps.sevice.impl;
 
-import utils.DownloadFile;
+import com.lunapps.sevice.DownloadFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
