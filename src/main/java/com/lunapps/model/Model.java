@@ -3,7 +3,7 @@ package com.lunapps.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "geo_names")
+@Table(name = "city_names")
 public class Model {
     private static long NEXT_ID = 0;
 
@@ -11,28 +11,28 @@ public class Model {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
+    @Column(name = "city_index")
     private int cityIndex;
 
-    @Column
+    @Column(name = "city_name")
     private String name;
 
-    @Column
+    @Column(name = "inter_name")
     private String internationalName;
 
-    @Column
+    @Column(name = "latitude")
     private Double latitude;
 
-    @Column
+    @Column(name = "longitude")
     private Double longitude;
 
-    @Column
+    @Column(name = "reg_id")
     private String regionId;
 
-    @Column
+    @Column(name = "city_ukr_name")
     private String cityCyrillicName;
 
-    @Column
+    @Column(name = "city_inter_name")
     private String cityInternationalName;
 
     public Model() {
@@ -110,6 +110,7 @@ public class Model {
     public void setCityInternationalName(String cityInternationalName) {
         this.cityInternationalName = cityInternationalName;
     }
+
     @Override
     public String toString() {
         return "Model{" +
