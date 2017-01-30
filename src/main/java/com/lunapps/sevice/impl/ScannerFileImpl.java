@@ -19,8 +19,6 @@ import static java.util.Objects.nonNull;
 @Service
 @Transactional
 public class ScannerFileImpl implements ScannerFile {
-    private final static String SCANNER_PATH = "src/main/resources/UA.txt";
-
     private final static String TABULATION = "\\t";
     private final static String COMMA = ",";
 
@@ -51,7 +49,7 @@ public class ScannerFileImpl implements ScannerFile {
     public List<Model> scanPath(String filepath) {
         if (!nonNull(filepath)) throw new IllegalArgumentException("Filepath can not be null");
         Scanner scanner = getScanner(filepath);
-        List<RegionInfo> regionCodes = ScannerFileImpl.findRegionCodes(SCANNER_PATH);
+        List<RegionInfo> regionCodes = new ScannerFileImpl().findRegionCodes(filepath);
 
         print(regionCodes);
         System.out.println("=========================");
@@ -96,23 +94,10 @@ public class ScannerFileImpl implements ScannerFile {
         return models;
     }
 
-    private static Scanner getScanner(String filepath) {
-        File file = new File(filepath);
-        Scanner scanner = null;
-        try {
-            scanner = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("Filepath or file does not exist");
-        }
-        return scanner;
-    }
-
-
-    public static List<RegionInfo> findRegionCodes(String filePath) {
+    public List<RegionInfo> findRegionCodes(String filePath) {
         if (!nonNull(filePath)) throw new IllegalArgumentException("Filepath can not be null");
-        Scanner scanner = getScanner(filePath);
 
+        Scanner scanner = getScanner(filePath);
         List<RegionInfo> models = new ArrayList<>();
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
@@ -143,6 +128,19 @@ public class ScannerFileImpl implements ScannerFile {
                 return checkedName = splittedLine[i];
         }
         return checkedName = "non cyrillic";
+    }
+
+    private static Scanner getScanner(String filepath) {
+        if (!nonNull(filepath)) throw new IllegalArgumentException("Filepath can not be null");
+        File file = new File(filepath);
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("Filepath or file does not exist");
+        }
+        return scanner;
     }
 
     public void print(List<?> modelList) {

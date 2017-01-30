@@ -36,7 +36,7 @@ public class ScannerFileImplTest {
         //GIVEN
         String FILE_PATH_TEST = "src/main/resources/UA_test.txt";
         //WHEN
-        List<RegionInfo> regionCodes = ScannerFileImpl.findRegionCodes(FILE_PATH_TEST);
+        List<RegionInfo> regionCodes = utils.findRegionCodes(FILE_PATH_TEST);
         //THEN
         assertEquals("04", regionCodes.get(0).getRegionId());
         assertEquals("Дніпропетровська область", regionCodes.get(0).getRegionCyrillicName());
