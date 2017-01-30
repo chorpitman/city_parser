@@ -31,16 +31,16 @@ public class Main {
 //        unzipFIle.unzip(ZIP_FILE_DIRECTORY, UNZIP_DIRECTORY);
 
         //PARSE FILE
-//        ScannerFileImpl scannerfile = new ScannerFileImpl();
-//        List<Model> models = scannerfile.scanPath(SCANNER_PATH);
-//        scannerfile.print(models);
-//        int size = models.size();
-//        System.out.println("List size ===== " + size);
+        ScannerFileImpl scannerfile = new ScannerFileImpl();
+        List<Model> models = scannerfile.scanPath(SCANNER_PATH);
+        scannerfile.print(models);
+        int size = models.size();
+        System.out.println("List size ===== " + size);
 
         //SPRING START
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         ModelRepository cityDao = (ModelRepository) context.getBean("modelRepository");
-//        cityDao.save(models);
+        cityDao.save(models);
     }
 }
 
