@@ -7,3 +7,6 @@
 *.iml
 out
 gen
+target/generated-sources/
+target/generated-test-sources/
+target/surefire-reports/utils.impl.ScannerFileImplTest.txt
