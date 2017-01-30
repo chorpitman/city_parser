@@ -9,20 +9,28 @@ public class Model {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @Column
     private int cityIndex;
+
     @Column
     private String name;
+
     @Column
     private String internationalName;
+
     @Column
     private Double latitude;
+
     @Column
     private Double longitude;
+
     @Column
     private String regionId;
+
     @Column
     private String cityCyrillicName;
+
     @Column
     private String cityInternationalName;
 
