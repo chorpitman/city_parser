@@ -28,6 +28,7 @@ public class ScannerFileImpl implements ScannerFile {
     private final static int LATITUDE = 4;
     private final static int LONGITUDE = 5;
     private final static int REGION_ID = 10;
+    private final static String UNNECESSARY_REGION_ID = "00";
     /**
      * @param feature code - element in array which can help find
      * administrative division
@@ -58,7 +59,9 @@ public class ScannerFileImpl implements ScannerFile {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] splitLine = line.split(TABULATION);
-
+            if (Objects.equals(splitLine[REGION_ID], UNNECESSARY_REGION_ID)){
+                continue;
+            }
             if (!(Objects.equals(splitLine[FEATURE_CODE], GEO_NAME_ADMINISTRATE_DIVISION_CODE) || Objects.equals(splitLine[FEATURE_CODE], GEO_NAME_POPULATED_PLACE))) {
                 continue;
             } else {
@@ -104,7 +107,7 @@ public class ScannerFileImpl implements ScannerFile {
             String[] splitLine = line.split(TABULATION);
 
             RegionInfo model = new RegionInfo();
-            if (splitLine[FEATURE_CODE].equals(GEO_NAME_ADMINISTRATE_DIVISION_CODE)) {
+            if (splitLine[FEATURE_CODE].equals(GEO_NAME_ADMINISTRATE_DIVISION_CODE) & !splitLine[REGION_ID].equals(UNNECESSARY_REGION_ID)) {
                 model.setRegionId(splitLine[REGION_ID]);
                 model.setRegionInternationalName(splitLine[INTERNATIONAL_NAME]);
                 model.setCityIndex(Integer.parseInt(splitLine[CITY_INDEX]));
