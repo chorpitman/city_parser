@@ -23,7 +23,7 @@ public class ScannerFileImplTest {
     @Test
     public void should_return_empty_list() throws Exception {
         //GIVEN
-        final String EMPTY_FILE_PATH = "src/main/resources/UA_empty.txt";
+        final String EMPTY_FILE_PATH = "src/main/resources/dbtxt/UA_empty.txt";
         //WHEN
         List<Model> models = utils.scanPath(EMPTY_FILE_PATH);
         //THEN
@@ -34,14 +34,13 @@ public class ScannerFileImplTest {
     @Test
     public void should_return_region_info() throws Exception {
         //GIVEN
-        String FILE_PATH_TEST = "src/main/resources/UA_test.txt";
+        String FILE_PATH_TEST = "src/main/resources/dbtxt/UA_test.txt";
         //WHEN
         List<RegionInfo> regionCodes = utils.findRegionCodes(FILE_PATH_TEST);
         //THEN
         assertEquals("04", regionCodes.get(0).getRegionId());
         assertEquals("Дніпропетровська область", regionCodes.get(0).getRegionCyrillicName());
         assertEquals("Dnipropetrovska Oblast'", regionCodes.get(0).getRegionInternationalName());
-//
     }
 
     @Test
@@ -59,6 +58,7 @@ public class ScannerFileImplTest {
         final String ukr2 = "Vodokhranilishche,Dniprodzerzhyns'ke Vodoskhovyshche,Dniprodzerzhyns’ke Vodoskhovyshche";
         final String ukr3 = "Dnepr-Donbass,Kanal Dnipro-Donbas";
         //WHEN
+
         //THEN
         assertEquals(false, containsHanScriptStream(CHINESE, COMMA));
         assertEquals(false, containsHanScriptStream(korean, COMMA));
@@ -72,6 +72,18 @@ public class ScannerFileImplTest {
         assertEquals(true, containsHanScriptStream(ukr1, COMMA));
         assertEquals(false, containsHanScriptStream(ukr2, COMMA));
         assertEquals(false, containsHanScriptStream(ukr3, COMMA));
+    }
+
+    @Test
+    public void should_return_entity_only_without_special_region_id_00() throws Exception {
+        //GIVEN
+        String FILE_PATH_TEST = "src/main/resources/dbtxt/UA_region==00.txt";
+        //WHEN
+        List<RegionInfo> regionCodes = utils.findRegionCodes(FILE_PATH_TEST);
+        //THEN
+        assertEquals(regionCodes.size(), 1);
+        assertNotEquals("00", regionCodes.get(0).getRegionId());
+        assertEquals(617607, regionCodes.get(0).getCityIndex());
     }
 
     private static boolean containsHanScriptStream(String s, String split) {
