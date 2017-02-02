@@ -12,8 +12,8 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-//        final String SCANNER_PATH = "src/main/resources/UA.txt";
-        final String SCANNER_PATH = "src/main/resources/dbtxt/UA_region==00.txt";
+        final String SCANNER_PATH = "src/main/resources/UA.txt";
+//        final String SCANNER_PATH = "src/main/resources/dbtxt/UA_region==00.txt";
 //        final String SCANNER_PATH = "src/main/resources/dbtxt/UA_test.txt";
 //        final String SCANNER_PATH = "src/main/resources/dbtxt/UA_test_test.txt";
 //        final String SCANNER_PATH = "src/main/resources/dbtxt/UA_test_test_test.txt";
@@ -37,10 +37,21 @@ public class Main {
         int size = models.size();
         System.out.println("List size ===== " + size);
 
+        //transliteration
+        Utils.countNonCyrillic(models);
+        System.out.println("========non cyrillic========== ");
+
+        Utils.transliterate(models);
+        Utils.countNonCyrillic(models);
+        System.out.println("========non cyrillic========== ");
+
+        System.out.println(models.size());
+
         //SPRING START
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         ModelRepository cityDao = context.getBean("modelRepository", ModelRepository.class);
         cityDao.save(models);
+
     }
 }
 
