@@ -54,7 +54,6 @@
             <version>1.10.7.RELEASE</version>
         </dependency>
 
-
         <!--Hibernate-->
         <dependency>
             <groupId>org.hibernate</groupId>
