@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("employeeService")
+@Service("scanFileService")
 public interface ScannerFile {
     List<Model> scanPath(String filepath);
 
