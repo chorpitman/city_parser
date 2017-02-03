@@ -34,9 +34,9 @@ public class ScannerFileImplTest {
     @Test
     public void should_return_region_info() throws Exception {
         //GIVEN
-        String FILE_PATH_TEST = "src/main/resources/dbtxt/UA_test.txt";
+        String FILE_PATH_TEST = "src/main/resources/dbtxt/UA_test=one_area.txt";
         //WHEN
-        List<RegionInfo> regionCodes = utils.findRegionCodes(FILE_PATH_TEST);
+        List<RegionInfo> regionCodes = utils.findRegions(FILE_PATH_TEST);
         //THEN
         assertEquals("04", regionCodes.get(0).getRegionId());
         assertEquals("Дніпропетровська область", regionCodes.get(0).getRegionCyrillicName());
@@ -79,7 +79,7 @@ public class ScannerFileImplTest {
         //GIVEN
         String FILE_PATH_TEST = "src/main/resources/dbtxt/UA_region==00.txt";
         //WHEN
-        List<RegionInfo> regionCodes = utils.findRegionCodes(FILE_PATH_TEST);
+        List<RegionInfo> regionCodes = utils.findRegions(FILE_PATH_TEST);
         //THEN
         assertEquals(regionCodes.size(), 1);
         assertNotEquals("00", regionCodes.get(0).getRegionId());
@@ -92,18 +92,6 @@ public class ScannerFileImplTest {
         for (int i = 0; i < splittedLine.length; i++) {
             if (splittedLine[i].codePoints().anyMatch(
                     c -> Character.UnicodeScript.of(c) == Character.UnicodeScript.CYRILLIC)) return true;
-        }
-        return false;
-    }
-
-    // TODO: 1/26/17 remove redundant method
-    public static boolean containsHanScript(String s) {
-        for (int i = 0; i < s.length(); ) {
-            int codepoint = s.codePointAt(i);
-            i += Character.charCount(codepoint);
-            if (Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.CYRILLIC) {
-                return true;
-            }
         }
         return false;
     }

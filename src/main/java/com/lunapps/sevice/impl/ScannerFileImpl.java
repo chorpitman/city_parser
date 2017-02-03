@@ -50,7 +50,7 @@ public class ScannerFileImpl implements ScannerFile {
     public List<Model> scanPath(String filepath) {
         if (!nonNull(filepath)) throw new IllegalArgumentException("Filepath can not be null");
         Scanner scanner = getScanner(filepath);
-        List<RegionInfo> regionCodes = new ScannerFileImpl().findRegionCodes(filepath);
+        List<RegionInfo> regionCodes = new ScannerFileImpl().findRegions(filepath);
 
         print(regionCodes);
         System.out.println("=========================");
@@ -97,7 +97,7 @@ public class ScannerFileImpl implements ScannerFile {
         return models;
     }
 
-    public List<RegionInfo> findRegionCodes(String filePath) {
+    public List<RegionInfo> findRegions(String filePath) {
         if (!nonNull(filePath)) throw new IllegalArgumentException("Filepath can not be null");
 
         Scanner scanner = getScanner(filePath);
