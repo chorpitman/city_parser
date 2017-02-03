@@ -5,10 +5,8 @@ import com.lunapps.sevice.Transliterator;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
+import java.util.Objects;
 
-/**
- * Created by olegchorpita on 2/2/17.
- */
 public class Utils {
 
     public static void countNonCyrillic(List<Model> models) {
@@ -30,7 +28,7 @@ public class Utils {
         CollectionUtils.isEmpty(models);
         for (Model entity : models) {
             String name = entity.getName();
-            if (name == EMPTY_STR) {
+            if (Objects.equals(name, EMPTY_STR)) {
                 System.out.println(entity.getInternationalName());
                 String s = Transliterator.lat2cyr(entity.getInternationalName());
                 System.out.println(s);
