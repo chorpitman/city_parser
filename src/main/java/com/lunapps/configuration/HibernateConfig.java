@@ -26,7 +26,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @ComponentScan({"com.lunapps"})
 @PropertySource(value = {"classpath:application.properties"})
-public class HibernateConfiguration {
+public class HibernateConfig {
 
     @Autowired
     private Environment environment;
