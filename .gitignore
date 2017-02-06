@@ -7,3 +7,24 @@
 *.iml
 out
 gen
+target/generated-sources/
+target/generated-test-sources/
+target/surefire-reports/utils.impl.ScannerFileImplTest.txt
+src/main/resources/downloads/
+src/main/resources/readme.txt
+### Java template
+*.class
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*

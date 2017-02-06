@@ -1,0 +1,13 @@
+711294	Budishcha	Budishcha	Budishcha,Budishche,Budishchi	52.48333	33.98333	P	PPL	UA	UA	00				0		165	Europe/Moscow	2012-01-18
+617607	Peruga Mike	Peruga Mike		46.4025	29.27	P	ADM1	UA		01				0		52	Europe/Kiev	2007-05-30
+704593	Koza	Koza		50.33976	28.96614	P	PPL	UA		00				0		194	Europe/Kiev	2014-02-03
+625390	Marochkyne	Marochkyne	Marochkine,Marochkino,Marochkov,Marochkyne,Марочкине	52.09547	31.32976	P	PPL	UA	UA	00				0		160	Europe/Kiev	2014-03-06
+686731	Tudorovo	Tudorovo	Tudorova,Tudorovo	46.43333	30.05	P	PPL	UA	UA	00				0		29	Europe/Kiev	2012-01-18
+686757	Koleshchatovka	Koleshchatovka	Koleshchatovka,Koleshchatoye	49.58219	39.88621	P	PPL	UA		00				0		166	Europe/Zaporozhye	2012-01-18
+706199	Khrystynivka	Khrystynivka	Khristinivka,Khristinovka,Khrystynivka,Христинівка	51.24296	29.20274	P	PPL	UA		00				0		129	Europe/Kiev	2012-09-06
+693445	Smerekovka	Smerekovka	Mereshuvka,Smerekovka	47.65	24.81667	P	PPL	UA	UA	00				0		1465	Europe/Bucharest	2012-01-18
+689279	Volchkov Perevoz	Volchkov Perevoz	Volchkov Perevoz,Wilczy Przewoz,Wilczy Przewóz	51.18333	23.78333	P	PPL	UA	UA	00				0		165	Europe/Kiev	2012-01-18
+695046	Rybal'skoye	Rybal'skoye	Kandel'	46.64861	29.95778	P	PPL	UA	UA	00				0		11	Europe/Kiev	2007-05-30
+687785	Zalucha	Zalucha		48.31667	26.7	P	PPL	UA		00				0		231	Europe/Kiev	1994-03-08
+706957	Kaminskoye	Kaminskoye		46.55	36.98333	P	PPL	UA		00				0		0	Europe/Zaporozhye	1994-03-08
+688096	Yezerske	Yezerske	Yezerske,Yezerskoye	49.75	35.95	P	PPL	UA		00				0		173	Europe/Kiev	2016-05-07
