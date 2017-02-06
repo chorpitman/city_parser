@@ -22,12 +22,12 @@ public class Main {
         final String UNZIP_DIRECTORY = "src/main/resources/";
 
         //DOWNLOAD FILE
-        DownloadFile downloadFile = new DownloadFileImpl();
-        downloadFile.downloadFile(DOWNLOAD_URL, DOWNLOAD_DIRECTORY);
+//        DownloadFile downloadFile = new DownloadFileImpl();
+//        downloadFile.downloadFile(DOWNLOAD_URL, DOWNLOAD_DIRECTORY);
 
         //UNZIP FILE
-        UnzipFIle unzipFIle = new UnzipFIleImpl();
-        unzipFIle.unzip(ZIP_FILE_DIRECTORY, UNZIP_DIRECTORY);
+//        UnzipFIle unzipFIle = new UnzipFIleImpl();
+//        unzipFIle.unzip(ZIP_FILE_DIRECTORY, UNZIP_DIRECTORY);
 
         //PARSE FILE
         ScannerFileImpl scannerfile = new ScannerFileImpl();
@@ -37,19 +37,18 @@ public class Main {
         System.out.println("List size ===== " + size);
 
         //COUNT CYRILLIC WORDS
-        System.out.println("========non cyrillic size========== ");
-        Utils.countNonCyrillic(models);
+        System.out.println("non cyrillic size ===== " + Utils.countNonCyrillic(models));
 
         //TRANSLIT
-        Utils.transliterate(models);
-        System.out.println("========non cyrillic========== ");
-        Utils.countNonCyrillic(models);
-        System.out.println("========List size========== " + models.size());
+//        Utils.transliterate(models);
+//        System.out.println("========non cyrillic========== ");
+//        Utils.countNonCyrillic(models);
+//        System.out.println("========List size========== " + models.size());
 
         //SPRING START
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-        ModelRepository cityDao = context.getBean("modelRepository", ModelRepository.class);
-        cityDao.save(models);
+//        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+//        ModelRepository cityDao = context.getBean("modelRepository", ModelRepository.class);
+//        cityDao.save(models);
     }
 }
 

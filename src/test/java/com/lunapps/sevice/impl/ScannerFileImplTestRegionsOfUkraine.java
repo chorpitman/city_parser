@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -114,6 +116,19 @@ public class ScannerFileImplTestRegionsOfUkraine {
 //        assertEquals(VOLYNSKA, searchRegion(regionCodes, VOLYNSKA));
 //        assertEquals(FRANKIV, searchRegion(regionCodes, FRANKIV));
 //        assertEquals(KHARKIV, searchRegion(regionCodes, KHARKIV));
+
+    }
+
+    @Test
+    public void experimentWithMatchers() {
+        final String text1= "Київська область";
+        final String text2= "Кіеўская вобласць";
+
+        String pattern = "йїі";
+        Pattern patternString = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = patternString.matcher(text1);
+        System.out.println(matcher.matches());
+
     }
 
     @Test

@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class Utils {
 
-    public static void countNonCyrillic(Collection<Model> models) {
+    public static int countNonCyrillic(Collection<Model> models) {
         if (CollectionUtils.isEmpty(models)) throw new IllegalArgumentException("Collection can not be empty or null");
 
         final String EMPTY_STR = "non cyrillic";
@@ -23,7 +23,7 @@ public class Utils {
                 }
             }
         }
-        System.out.println(count);
+        return count;
     }
 
     public static void transliterate(Collection<Model> models) {

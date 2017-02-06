@@ -121,8 +121,7 @@ public class ScannerFileImpl implements ScannerFile {
     }
 
     private static String languageCheck(String[] splittedLine) {
-        if (Objects.isNull(splittedLine))
-            throw new IllegalArgumentException("String for language check can not be null");
+        if (Objects.isNull(splittedLine)) throw new IllegalArgumentException("String for language check can not be null");
         String checkedName = "";
         for (int i = splittedLine.length - 1; i >= 0; i--) {
             if (splittedLine[i].codePoints().anyMatch(
