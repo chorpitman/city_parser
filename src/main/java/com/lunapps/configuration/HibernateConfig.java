@@ -86,6 +86,7 @@ public class HibernateConfig {
         properties.put("hibernate.connection.characterEncoding", environment.getRequiredProperty("hibernate.connection.characterEncoding"));
         properties.put("hibernate.connection.useUnicode", environment.getRequiredProperty("hibernate.connection.useUnicode"));
         properties.put("hibernate.default_schema", environment.getRequiredProperty("hibernate.default_schema"));
+        properties.put("hibernate.jdbc.batch_size", environment.getRequiredProperty("hibernate.jdbc.batch_size"));
 
 
         return properties;
