@@ -6,6 +6,7 @@ import com.lunapps.sevice.impl.ScannerFileImpl;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Collection;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -20,12 +21,12 @@ public class ScannerFileImplTest {
         utils = new ScannerFileImpl();
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void should_return_empty_list() throws Exception {
         //GIVEN
         final String EMPTY_FILE_PATH = "src/main/resources/dbtxt/UA_empty.txt";
         //WHEN
-        List<Model> models = utils.scanPath(EMPTY_FILE_PATH);
+        Collection<Model> models = utils.scanPath(EMPTY_FILE_PATH);
         //THEN
         assertNotNull(models);
         assertTrue(models.isEmpty());
