@@ -3,11 +3,11 @@ package com.lunapps.sevice;
 import com.lunapps.model.Model;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Collection;
 
 @Service("scanFileService")
 public interface ScannerFile {
-    List<Model> scanPath(String filepath);
+    Collection<Model> scanPath(String filepath);
 
-    void print(List<?> modelList);
+    void print(Collection<?> c);
 }
