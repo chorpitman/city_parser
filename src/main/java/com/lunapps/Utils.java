@@ -4,18 +4,21 @@ import com.lunapps.model.Model;
 import com.lunapps.sevice.Transliterator;
 import org.apache.commons.collections.CollectionUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 public class Utils {
 
-    public static void countNonCyrillic(List<Model> models) {
+    public static void countNonCyrillic(Collection<Model> models) {
+        if (CollectionUtils.isEmpty(models)) throw new IllegalArgumentException("Collection can not be empty or null");
+
         final String EMPTY_STR = "non cyrillic";
         int count = 0;
         if (!CollectionUtils.isEmpty(models)) {
             for (Model entity : models) {
                 String name = entity.getName();
-                if (name == EMPTY_STR) {
+                if (Objects.equals(name, EMPTY_STR)) {
                     count++;
                 }
             }
@@ -23,9 +26,10 @@ public class Utils {
         System.out.println(count);
     }
 
-    public static void transliterate(List<Model> models) {
+    public static void transliterate(Collection<Model> models) {
+        if (CollectionUtils.isEmpty(models)) throw new IllegalArgumentException("Collection can not be empty or null");
+
         final String EMPTY_STR = "non cyrillic";
-        CollectionUtils.isEmpty(models);
         for (Model entity : models) {
             String name = entity.getName();
             if (Objects.equals(name, EMPTY_STR)) {

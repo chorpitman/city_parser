@@ -4,15 +4,13 @@ import com.lunapps.model.Model;
 import com.lunapps.model.RegionInfo;
 import com.lunapps.sevice.ScannerFile;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 import static java.util.Objects.nonNull;
 
@@ -47,8 +45,8 @@ public class ScannerFileImpl implements ScannerFile {
     private final static String GEO_NAME_POPULATED_PLACE = "PPL";
 
 
-    public List<Model> scanPath(String filepath) {
-        if (!nonNull(filepath)) throw new IllegalArgumentException("Filepath can not be null");
+    public Collection<Model> scanPath(String filepath) {
+        if (StringUtils.isBlank(filepath)) throw new IllegalArgumentException("Filepath can not be null");
         Scanner scanner = getScanner(filepath);
         List<RegionInfo> regionCodes = new ScannerFileImpl().findRegions(filepath);
 
@@ -59,7 +57,7 @@ public class ScannerFileImpl implements ScannerFile {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] splitLine = line.split(TABULATION);
-            if (Objects.equals(splitLine[REGION_ID], UNNECESSARY_REGION_ID)){
+            if (Objects.equals(splitLine[REGION_ID], UNNECESSARY_REGION_ID)) {
                 continue;
             }
             if (!(Objects.equals(splitLine[FEATURE_CODE], GEO_NAME_ADMINISTRATE_DIVISION_CODE) || Objects.equals(splitLine[FEATURE_CODE], GEO_NAME_POPULATED_PLACE))) {
@@ -98,7 +96,7 @@ public class ScannerFileImpl implements ScannerFile {
     }
 
     public List<RegionInfo> findRegions(String filePath) {
-        if (!nonNull(filePath)) throw new IllegalArgumentException("Filepath can not be null");
+        if (StringUtils.isBlank(filePath)) throw new IllegalArgumentException("Filepath can not be null");
 
         Scanner scanner = getScanner(filePath);
         List<RegionInfo> models = new ArrayList<>();
@@ -123,7 +121,8 @@ public class ScannerFileImpl implements ScannerFile {
     }
 
     private static String languageCheck(String[] splittedLine) {
-        if (!nonNull(splittedLine)) throw new IllegalArgumentException("String for language check can not be null");
+        if (Objects.isNull(splittedLine))
+            throw new IllegalArgumentException("String for language check can not be null");
         String checkedName = "";
         for (int i = splittedLine.length - 1; i >= 0; i--) {
             if (splittedLine[i].codePoints().anyMatch(
@@ -134,7 +133,7 @@ public class ScannerFileImpl implements ScannerFile {
     }
 
     private static Scanner getScanner(String filepath) {
-        if (!nonNull(filepath)) throw new IllegalArgumentException("Filepath can not be null");
+        if (StringUtils.isBlank(filepath)) throw new IllegalArgumentException("Filepath can not be null");
         File file = new File(filepath);
         Scanner scanner = null;
         try {
@@ -146,10 +145,10 @@ public class ScannerFileImpl implements ScannerFile {
         return scanner;
     }
 
-    public void print(List<?> modelList) {
-        CollectionUtils.isEmpty(modelList);
-        for (Object o : modelList) {
-            System.out.println(o);
-        }
+    @Override
+    public void print(java.util.Collection<?> modelList) {
+        if (CollectionUtils.isEmpty(modelList))
+            throw new IllegalArgumentException("Model list cannot be null or Empty");
+        for (Object o : modelList) System.out.println(o);
     }
 }
