@@ -1,5 +1,6 @@
 package com.lunapps.sevice.impl;
 
+import com.lunapps.model.AlternativeModel;
 import com.lunapps.model.Model;
 import com.lunapps.model.RegionInfo;
 import com.lunapps.sevice.ScannerFile;
@@ -11,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
-
-import static java.util.Objects.nonNull;
 
 @Service
 @Transactional
@@ -47,6 +46,7 @@ public class ScannerFileImpl implements ScannerFile {
 
     public Collection<Model> scanPath(String filepath) {
         if (StringUtils.isBlank(filepath)) throw new IllegalArgumentException("Filepath can not be null");
+
         Scanner scanner = getScanner(filepath);
         List<RegionInfo> regionCodes = new ScannerFileImpl().findRegions(filepath);
 
@@ -109,10 +109,38 @@ public class ScannerFileImpl implements ScannerFile {
                 model.setRegionId(splitLine[REGION_ID]);
                 model.setRegionInternationalName(splitLine[INTERNATIONAL_NAME]);
                 model.setCityIndex(Integer.parseInt(splitLine[CITY_INDEX]));
-                String[] splitedStrings = splitLine[NAME].split(COMMA);
-                model.setRegionCyrillicName(languageCheck(splitedStrings));
+//                String[] splitedStrings = splitLine[NAME].split(COMMA);
+//                model.setRegionCyrillicName(languageCheck(splitedStrings));
+                models.add(model);
             }
-            if (nonNull(model.getRegionCyrillicName())) {
+//            if (nonNull(model.getRegionCyrillicName())) {
+//            }
+        }
+        scanner.close();
+        return models;
+    }
+
+    public List<AlternativeModel> findAlternativeRegions(String filePath) {
+        if (StringUtils.isBlank(filePath)) throw new IllegalArgumentException("Filepath can not be null");
+
+        final String UKR = "uk";
+        final int CYRILL_NAME = 3;
+        final int ISO_LANG = 2;
+
+        final int GEONAME_ID = 1;
+
+        Scanner scanner = getScanner(filePath);
+        List<AlternativeModel> models = new ArrayList<>();
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            String[] splitLine = line.split(TABULATION);
+
+            AlternativeModel model = new AlternativeModel();
+            if (splitLine[ISO_LANG].equals(UKR)) {
+                model.setGeoNameId(Integer.parseInt(splitLine[GEONAME_ID]));
+                model.setIsoLang(splitLine[ISO_LANG]);
+                languageCheck(splitLine);
+                model.setCyrillicName(splitLine[CYRILL_NAME]);
                 models.add(model);
             }
         }
@@ -121,8 +149,11 @@ public class ScannerFileImpl implements ScannerFile {
     }
 
     private static String languageCheck(String[] splittedLine) {
-        if (Objects.isNull(splittedLine)) throw new IllegalArgumentException("String for language check can not be null");
+        if (Objects.isNull(splittedLine))
+            throw new IllegalArgumentException("String for language check can not be null");
+
         String checkedName = "";
+
         for (int i = splittedLine.length - 1; i >= 0; i--) {
             if (splittedLine[i].codePoints().anyMatch(
                     c -> Character.UnicodeScript.of(c) == Character.UnicodeScript.CYRILLIC))
