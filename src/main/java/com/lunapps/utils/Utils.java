@@ -1,11 +1,9 @@
-package com.lunapps;
+package com.lunapps.utils;
 
 import com.lunapps.model.Model;
-import com.lunapps.sevice.Transliterator;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 public class Utils {

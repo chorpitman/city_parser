@@ -9,5 +9,7 @@ import java.util.Collection;
 public interface ScannerFile {
     Collection<Model> scanPath(String filepath);
 
+    Collection<Model> scan2Path(String filepath, String alterNameDb);
+
     void print(Collection<?> c);
 }

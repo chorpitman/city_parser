@@ -1,4 +1,4 @@
-package com.lunapps.sevice;
+package com.lunapps.utils;
 
 
 import static java.lang.Character.toUpperCase;

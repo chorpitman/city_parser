@@ -14,10 +14,10 @@ public class Model {
     @Column(name = "city_index")
     private int cityIndex;
 
-    @Column(name = "city_name")
+    @Column(name = "city_ukr_name")
     private String name;
 
-    @Column(name = "inter_name")
+    @Column(name = "city_inter_name")
     private String internationalName;
 
     @Column(name = "latitude")
@@ -29,10 +29,10 @@ public class Model {
     @Column(name = "reg_id")
     private String regionId;
 
-    @Column(name = "city_ukr_name")
+    @Column(name = "region_ukr_name")
     private String cityCyrillicName;
 
-    @Column(name = "city_inter_name")
+    @Column(name = "region_inter_name")
     private String cityInternationalName;
 
     public Model() {
