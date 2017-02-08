@@ -4,6 +4,7 @@ import com.lunapps.configuration.AppConfig;
 import com.lunapps.model.AlternativeModel;
 import com.lunapps.model.Model;
 import com.lunapps.model.RegionInfo;
+import com.lunapps.repository.AlternativeRepository;
 import com.lunapps.repository.ModelRepository;
 import com.lunapps.sevice.DownloadFile;
 import com.lunapps.sevice.UnzipFIle;
@@ -143,6 +144,10 @@ public class Main {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         ModelRepository cityDao = context.getBean("modelRepository", ModelRepository.class);
         cityDao.save(models);
+
+//        AlternativeRepository repository = context.getBean("alterRepository", AlternativeRepository.class);
+//        ScannerFileImpl scannerFile = new ScannerFileImpl();
+//        repository.save(scannerFile.findAlternativeRegions(PARSE_UKR_DB))
 
         long finish = System.currentTimeMillis();
         System.out.println("time for save" + (finish - start));

@@ -4,6 +4,8 @@ import com.lunapps.model.AlternativeModel;
 import com.lunapps.model.Model;
 import com.lunapps.model.RegionInfo;
 import com.lunapps.sevice.ScannerFile;
+import com.lunapps.utils.Transliterator;
+import com.lunapps.utils.Utils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
@@ -12,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
-
-import static java.util.Objects.nonNull;
 
 @Service
 @Transactional
@@ -38,14 +38,14 @@ public class ScannerFileImpl implements ScannerFile {
      * @param first-order administrative division
      * @link http://www.geonames.org/export/codes.html
      */
-    private final static String GEO_NAME_ADMINISTRATE_DIVISION_CODE = "ADM1";
+    private final static String GEO_REGION_CODE = "ADM1";
     /**
      * @param populated place.
      * @link http://www.geonames.org/export/codes.html
      */
     private final static String GEO_NAME_POPULATED_PLACE = "PPL";
 
-
+    @Override
     public Collection<Model> scanPath(String filepath) {
         if (StringUtils.isBlank(filepath)) throw new IllegalArgumentException("Filepath can not be null");
 
@@ -62,7 +62,7 @@ public class ScannerFileImpl implements ScannerFile {
             if (Objects.equals(splitLine[REGION_ID], UNNECESSARY_REGION_ID)) {
                 continue;
             }
-            if (!(Objects.equals(splitLine[FEATURE_CODE], GEO_NAME_ADMINISTRATE_DIVISION_CODE) || Objects.equals(splitLine[FEATURE_CODE], GEO_NAME_POPULATED_PLACE))) {
+            if (!(Objects.equals(splitLine[FEATURE_CODE], GEO_REGION_CODE) || Objects.equals(splitLine[FEATURE_CODE], GEO_NAME_POPULATED_PLACE))) {
                 continue;
             } else {
                 Model model = new Model();
@@ -101,6 +101,7 @@ public class ScannerFileImpl implements ScannerFile {
     public Collection<Model> scan2Path(String filepath, String alterNameDb) {
         if (StringUtils.isBlank(filepath) || StringUtils.isBlank(alterNameDb))
             throw new IllegalArgumentException("Filepath can not be null");
+
         Scanner scanner = getScanner(filepath);
 
         //GET ALTERNATIVE UKR REGIONS
@@ -130,7 +131,7 @@ public class ScannerFileImpl implements ScannerFile {
                 continue;
             }
 
-            if (!(Objects.equals(splitLine[FEATURE_CODE], GEO_NAME_ADMINISTRATE_DIVISION_CODE) || Objects.equals(splitLine[FEATURE_CODE], GEO_NAME_POPULATED_PLACE))) {
+            if (!(Objects.equals(splitLine[FEATURE_CODE], GEO_REGION_CODE) || Objects.equals(splitLine[FEATURE_CODE], GEO_NAME_POPULATED_PLACE))) {
                 continue;
             } else {
                 Model model = new Model();
@@ -149,8 +150,7 @@ public class ScannerFileImpl implements ScannerFile {
                         }
                     }
                     models.add(model);
-                }
-                else {
+                } else {
                     model.setName(languageCheck(splitedName));
                     for (RegionInfo region : regions) {
                         if (Objects.equals(model.getRegionId(), region.getRegionId())) {
@@ -176,14 +176,12 @@ public class ScannerFileImpl implements ScannerFile {
             String[] splitLine = line.split(TABULATION);
 
             RegionInfo model = new RegionInfo();
-            if (splitLine[FEATURE_CODE].equals(GEO_NAME_ADMINISTRATE_DIVISION_CODE) & !splitLine[REGION_ID].equals(UNNECESSARY_REGION_ID)) {
+            if (splitLine[FEATURE_CODE].equals(GEO_REGION_CODE)) {
                 model.setRegionId(splitLine[REGION_ID]);
                 model.setCityIndex(Integer.parseInt(splitLine[CITY_INDEX]));
                 model.setRegionInternationalName(splitLine[INTERNATIONAL_NAME]);
                 String[] splitedStrings = splitLine[NAME].split(COMMA);
                 model.setRegionCyrillicName(languageCheck(splitedStrings));
-            }
-            if (nonNull(model.getRegionCyrillicName())) {
                 models.add(model);
             }
         }
@@ -197,7 +195,7 @@ public class ScannerFileImpl implements ScannerFile {
         final String UKR = "uk";
 
         //ELEMENT OF ARRAY
-        final int GEONAME_ID = 1;
+        final int CITY_INDEX = 1;
         final int ISO_LANG = 2;
         final int CYRILL_NAME = 3;
 
@@ -209,12 +207,14 @@ public class ScannerFileImpl implements ScannerFile {
 
             AlternativeModel model = new AlternativeModel();
             if (splitLine[ISO_LANG].equals(UKR)) {
-                model.setGeoNameId(Integer.parseInt(splitLine[GEONAME_ID]));
+                model.setGeoNameId(Integer.parseInt(splitLine[CITY_INDEX]));
                 model.setIsoLang(splitLine[ISO_LANG]);
                 if (languageCheck(splitLine[CYRILL_NAME])) {
                     model.setCyrillicName(splitLine[CYRILL_NAME]);
                 } else {
+                    //если нет кириллицы добавляем
                     model.setCyrillicName("non cyr");
+//                    model.setCyrillicName(Transliterator.lat2cyr(splitLine[CYRILL_NAME]));
                 }
                 models.add(model);
             }

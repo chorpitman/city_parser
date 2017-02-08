@@ -28,6 +28,7 @@ public class Utils {
         if (CollectionUtils.isEmpty(models)) throw new IllegalArgumentException("Collection can not be empty or null");
 
         final String EMPTY_STR = "non cyrillic";
+
         for (Model entity : models) {
             String name = entity.getName();
             if (Objects.equals(name, EMPTY_STR)) {

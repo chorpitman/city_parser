@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 @Repository("modelRepository")
 public interface ModelRepository extends JpaRepository<Model, Long> {
 
-    Model findModelByName(final String email);
 }
