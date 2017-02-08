@@ -15,7 +15,7 @@ public class Model {
     private int cityIndex;
 
     @Column(name = "city_ukr_name")
-    private String name;
+    private String cityUkrName;
 
     @Column(name = "city_inter_name")
     private String internationalName;
@@ -30,10 +30,10 @@ public class Model {
     private String regionId;
 
     @Column(name = "region_ukr_name")
-    private String cityCyrillicName;
+    private String regionCyrillicName;
 
     @Column(name = "region_inter_name")
-    private String cityInternationalName;
+    private String regionInternationalName;
 
     public Model() {
         this.id = ++Model.NEXT_ID;
@@ -55,12 +55,12 @@ public class Model {
         this.cityIndex = cityIndex;
     }
 
-    public String getName() {
-        return name;
+    public String getCityUkrName() {
+        return cityUkrName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCityUkrName(String cityUkrName) {
+        this.cityUkrName = cityUkrName;
     }
 
     public String getInternationalName() {
@@ -95,20 +95,20 @@ public class Model {
         this.regionId = regionId;
     }
 
-    public String getCityCyrillicName() {
-        return cityCyrillicName;
+    public String getRegionCyrillicName() {
+        return regionCyrillicName;
     }
 
-    public void setCityCyrillicName(String cityCyrillicName) {
-        this.cityCyrillicName = cityCyrillicName;
+    public void setRegionCyrillicName(String regionCyrillicName) {
+        this.regionCyrillicName = regionCyrillicName;
     }
 
-    public String getCityInternationalName() {
-        return cityInternationalName;
+    public String getRegionInternationalName() {
+        return regionInternationalName;
     }
 
-    public void setCityInternationalName(String cityInternationalName) {
-        this.cityInternationalName = cityInternationalName;
+    public void setRegionInternationalName(String regionInternationalName) {
+        this.regionInternationalName = regionInternationalName;
     }
 
     @Override
@@ -116,13 +116,13 @@ public class Model {
         return "Model{" +
                 "id=" + id +
                 ", cityIndex=" + cityIndex +
-                ", name='" + name + '\'' +
+                ", cityUkrName='" + cityUkrName + '\'' +
                 ", internationalName='" + internationalName + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", regionId='" + regionId + '\'' +
-                ", cityCyrillicName='" + cityCyrillicName + '\'' +
-                ", cityInternationalName='" + cityInternationalName + '\'' +
+                ", regionCyrillicName='" + regionCyrillicName + '\'' +
+                ", regionInternationalName='" + regionInternationalName + '\'' +
                 '}';
     }
 }

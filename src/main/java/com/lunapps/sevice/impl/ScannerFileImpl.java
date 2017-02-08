@@ -4,8 +4,6 @@ import com.lunapps.model.AlternativeModel;
 import com.lunapps.model.Model;
 import com.lunapps.model.RegionInfo;
 import com.lunapps.sevice.ScannerFile;
-import com.lunapps.utils.Transliterator;
-import com.lunapps.utils.Utils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
@@ -75,18 +73,18 @@ public class ScannerFileImpl implements ScannerFile {
                 if (splitedName.length == 0) {
                     for (RegionInfo element : regionCodes) {
                         if (Objects.equals(model.getRegionId(), element.getRegionId())) {
-                            model.setCityCyrillicName(element.getRegionCyrillicName());
-                            model.setCityInternationalName(element.getRegionInternationalName());
-                            model.setName(element.getRegionCyrillicName());
+                            model.setRegionCyrillicName(element.getRegionCyrillicName());
+                            model.setRegionInternationalName(element.getRegionInternationalName());
+                            model.setCityUkrName(element.getRegionCyrillicName());
                         }
                     }
                     models.add(model);
                 } else {
-                    model.setName(languageCheck(splitedName));
+                    model.setCityUkrName(languageCheck(splitedName));
                     for (RegionInfo element : regionCodes) {
                         if (Objects.equals(model.getRegionId(), element.getRegionId())) {
-                            model.setCityCyrillicName(element.getRegionCyrillicName());
-                            model.setCityInternationalName(element.getRegionInternationalName());
+                            model.setRegionCyrillicName(element.getRegionCyrillicName());
+                            model.setRegionInternationalName(element.getRegionInternationalName());
                         }
                     }
                     models.add(model);
@@ -106,9 +104,13 @@ public class ScannerFileImpl implements ScannerFile {
 
         //GET ALTERNATIVE UKR REGIONS
         List<AlternativeModel> altRegions = new ScannerFileImpl().findAlternativeRegions(alterNameDb);
+        System.out.println("alternative name size = " + altRegions.size());
+
         //GET UKR REGIONS
         List<RegionInfo> regions = new ScannerFileImpl().findRegions(filepath);
+        System.out.println("regions size = " + regions.size());
 
+        //SET CYRILLIC NAME FOR REGIONS
         for (RegionInfo region : regions) {
             int cityIndex = region.getCityIndex();
             for (AlternativeModel altRegion : altRegions) {
@@ -123,6 +125,7 @@ public class ScannerFileImpl implements ScannerFile {
         print(regions);
         System.out.println("====================================");
 
+        //PARSE UKR DB
         ArrayList<Model> models = new ArrayList<>();
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
@@ -131,38 +134,43 @@ public class ScannerFileImpl implements ScannerFile {
                 continue;
             }
 
-            if (!(Objects.equals(splitLine[FEATURE_CODE], GEO_REGION_CODE) || Objects.equals(splitLine[FEATURE_CODE], GEO_NAME_POPULATED_PLACE))) {
+            if (!(Objects.equals(splitLine[FEATURE_CODE], GEO_REGION_CODE) ||
+                    Objects.equals(splitLine[FEATURE_CODE], GEO_NAME_POPULATED_PLACE) ||
+                    Objects.equals(splitLine[FEATURE_CODE], "PPLA") ||
+                    Objects.equals(splitLine[FEATURE_CODE], "PPLC"))) {
                 continue;
             } else {
                 Model model = new Model();
                 model.setCityIndex(Integer.parseInt(splitLine[CITY_INDEX]));
+                model.setCityUkrName(languageCheck(splitLine[NAME].split(COMMA)));
+                model.setInternationalName((splitLine[INTERNATIONAL_NAME]));
                 model.setLatitude(Double.parseDouble(splitLine[LATITUDE]));
                 model.setLongitude(Double.parseDouble(splitLine[LONGITUDE]));
                 model.setRegionId(splitLine[REGION_ID]);
-                model.setInternationalName((splitLine[INTERNATIONAL_NAME]));
-                String[] splitedName = splitLine[NAME].split(COMMA);
-                if (splitedName.length == 0) {
-                    for (RegionInfo region : regions) {
-                        if (Objects.equals(model.getRegionId(), region.getRegionId())) {
-                            model.setCityInternationalName(region.getRegionInternationalName());
-                            model.setCityCyrillicName(region.getRegionCyrillicName());
-                            model.setName(splitedName[0]);
-                        }
-                    }
-                    models.add(model);
-                } else {
-                    model.setName(languageCheck(splitedName));
-                    for (RegionInfo region : regions) {
-                        if (Objects.equals(model.getRegionId(), region.getRegionId())) {
-                            model.setCityInternationalName(region.getRegionInternationalName());
-                            model.setCityCyrillicName(region.getRegionCyrillicName());
-                        }
-                    }
-                    models.add(model);
-                }
+                models.add(model);
             }
         }
         scanner.close();
+
+        for (Model model : models) {
+            String regionId = model.getRegionId();
+            for (RegionInfo region : regions) {
+                if (Objects.equals(regionId, region.getRegionId())) {
+                    model.setRegionInternationalName(region.getRegionInternationalName());
+                    model.setRegionCyrillicName(region.getRegionCyrillicName());
+                }
+            }
+        }
+
+        for (Model model : models) {
+            int cityIndex = model.getCityIndex();
+            for (AlternativeModel altRegion : altRegions) {
+                if (cityIndex == altRegion.getGeoNameId()) {
+                    model.setCityUkrName(altRegion.getCyrillicName());
+                }
+            }
+        }
+
         return models;
     }
 
@@ -206,17 +214,18 @@ public class ScannerFileImpl implements ScannerFile {
             String[] splitLine = line.split(TABULATION);
 
             AlternativeModel model = new AlternativeModel();
-            if (splitLine[ISO_LANG].equals(UKR)) {
-                model.setGeoNameId(Integer.parseInt(splitLine[CITY_INDEX]));
-                model.setIsoLang(splitLine[ISO_LANG]);
-                if (languageCheck(splitLine[CYRILL_NAME])) {
-                    model.setCyrillicName(splitLine[CYRILL_NAME]);
-                } else {
-                    //если нет кириллицы добавляем
-                    model.setCyrillicName("non cyr");
-//                    model.setCyrillicName(Transliterator.lat2cyr(splitLine[CYRILL_NAME]));
+            if (Integer.parseInt(splitLine[CITY_INDEX]) >= 468196) {
+                if (splitLine[ISO_LANG].equals(UKR)) {
+                    model.setGeoNameId(Integer.parseInt(splitLine[CITY_INDEX]));
+                    model.setIsoLang(splitLine[ISO_LANG]);
+                    if (languageCheck(splitLine[CYRILL_NAME])) {
+                        model.setCyrillicName(splitLine[CYRILL_NAME]);
+                    } else {
+                        //если нет кириллицы добавляем
+                        model.setCyrillicName("non cyrillic");
+                    }
+                    models.add(model);
                 }
-                models.add(model);
             }
         }
         scanner.close();

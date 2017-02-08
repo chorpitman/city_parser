@@ -15,7 +15,7 @@ public class Utils {
         int count = 0;
         if (!CollectionUtils.isEmpty(models)) {
             for (Model entity : models) {
-                String name = entity.getName();
+                String name = entity.getCityUkrName();
                 if (Objects.equals(name, EMPTY_STR)) {
                     count++;
                 }
@@ -30,12 +30,12 @@ public class Utils {
         final String EMPTY_STR = "non cyrillic";
 
         for (Model entity : models) {
-            String name = entity.getName();
+            String name = entity.getCityUkrName();
             if (Objects.equals(name, EMPTY_STR)) {
                 System.out.println(entity.getInternationalName());
                 String s = Transliterator.lat2cyr(entity.getInternationalName());
                 System.out.println(s);
-                entity.setName(s);
+                entity.setCityUkrName(s);
                 System.out.println();
             }
         }
