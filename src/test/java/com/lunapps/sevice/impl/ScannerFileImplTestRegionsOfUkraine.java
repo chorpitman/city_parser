@@ -224,7 +224,7 @@ public class ScannerFileImplTestRegionsOfUkraine {
 
         //WHEN
         //GET OPTIMIZE METHOD
-        LinkedList<AlternativeModel> optimizedListReapeatEntity = ScannerFileImpl.getOptimizedAlternativeNamesList(listRepeatEntities);
+        List<AlternativeModel> optimizedListReapeatEntity = (List<AlternativeModel>) ScannerFileImpl.getOptimizedAlternativeNamesList(listRepeatEntities);
         System.out.println("optimizedListReapeatEntity size -->" + optimizedListReapeatEntity.size());
         //THEN
         assertEquals(optimizedListReapeatEntity.size(), 2);

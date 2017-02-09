@@ -5,15 +5,12 @@ import com.lunapps.model.AlternativeModel;
 import com.lunapps.model.Model;
 import com.lunapps.repository.AlternativeRepository;
 import com.lunapps.repository.ModelRepository;
-import com.lunapps.sevice.ScannerFile;
 import com.lunapps.sevice.impl.ScannerFileImpl;
 import com.lunapps.utils.Utils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -26,6 +23,8 @@ public class Main {
         final String ZIP_UKR_DB = "src/main/resources/downloads/UA.zip";
         final String ZIP_ALTER_NAMES_DB = "src/main/resources/downloads/alternateNames.zip";
         final String UNZIP_DIRECTORY = "src/main/resources/";
+
+        long start = System.currentTimeMillis();
 
         //DOWNLOAD FILE
 //        DownloadFile downloadFile = new DownloadFileImpl();
@@ -52,20 +51,19 @@ public class Main {
 
 
         //SPRING START
-        long start = System.currentTimeMillis();
 
-            //save model
+        //save model
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         ModelRepository cityDao = context.getBean("modelRepository", ModelRepository.class);
         cityDao.save(models);
-
-            //save alter table
+//
+        //save alter table
         AlternativeRepository repository = context.getBean("alterRepository", AlternativeRepository.class);
-        LinkedList<AlternativeModel> optimizedAlternativeNamesList = ScannerFileImpl.getOptimizedAlternativeNamesList(ScannerFileImpl.findAlternativeRegions(PARSE_UKR_DB));
+        Collection<AlternativeModel> optimizedAlternativeNamesList = ScannerFileImpl.getOptimizedAlternativeNamesList(ScannerFileImpl.findAlternativeRegions(PARSE_UKR_DB));
         repository.save(optimizedAlternativeNamesList);
 
         long finish = System.currentTimeMillis();
-        System.out.println("time for save" + (finish - start));
+        System.out.println("time for save -->" + (finish - start) / 1000 + " sec");
     }
 }
 
