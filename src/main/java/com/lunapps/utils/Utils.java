@@ -7,16 +7,16 @@ import java.util.Collection;
 import java.util.Objects;
 
 public class Utils {
+    private static final String NAME_NON_CYR = "non cyrillic";
 
     public static int countNonCyrillic(Collection<Model> models) {
         if (CollectionUtils.isEmpty(models)) throw new IllegalArgumentException("Collection can not be empty or null");
 
-        final String EMPTY_STR = "non cyrillic";
         int count = 0;
         if (!CollectionUtils.isEmpty(models)) {
             for (Model entity : models) {
                 String name = entity.getCityUkrName();
-                if (Objects.equals(name, EMPTY_STR)) {
+                if (Objects.equals(name, NAME_NON_CYR)) {
                     count++;
                 }
             }
@@ -27,11 +27,9 @@ public class Utils {
     public static void transliterate(Collection<Model> models) {
         if (CollectionUtils.isEmpty(models)) throw new IllegalArgumentException("Collection can not be empty or null");
 
-        final String EMPTY_STR = "non cyrillic";
-
         for (Model entity : models) {
             String name = entity.getCityUkrName();
-            if (Objects.equals(name, EMPTY_STR)) {
+            if (Objects.equals(name, NAME_NON_CYR)) {
                 System.out.println(entity.getInternationalName());
                 String s = Transliterator.lat2cyr(entity.getInternationalName());
                 System.out.println(s);
