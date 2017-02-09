@@ -1,5 +1,8 @@
 package com.lunapps.model;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import javax.persistence.*;
 
 @Entity
@@ -58,5 +61,29 @@ public class AlternativeModel {
                 ", isoLang='" + isoLang + '\'' +
                 ", cyrillicName='" + cyrillicName + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AlternativeModel that = (AlternativeModel) o;
+
+        return new EqualsBuilder()
+                .append(geoNameId, that.geoNameId)
+                .append(isoLang, that.isoLang)
+                .append(cyrillicName, that.cyrillicName)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(geoNameId)
+                .append(isoLang)
+                .append(cyrillicName)
+                .toHashCode();
     }
 }
