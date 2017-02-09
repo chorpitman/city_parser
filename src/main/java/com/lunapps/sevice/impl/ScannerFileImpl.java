@@ -98,35 +98,31 @@ public class ScannerFileImpl implements ScannerFile {
     @Override
     public Collection<Model> scan2Path(String filepath, String alterNameDb) {
         if (StringUtils.isBlank(filepath) || StringUtils.isBlank(alterNameDb))
-            throw new IllegalArgumentException("Filepath can not be null");
+            throw new IllegalArgumentException("Filepath can not be null or empty");
 
         Scanner scanner = getScanner(filepath);
 
         //GET ALTERNATIVE UKR REGIONS
-        List<AlternativeModel> altRegions = new ScannerFileImpl().findAlternativeRegions(alterNameDb);
-        System.out.println("alternative name size = " + altRegions.size());
+        List<AlternativeModel> nonOptimizeAlternativeNamesList = findAlternativeRegions(alterNameDb);
+
+        //OPTIMIZE ALTERNATIVE UKR REGION
+        LinkedList<AlternativeModel> optimizedAlternativeNamesList = ScannerFileImpl.getOptimizedAlternativeNamesList(nonOptimizeAlternativeNamesList);
+        System.out.println("alternative name size = " + optimizedAlternativeNamesList.size());
 
         //GET UKR REGIONS
-        List<RegionInfo> regions = new ScannerFileImpl().findRegions(filepath);
-        System.out.println("regions size = " + regions.size());
+        List<RegionInfo> ukrRegionsList = new ScannerFileImpl().findRegions(filepath);
+        System.out.println("regions size = " + ukrRegionsList.size());
 
-        //SET CYRILLIC NAME FOR REGIONS
-        for (RegionInfo region : regions) {
-            int cityIndex = region.getCityIndex();
-            for (AlternativeModel altRegion : altRegions) {
-                if (altRegion.getGeoNameId() == cityIndex) {
-                    if (languageCheck(altRegion.getCyrillicName())) {
-                        region.setRegionCyrillicName(altRegion.getCyrillicName());
-                    } else continue;
-                }
-            }
-        }
+        //SET CYRILLIC NAME INTO REGIONS
+        setCyrNameInRegions(optimizedAlternativeNamesList, ukrRegionsList);
 
-        print(regions);
-        System.out.println("====================================");
+        print(ukrRegionsList);
+        System.out.println(ukrRegionsList.size() + "====================================");
 
         //PARSE UKR DB
-        ArrayList<Model> models = new ArrayList<>();
+        // TODO: 2/9/17 think about Array or LinkedList
+        List<Model> ukrCitiesModels = new ArrayList<>();
+
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] splitLine = line.split(TABULATION);
@@ -147,31 +143,71 @@ public class ScannerFileImpl implements ScannerFile {
                 model.setLatitude(Double.parseDouble(splitLine[LATITUDE]));
                 model.setLongitude(Double.parseDouble(splitLine[LONGITUDE]));
                 model.setRegionId(splitLine[REGION_ID]);
-                models.add(model);
+                ukrCitiesModels.add(model);
             }
         }
         scanner.close();
 
-        for (Model model : models) {
+        //SET INTO UKR REGIONS INTERNATIONAL AND CYRILLIC NAME
+        setInterCyrRegion(ukrCitiesModels, ukrRegionsList);
+
+        //SET INTO UKR CITIES UKR NAME
+        setCityUkrName(ukrCitiesModels, optimizedAlternativeNamesList);
+
+        return ukrCitiesModels;
+    }
+
+    private static void setCityUkrName(Collection<Model> ukrCitiesModels, Collection<AlternativeModel> optimizedAlternativeNamesList) {
+        if (CollectionUtils.isEmpty(ukrCitiesModels) || CollectionUtils.isEmpty(optimizedAlternativeNamesList))
+            throw new IllegalArgumentException("ukrCitiesModels or optimizedAlternativeNamesList can not be null or empty");
+
+        int result = 0;
+
+        for (Model model : ukrCitiesModels) {
+            int cityIndex = model.getCityIndex();
+            for (AlternativeModel altRegion : optimizedAlternativeNamesList) {
+                if (cityIndex == altRegion.getGeoNameId()) {
+                    model.setCityUkrName(altRegion.getCyrillicName());
+                    result++;
+                }
+            }
+        }
+        //SHOWS result of changes for DEBUG
+        int a = result;
+    }
+
+    private static void setInterCyrRegion(Collection<Model> ukrCitiesModels, Collection<RegionInfo> ukrRegionsList) {
+        if (CollectionUtils.isEmpty(ukrCitiesModels) || CollectionUtils.isEmpty(ukrRegionsList))
+            throw new IllegalArgumentException("ukrCitiesModels or ukrRegionsList can not be null or empty");
+
+        for (Model model : ukrCitiesModels) {
             String regionId = model.getRegionId();
-            for (RegionInfo region : regions) {
+
+            for (RegionInfo region : ukrRegionsList) {
                 if (Objects.equals(regionId, region.getRegionId())) {
                     model.setRegionInternationalName(region.getRegionInternationalName());
                     model.setRegionCyrillicName(region.getRegionCyrillicName());
                 }
             }
         }
+    }
 
-        for (Model model : models) {
-            int cityIndex = model.getCityIndex();
-            for (AlternativeModel altRegion : altRegions) {
-                if (cityIndex == altRegion.getGeoNameId()) {
-                    model.setCityUkrName(altRegion.getCyrillicName());
+    private void setCyrNameInRegions(Collection<AlternativeModel> optimizedAlternativeNamesList, Collection<RegionInfo> regions) {
+        if (CollectionUtils.isEmpty(optimizedAlternativeNamesList) || CollectionUtils.isEmpty(regions))
+            throw new IllegalArgumentException("optimizedAlternativeNamesList or regions List can not be null or empty");
+
+        for (RegionInfo region : regions) {
+            int cityIndex = region.getCityIndex();
+
+            for (AlternativeModel alternativeRegion : optimizedAlternativeNamesList) {
+                if (alternativeRegion.getGeoNameId() == cityIndex) {
+                    if (languageCheck(alternativeRegion.getCyrillicName())) {
+                        region.setRegionCyrillicName(alternativeRegion.getCyrillicName());
+                        break;
+                    } else continue;
                 }
             }
         }
-
-        return models;
     }
 
     public List<RegionInfo> findRegions(String filePath) {
@@ -197,7 +233,7 @@ public class ScannerFileImpl implements ScannerFile {
         return models;
     }
 
-    public List<AlternativeModel> findAlternativeRegions(String filePath) {
+    public static List<AlternativeModel> findAlternativeRegions(String filePath) {
         if (StringUtils.isBlank(filePath)) throw new IllegalArgumentException("Filepath can not be null");
 
         final String UKR = "uk";
@@ -207,6 +243,8 @@ public class ScannerFileImpl implements ScannerFile {
         final int ISO_LANG = 2;
         final int CYRILL_NAME = 3;
 
+        final int START_UKR_CITY_INDEX = 468196;
+
         Scanner scanner = getScanner(filePath);
         List<AlternativeModel> models = new ArrayList<>();
         while (scanner.hasNextLine()) {
@@ -214,7 +252,7 @@ public class ScannerFileImpl implements ScannerFile {
             String[] splitLine = line.split(TABULATION);
 
             AlternativeModel model = new AlternativeModel();
-            if (Integer.parseInt(splitLine[CITY_INDEX]) >= 468196) {
+            if (Integer.parseInt(splitLine[CITY_INDEX]) >= START_UKR_CITY_INDEX) {
                 if (splitLine[ISO_LANG].equals(UKR)) {
                     model.setGeoNameId(Integer.parseInt(splitLine[CITY_INDEX]));
                     model.setIsoLang(splitLine[ISO_LANG]);
@@ -246,7 +284,7 @@ public class ScannerFileImpl implements ScannerFile {
         return checkedName = "non cyrillic";
     }
 
-    private static boolean languageCheck(String splittedLine) {
+    public static boolean languageCheck(String splittedLine) {
         if (Objects.isNull(splittedLine))
             throw new IllegalArgumentException("String for language check can not be null");
 
@@ -269,9 +307,40 @@ public class ScannerFileImpl implements ScannerFile {
     }
 
     @Override
-    public void print(java.util.Collection<?> modelList) {
+    public void print(Collection<?> modelList) {
         if (CollectionUtils.isEmpty(modelList))
             throw new IllegalArgumentException("Model list cannot be null or Empty");
         for (Object o : modelList) System.out.println(o);
+    }
+
+    public static LinkedList<AlternativeModel> getOptimizedAlternativeNamesList(Collection<AlternativeModel> nonOptimizeList) {
+        if (CollectionUtils.isEmpty(nonOptimizeList))
+            throw new IllegalArgumentException("nonOptimizeList can not be null or empty");
+
+        Collection<AlternativeModel> copyNonOptimizeList = new LinkedList<>(nonOptimizeList);
+        LinkedList<AlternativeModel> optimizedList = new LinkedList<>();
+
+        long result = 0;
+        for (AlternativeModel element : nonOptimizeList) {
+            long geoNameId = element.getGeoNameId();
+            if (result == geoNameId) {
+                continue;
+            }
+            for (AlternativeModel model : copyNonOptimizeList) {
+                if (model.getGeoNameId() == geoNameId) {
+                    String cyrillicName = model.getCyrillicName();
+                    if (ScannerFileImpl.languageCheck(cyrillicName)) {
+                        AlternativeModel alternativeModel = new AlternativeModel();
+                        alternativeModel.setCyrillicName(cyrillicName);
+                        alternativeModel.setGeoNameId(model.getGeoNameId());
+                        alternativeModel.setIsoLang(model.getIsoLang());
+                        optimizedList.add(alternativeModel);
+                        result = geoNameId;
+                        break;
+                    }
+                }
+            }
+        }
+        return optimizedList;
     }
 }

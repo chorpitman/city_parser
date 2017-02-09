@@ -1,15 +1,19 @@
 package com.lunapps;
 
 import com.lunapps.configuration.AppConfig;
+import com.lunapps.model.AlternativeModel;
 import com.lunapps.model.Model;
 import com.lunapps.repository.AlternativeRepository;
 import com.lunapps.repository.ModelRepository;
+import com.lunapps.sevice.ScannerFile;
 import com.lunapps.sevice.impl.ScannerFileImpl;
 import com.lunapps.utils.Utils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -37,26 +41,28 @@ public class Main {
         ScannerFileImpl scannerfile = new ScannerFileImpl();
         Collection<Model> models = scannerfile.scan2Path(PARSE_UKR_DB1, PARSE_UKR_DB);
         System.out.println(models.size());
-        System.out.println("non cyr" + Utils.countNonCyrillic(models));
+        System.out.println("non cyr -->" + Utils.countNonCyrillic(models));
 //
 
         //TRANSLIT
-        Utils.transliterate(models);
-        System.out.println("========non cyrillic========== ");
-        Utils.countNonCyrillic(models);
-        System.out.println("========List size========== " + models.size());
+//        Utils.transliterate(models);
+//        System.out.println("========non cyrillic========== ");
+//        Utils.countNonCyrillic(models);
+//        System.out.println("========List size========== " + models.size());
 
 
         //SPRING START
         long start = System.currentTimeMillis();
 
+            //save model
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         ModelRepository cityDao = context.getBean("modelRepository", ModelRepository.class);
         cityDao.save(models);
 
+            //save alter table
         AlternativeRepository repository = context.getBean("alterRepository", AlternativeRepository.class);
-        ScannerFileImpl scannerFile = new ScannerFileImpl();
-        repository.save(scannerFile.findAlternativeRegions(PARSE_UKR_DB));
+        LinkedList<AlternativeModel> optimizedAlternativeNamesList = ScannerFileImpl.getOptimizedAlternativeNamesList(ScannerFileImpl.findAlternativeRegions(PARSE_UKR_DB));
+        repository.save(optimizedAlternativeNamesList);
 
         long finish = System.currentTimeMillis();
         System.out.println("time for save" + (finish - start));

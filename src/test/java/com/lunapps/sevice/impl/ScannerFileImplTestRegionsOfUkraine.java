@@ -1,10 +1,12 @@
 package com.lunapps.sevice.impl;
 
+import com.lunapps.model.AlternativeModel;
 import com.lunapps.model.RegionInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -12,6 +14,7 @@ import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class ScannerFileImplTestRegionsOfUkraine {
     private ScannerFileImpl scannerFile;
@@ -121,8 +124,8 @@ public class ScannerFileImplTestRegionsOfUkraine {
 
     @Test
     public void experimentWithMatchers() {
-        final String text1= "Київська область";
-        final String text2= "Кіеўская вобласць";
+        final String text1 = "Київська область";
+        final String text2 = "Кіеўская вобласць";
 
         String pattern = "йїі";
         Pattern patternString = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
@@ -130,6 +133,132 @@ public class ScannerFileImplTestRegionsOfUkraine {
         System.out.println(matcher.matches());
 
     }
+
+    @Test
+    public void alternativeTables() {
+        final String UKR_NAME = "Станція Славута Перша";
+        final String UKR_NAME1 = "Зупиночний Пункт Нове Депо";
+
+        //GEVEN
+        AlternativeModel altModel = new AlternativeModel();
+        altModel.setId(116723);
+        altModel.setGeoNameId(8458701);
+        altModel.setIsoLang("uk");
+        altModel.setCyrillicName("non cyrillic");
+
+        AlternativeModel altModel1 = new AlternativeModel();
+        altModel1.setId(116724);
+        altModel1.setGeoNameId(8458701);
+        altModel1.setIsoLang("uk");
+        altModel1.setCyrillicName("Станція Славута Перша");
+
+        AlternativeModel altModel2 = new AlternativeModel();
+        altModel2.setId(116725);
+        altModel2.setGeoNameId(8458701);
+        altModel2.setIsoLang("uk");
+        altModel2.setCyrillicName("non cyrillic");
+
+        AlternativeModel altModel3 = new AlternativeModel();
+        altModel3.setId(116726);
+        altModel3.setGeoNameId(8458701);
+        altModel3.setIsoLang("uk");
+        altModel3.setCyrillicName("non cyrillic");
+
+        AlternativeModel altModel4 = new AlternativeModel();
+        altModel4.setId(116727);
+        altModel4.setGeoNameId(8458701);
+        altModel4.setIsoLang("uk");
+        altModel4.setCyrillicName("non cyrillic");
+
+        AlternativeModel altModel5 = new AlternativeModel();
+        altModel5.setId(116728);
+        altModel5.setGeoNameId(8458701);
+        altModel5.setIsoLang("uk");
+        altModel5.setCyrillicName("Станція Славута I");
+
+        AlternativeModel altModel6 = new AlternativeModel();
+        altModel6.setId(116728);
+        altModel6.setGeoNameId(8458701);
+        altModel6.setIsoLang("uk");
+        altModel6.setCyrillicName("Славута I");
+
+        //new other entity
+        AlternativeModel altModel7 = new AlternativeModel();
+        altModel7.setId(61109);
+        altModel7.setGeoNameId(859659);
+        altModel7.setIsoLang("uk");
+        altModel7.setCyrillicName("non cyrillic");
+
+        AlternativeModel altModel8 = new AlternativeModel();
+        altModel8.setId(61110);
+        altModel8.setGeoNameId(859659);
+        altModel8.setIsoLang("uk");
+        altModel8.setCyrillicName("non cyrillic");
+
+        AlternativeModel altModel9 = new AlternativeModel();
+        altModel9.setId(61111);
+        altModel9.setGeoNameId(859659);
+        altModel9.setIsoLang("uk");
+        altModel9.setCyrillicName("non cyrillic");
+
+        AlternativeModel altModel10 = new AlternativeModel();
+        altModel10.setId(61112);
+        altModel10.setGeoNameId(859659);
+        altModel10.setIsoLang("uk");
+        altModel10.setCyrillicName("Зупиночний Пункт Нове Депо");
+
+        //save into Collection
+        LinkedList<AlternativeModel> listRepeatEntities = new LinkedList<>();
+        listRepeatEntities.add(altModel);
+        listRepeatEntities.add(altModel1);
+        listRepeatEntities.add(altModel2);
+        listRepeatEntities.add(altModel3);
+        listRepeatEntities.add(altModel4);
+        listRepeatEntities.add(altModel5);
+        listRepeatEntities.add(altModel6);
+        listRepeatEntities.add(altModel7);
+        listRepeatEntities.add(altModel8);
+        listRepeatEntities.add(altModel9);
+        listRepeatEntities.add(altModel10);
+        System.out.println("listRepeatEntities size -->" + listRepeatEntities.size());
+
+        //WHEN
+        //GET OPTIMIZE METHOD
+        LinkedList<AlternativeModel> optimizedListReapeatEntity = ScannerFileImpl.getOptimizedAlternativeNamesList(listRepeatEntities);
+        System.out.println("optimizedListReapeatEntity size -->" + optimizedListReapeatEntity.size());
+        //THEN
+        assertEquals(optimizedListReapeatEntity.size(), 2);
+        assertEquals(optimizedListReapeatEntity.get(0).getCyrillicName(), UKR_NAME);
+        assertEquals(optimizedListReapeatEntity.get(1).getCyrillicName(), UKR_NAME1);
+    }
+
+//    private LinkedList<AlternativeModel> getOptimizeList(Collection<AlternativeModel> nonOptimizeList) {
+//        Collection<AlternativeModel> copyNonOptimizeList = new LinkedList<>(nonOptimizeList);
+//
+//        LinkedList<AlternativeModel> optimizedList = new LinkedList<>();
+//        long result = 0;
+//        for (AlternativeModel element : nonOptimizeList) {
+//            long geoNameId = element.getGeoNameId();
+//            if (result == geoNameId) {
+//                continue;
+//            }
+//            for (AlternativeModel model : copyNonOptimizeList) {
+//                if (model.getGeoNameId() == geoNameId) {
+//                    String cyrillicName = model.getCyrillicName();
+//                    if (ScannerFileImpl.languageCheck(cyrillicName)) {
+//                        AlternativeModel alternativeModel = new AlternativeModel();
+//                        alternativeModel.setCyrillicName(cyrillicName);
+//                        alternativeModel.setGeoNameId(model.getGeoNameId());
+//                        alternativeModel.setIsoLang(model.getIsoLang());
+//                        optimizedList.add(alternativeModel);
+//                        result = geoNameId;
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//        return optimizedList;
+//    }
 
     @Test
     public void should_return_name_of_the_Ukraine_areas() {
