@@ -112,6 +112,7 @@ public class ScannerFileImpl implements ScannerFile {
                 model.setLatitude(Double.parseDouble(splitLine[LATITUDE]));
                 model.setLongitude(Double.parseDouble(splitLine[LONGITUDE]));
                 model.setRegionId(splitLine[REGION_ID]);
+                model.setFeatureCode(splitLine[7]);
                 ukrCitiesModels.add(model);
             }
         }

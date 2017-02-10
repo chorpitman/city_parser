@@ -1,8 +1,11 @@
 package com.lunapps;
 
+import com.lunapps.configuration.AppConfig;
 import com.lunapps.model.Model;
+import com.lunapps.repository.ModelRepository;
 import com.lunapps.sevice.impl.ScannerFileImpl;
 import com.lunapps.utils.Utils;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -46,10 +49,10 @@ public class Main {
 
         //SPRING START
         //save model
-//        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-//        ModelRepository cityDao = context.getBean("modelRepository", ModelRepository.class);
-//        cityDao.save(models);
-
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        ModelRepository cityDao = context.getBean("modelRepository", ModelRepository.class);
+        cityDao.save(models);
+//
         //save alter table
 //        AlternativeRepository repository = context.getBean("alterRepository", AlternativeRepository.class);
 //        Collection<AlternativeModel> optimizedAlternativeNamesList = ScannerFileImpl.getOptimizedAlternativeNamesList(ScannerFileImpl.findAlternativeRegions(PARSE_ALTER_NAME_DB));

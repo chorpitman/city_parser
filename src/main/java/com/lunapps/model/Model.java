@@ -35,6 +35,9 @@ public class Model {
     @Column(name = "region_inter_name")
     private String regionInternationalName;
 
+    @Column(name = "feature_codes")
+    private String featureCode;
+
     public Model() {
         this.id = ++Model.NEXT_ID;
     }
@@ -111,6 +114,14 @@ public class Model {
         this.regionInternationalName = regionInternationalName;
     }
 
+    public String getFeatureCode() {
+        return featureCode;
+    }
+
+    public void setFeatureCode(String featureCode) {
+        this.featureCode = featureCode;
+    }
+
     @Override
     public String toString() {
         return "Model{" +
@@ -123,6 +134,7 @@ public class Model {
                 ", regionId='" + regionId + '\'' +
                 ", regionCyrillicName='" + regionCyrillicName + '\'' +
                 ", regionInternationalName='" + regionInternationalName + '\'' +
+                ", featureCode='" + featureCode + '\'' +
                 '}';
     }
 }
