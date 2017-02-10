@@ -1,22 +1,16 @@
 package com.lunapps;
 
-import com.lunapps.configuration.AppConfig;
-import com.lunapps.model.AlternativeModel;
 import com.lunapps.model.Model;
-import com.lunapps.repository.AlternativeRepository;
-import com.lunapps.repository.ModelRepository;
 import com.lunapps.sevice.impl.ScannerFileImpl;
 import com.lunapps.utils.Utils;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.IOException;
 import java.util.Collection;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        final String PARSE_UKR_DB1 = "src/main/resources/UA.txt";
-        final String PARSE_UKR_DB = "src/main/resources/alternateNames.txt";
-//        final String PARSE_UKR_DB = "src/main/resources/dbtxt/AltNames=Ukr_region";
+        final String PARSE_UKR_DB = "src/main/resources/UA.txt";
+        final String PARSE_ALTER_NAME_DB = "src/main/resources/alternateNames.txt";
         final String DOWNLOAD_DIRECTORY = "src/main/resources/downloads";
         final String DOWNLOAD_UKR_DB = "http://download.geonames.org/export/dump/UA.zip";
         final String DOWNLOAD_ALTER_NAMES_DB = "http://download.geonames.org/export/dump/alternateNames.zip";
@@ -38,7 +32,7 @@ public class Main {
 
         //PARSE FILE
         ScannerFileImpl scannerfile = new ScannerFileImpl();
-        Collection<Model> models = scannerfile.scan2Path(PARSE_UKR_DB1, PARSE_UKR_DB);
+        Collection<Model> models = scannerfile.parseDbFiles(PARSE_UKR_DB, PARSE_ALTER_NAME_DB);
         System.out.println(models.size());
         System.out.println("non cyr -->" + Utils.countNonCyrillic(models));
 //
@@ -51,16 +45,15 @@ public class Main {
 
 
         //SPRING START
-
         //save model
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-        ModelRepository cityDao = context.getBean("modelRepository", ModelRepository.class);
-        cityDao.save(models);
-//
+//        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+//        ModelRepository cityDao = context.getBean("modelRepository", ModelRepository.class);
+//        cityDao.save(models);
+
         //save alter table
-        AlternativeRepository repository = context.getBean("alterRepository", AlternativeRepository.class);
-        Collection<AlternativeModel> optimizedAlternativeNamesList = ScannerFileImpl.getOptimizedAlternativeNamesList(ScannerFileImpl.findAlternativeRegions(PARSE_UKR_DB));
-        repository.save(optimizedAlternativeNamesList);
+//        AlternativeRepository repository = context.getBean("alterRepository", AlternativeRepository.class);
+//        Collection<AlternativeModel> optimizedAlternativeNamesList = ScannerFileImpl.getOptimizedAlternativeNamesList(ScannerFileImpl.findAlternativeRegions(PARSE_ALTER_NAME_DB));
+//        repository.save(optimizedAlternativeNamesList);
 
         long finish = System.currentTimeMillis();
         System.out.println("time for save -->" + (finish - start) / 1000 + " sec");
