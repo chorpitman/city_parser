@@ -8,6 +8,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "alter_names")
 public class AlternativeModel {
+    private static long NEXT_ID = 0;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -20,6 +22,10 @@ public class AlternativeModel {
 
     @Column(name = "city_ukr_name")
     private String cyrillicName;
+
+    public AlternativeModel() {
+        this.id = ++AlternativeModel.NEXT_ID;
+    }
 
     public long getId() {
         return id;
