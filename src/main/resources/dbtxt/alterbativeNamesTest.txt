@@ -1,0 +1,48 @@
+287466	468196		Yekaterinoslavskiy
+3721743	468196		Katerinovka
+9535156	468196	uk	Катеринівка
+9535157	468196	uk	Катеринівка
+5816625	468197		Yekaterinoslavskiy
+2923667	471101	link	http://en.wikipedia.org/wiki/Vsevolozhsk
+7976508	471101	fi	Seuloskoi	1
+8221406	471101	de	Wsewoloschsk
+8221407	471101	es	Vsévolozhsk
+8221408	471101	fr	Vsevolojsk
+8221409	471101	it	Vsevoložsk
+8221410	471101	nl	Vsevolozjsk
+8221411	471101	uk	Всеволожськ
+8221412	471101	et	Vsevoložsk
+8221413	471101	ar	فسيفولوجسك
+8221414	471101	sr	Всеволошк
+8221415	471101	fa	وسوولوژسک
+8221416	471101	ko	브세볼로시스크
+8221417	471101	be	Горад Усевалажск
+8221418	471101	eo	Vsevoloĵsk
+8221419	471101	nn	Vsevolozjsk
+8221420	471101	cu	Вьсєволожьскъ
+8221421	471101	tg	Всеволожск
+8221424	471101	ru	Всеволожск
+8221425	471101	sv	Vsevolozjsk
+8221426	471101	zh	弗謝沃洛日斯克
+297937	492094		Sslawjanskaja
+297938	492094		Slawjanskaja
+297939	492094		Slavyanskaya
+297940	492094		Slavanskaya
+1727315	492094	en	Slavyansk-na-Kubani
+1727316	492094	ru	Славянск На Кубани
+1928669	492094	eo	Slavjansk-na-Kubani
+1928670	492094	ko	슬라뱐스크나쿠바니
+1928671	492094		Славянск-на-Кубани
+1928672	492094	uk	Слов'янськ на Кубані
+2923790	492094	link	http://en.wikipedia.org/wiki/Slavyansk-na-Kubani
+3048047	492094	link	http://ru.wikipedia.org/wiki/%D0%A1%D0%BB%D0%B0%D0%B2%D1%8F%D0%BD%D1%81%D0%BA-%D0%BD%D0%B0-%D0%9A%D1%83%D0%B1%D0%B0%D0%BD%D0%B8
+3746584	492094		Slavyansk-na-Kubani
+5966663	492094	ru	Славянск-на-Кубани
+8026771	8458701	uk	Stantsiya Slavuta Persha
+8026772	8458701	uk	Станція Славута Перша
+8026773	8458701	uk	Slavuta Persha
+8026774	8458701		Stantsiya Slavuta Pervaya
+11673556	8458701	uk	Stantsiya Slavuta I
+11673557	8458701	uk	Slavuta I
+11673558	8458701	uk	Станція Славута I
+11673559	8458701	uk	Славута I
