@@ -1,6 +1,7 @@
 package com.lunapps.sevice.impl;
 
 import com.lunapps.model.AlternativeModel;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,68 +38,95 @@ public class ScannerFileImplTest {
     }
 
 
-//    @Test
+    //    @Test
     public void parseDbFiles() throws Exception {
 
     }
 
-//    @Test
+    //    @Test
     public void findExistCyr() throws Exception {
 
     }
 
-//    @Test
+    //    @Test
     public void setCityUkrName() throws Exception {
 
     }
 
-//    @Test
+    //    @Test
     public void setInterCyrRegion() throws Exception {
 
     }
 
-//    @Test
+    //    @Test
     public void setCyrNameInRegions() throws Exception {
-
-    }
-
-    @Test
-    public void findRegions() throws Exception {
 
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void should_throw_exception_findAlternativeRegions() throws Exception {
         //GIVEN
-
         //WHEN
         scannerFile.findAlternativeRegions(EMPTY_PATH);
     }
 
-//    @Test
-    public void findAlternativeRegions() throws Exception {
+    @Test
+    public void should_return_alternativeRegions() throws Exception {
+        //GIVEN
+        final int EXPECTED_SIZE = 7;
+        final int EXPECTED_MATCH_FOR_468196 = 2;
+        final int EXPECTED_MATCH_FOR_471101 = 1;
+        final int EXPECTED_MATCH_FOR_492094 = 1;
+        final int EXPECTED_MATCH_FOR_8458701 = 3;
+        final String ALT_DB_PATH = "src/main/resources/dbtxt/alterbativeNamesTest.txt";
+        final String EXPECTED_CITY_UKR_NAME = "Катеринівка";
+        final String EXPECTED_CITY_UKR_NAME1 = "Всеволожськ";
+        final String EXPECTED_CITY_UKR_NAME2 = "Слов'янськ на Кубані";
+        final String EXPECTED_CITY_UKR_NAME3 = "Станція Славута Перша";
+        final String EXPECTED_CITY_UKR_NAME4 = "Станція Славута I";
+        final String EXPECTED_CITY_UKR_NAME5 = "Славута I";
+        //WHEN
+        List<AlternativeModel> aModelList = scannerFile.findAlternativeRegions(ALT_DB_PATH);
+        //THEN
+        assertNotNull(aModelList);
+        assertEquals(aModelList.size(), EXPECTED_SIZE);
+        assertEquals(aModelList.get(0).getCyrillicName(), EXPECTED_CITY_UKR_NAME);
+        assertEquals(aModelList.get(1).getCyrillicName(), EXPECTED_CITY_UKR_NAME);
+        assertEquals(aModelList.get(2).getCyrillicName(), EXPECTED_CITY_UKR_NAME1);
+        assertEquals(aModelList.get(3).getCyrillicName(), EXPECTED_CITY_UKR_NAME2);
+        assertEquals(aModelList.get(4).getCyrillicName(), EXPECTED_CITY_UKR_NAME3);
+        assertEquals(aModelList.get(5).getCyrillicName(), EXPECTED_CITY_UKR_NAME4);
+        assertEquals(aModelList.get(6).getCyrillicName(), EXPECTED_CITY_UKR_NAME5);
+        assertEquals(count(aModelList, aModelList.get(0).getGeoNameId()), EXPECTED_MATCH_FOR_468196);
+        assertEquals(count(aModelList, aModelList.get(2).getGeoNameId()), EXPECTED_MATCH_FOR_471101);
+        assertEquals(count(aModelList, aModelList.get(3).getGeoNameId()), EXPECTED_MATCH_FOR_492094);
+        assertEquals(count(aModelList, aModelList.get(4).getGeoNameId()), EXPECTED_MATCH_FOR_8458701);
+    }
+
+    //    @Test
+    public void findRegions() throws Exception {
 
     }
 
 
-//    @Test
+    //    @Test
     public void languageCheckString() throws Exception {
 
     }
 
-//    @Test
+    //    @Test
     public void languageCheckArrays() throws Exception {
 
     }
 
 
-//    @Test
+    //    @Test
     public void print() throws Exception {
 
     }
 
     @Test
-    public void getOptimizedAlternativeNamesList() throws Exception {
+    public void should_return_optimizedAlternativeNamesList() throws Exception {
         final String UKR_NAME = "Станція Славута Перша";
         final String UKR_NAME1 = "Зупиночний Пункт Нове Депо";
         final String NON_CYR = "non cyrillic";
@@ -150,5 +178,17 @@ public class ScannerFileImplTest {
         assertEquals(new ArrayList<>(aOptimizedList1).get(0).getCyrillicName(), UKR_NAME1);
         assertEquals(new ArrayList<>(aOptimizedList2).get(0).getCyrillicName(), UKR_NAME);
         assertEquals(new ArrayList<>(aOptimizedList2).get(1).getCyrillicName(), UKR_NAME1);
+    }
+
+    //UTILS METHODS
+    public int count(List<AlternativeModel> list, long id) {
+        if (CollectionUtils.isEmpty(list)) throw new IllegalArgumentException("list can not be null or empty");
+        int count = 0;
+        for (AlternativeModel model : list) {
+            if (model.getGeoNameId() == id) {
+                count++;
+            }
+        }
+        return count;
     }
 }

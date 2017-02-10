@@ -243,8 +243,9 @@ public class ScannerFileImpl implements ScannerFile {
                         model.setCyrillicName(splitLine[CYRILL_NAME]);
                     } else {
                         // TODO: 09.02.2017 think может просто забывать про эту сущность???
+                        continue;
                         //если нет кириллицы добавляем
-                        model.setCyrillicName(NON_CYRILLIC);
+//                        model.setCyrillicName(NON_CYRILLIC);
                     }
                     models.add(model);
                 }
