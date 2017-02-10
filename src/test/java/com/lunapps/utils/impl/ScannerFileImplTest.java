@@ -21,17 +21,6 @@ public class ScannerFileImplTest {
         utils = new ScannerFileImpl();
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void should_return_empty_list() throws Exception {
-        //GIVEN
-        final String EMPTY_FILE_PATH = "src/main/resources/dbtxt/UA_empty.txt";
-        //WHEN
-        Collection<Model> models = utils.scanPath(EMPTY_FILE_PATH);
-        //THEN
-        assertNotNull(models);
-        assertTrue(models.isEmpty());
-    }
-
     @Test
     public void should_return_region_info() throws Exception {
         //GIVEN
