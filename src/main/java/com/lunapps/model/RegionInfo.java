@@ -8,6 +8,7 @@ public class RegionInfo {
     private int cityIndex;
     private String regionCyrillicName;
     private String regionInternationalName;
+    private String featureCode;
 
     public RegionInfo() {
         this.id = ++RegionInfo.NEXT_ID;
@@ -53,6 +54,14 @@ public class RegionInfo {
         this.cityIndex = cityIndex;
     }
 
+    public String getFeatureCode() {
+        return featureCode;
+    }
+
+    public void setFeatureCode(String featureCode) {
+        this.featureCode = featureCode;
+    }
+
     @Override
     public String toString() {
         return "RegionInfo{" +
@@ -61,6 +70,7 @@ public class RegionInfo {
                 ", cityIndex=" + cityIndex +
                 ", regionCyrillicName='" + regionCyrillicName + '\'' +
                 ", regionInternationalName='" + regionInternationalName + '\'' +
+                ", featureCode='" + featureCode + '\'' +
                 '}';
     }
 }
