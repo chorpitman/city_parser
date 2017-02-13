@@ -1,6 +1,7 @@
 package com.lunapps.sevice.impl;
 
 import com.lunapps.model.AlternativeModel;
+import com.lunapps.model.RegionInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -71,7 +72,7 @@ public class ScannerFileImplTest {
     public void should_throw_exception_findAlternativeRegions() throws Exception {
         //GIVEN
         //WHEN
-        scannerFile.findAlternativeRegions(EMPTY_PATH);
+        ScannerFileImpl.findAlternativeRegions(EMPTY_PATH);
     }
 
     @Test
@@ -82,7 +83,7 @@ public class ScannerFileImplTest {
         final int EXPECTED_MATCH_FOR_471101 = 1;
         final int EXPECTED_MATCH_FOR_492094 = 1;
         final int EXPECTED_MATCH_FOR_8458701 = 3;
-        final String ALT_DB_PATH = "src/main/resources/dbtxt/alterbativeNamesTest.txt";
+        final String ALT_DB_PATH = "src/main/resources/dbtxt/alternativeNamesTest.txt";
         final String EXPECTED_CITY_UKR_NAME = "Катеринівка";
         final String EXPECTED_CITY_UKR_NAME1 = "Всеволожськ";
         final String EXPECTED_CITY_UKR_NAME2 = "Слов'янськ на Кубані";
@@ -90,7 +91,7 @@ public class ScannerFileImplTest {
         final String EXPECTED_CITY_UKR_NAME4 = "Станція Славута I";
         final String EXPECTED_CITY_UKR_NAME5 = "Славута I";
         //WHEN
-        List<AlternativeModel> aModelList = scannerFile.findAlternativeRegions(ALT_DB_PATH);
+        List<AlternativeModel> aModelList = ScannerFileImpl.findAlternativeRegions(ALT_DB_PATH);
         //THEN
         assertNotNull(aModelList);
         assertEquals(aModelList.size(), EXPECTED_SIZE);
@@ -107,9 +108,23 @@ public class ScannerFileImplTest {
         assertEquals(count(aModelList, aModelList.get(4).getGeoNameId()), EXPECTED_MATCH_FOR_8458701);
     }
 
-    //    @Test
-    public void findRegions() throws Exception {
+    @Test(expected = IllegalArgumentException.class)
+    public void should_return_exception_if_path_empty_findRegions() throws Exception {
+        //GIVEN
+        //WHEN
+        List<RegionInfo> foundRegions = scannerFile.findRegions(EMPTY_PATH);
+        //THEN
+    }
 
+    @Test
+    public void should_return_regions_with_feature_code_ADM1_findRegions() throws Exception {
+        //GIVEN
+        final int EXPECTED_REGIONS_SIZE = 27;
+        //WHEN
+        List<RegionInfo> foundRegions = scannerFile.findRegions(PATH);
+        //THEN
+        assertNotNull(foundRegions);
+        assertEquals(EXPECTED_REGIONS_SIZE, foundRegions);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -149,7 +164,6 @@ public class ScannerFileImplTest {
         //WHEN
         String checkedWord = ScannerFileImpl.languageCheck(emptyArray);
     }
-
 
     @Test
     public void should_return_first_cyrillic_word_or_non_cyr_from_array_after_language_check() throws Exception {

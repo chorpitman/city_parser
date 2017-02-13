@@ -202,6 +202,10 @@ public class ScannerFileImpl implements ScannerFile {
         }
     }
 
+    /**
+     * @info this method find all entity, which has feature code ADM1
+     * @return model with fields, which has ADM1 feature param
+     */
     public List<RegionInfo> findRegions(final String filePath) {
         if (StringUtils.isBlank(filePath)) throw new IllegalArgumentException("Filepath can not be null");
 
@@ -225,6 +229,9 @@ public class ScannerFileImpl implements ScannerFile {
         return models;
     }
 
+    /**
+     * @return create alternativeName model
+     */
     public static List<AlternativeModel> findAlternativeRegions(final String filePath) {
         if (StringUtils.isBlank(filePath)) throw new IllegalArgumentException("Filepath can not be null");
 
