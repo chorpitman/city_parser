@@ -74,7 +74,7 @@ public class ScannerFileImpl implements ScannerFile {
         List<AlternativeModel> nonOptimizeAlternativeNamesList = findAlternativeRegions(alterNameDb);
         sortByCityIndex(nonOptimizeAlternativeNamesList);
 
-        //OPTIMIZE ALTERNATIVE UKR REGION
+        //OPTIMIZE ALTERNATIVE UKR REGION = REMOVE REDUNDANT ENTITY WHICH HAS SAME CITY ID
         Collection<AlternativeModel> optimizedAlternativeNamesList = ScannerFileImpl.getOptimizedAlternativeNamesList(nonOptimizeAlternativeNamesList);
         System.out.println("alternative name size = " + optimizedAlternativeNamesList.size());
 
@@ -83,7 +83,7 @@ public class ScannerFileImpl implements ScannerFile {
         System.out.println("regions size = " + ukrRegionsList.size());
 
         //SET CYRILLIC CYRILLIC_NAME INTO REGIONS
-        setCyrNameInRegions(optimizedAlternativeNamesList, ukrRegionsList);
+        setCyrNameIntoRegions(optimizedAlternativeNamesList, ukrRegionsList);
         print(ukrRegionsList);
         System.out.println(ukrRegionsList.size() + "====================================");
 
@@ -112,6 +112,7 @@ public class ScannerFileImpl implements ScannerFile {
                 model.setLatitude(Double.parseDouble(splitLine[LATITUDE]));
                 model.setLongitude(Double.parseDouble(splitLine[LONGITUDE]));
                 model.setRegionId(splitLine[REGION_ID]);
+                //todo feature code move to constant
                 model.setFeatureCode(splitLine[7]);
                 ukrCitiesModels.add(model);
             }
@@ -119,7 +120,7 @@ public class ScannerFileImpl implements ScannerFile {
         scanner.close();
 
         //SET INTO UKR REGIONS INTERNATIONAL AND CYRILLIC CYRILLIC_NAME
-        setInterCyrRegion(ukrCitiesModels, ukrRegionsList);
+        setInterAndCyrRegion(ukrCitiesModels, ukrRegionsList);
 
         //SET INTO UKR CITIES UKR CYRILLIC_NAME
         setCityUkrName(ukrCitiesModels, optimizedAlternativeNamesList);
@@ -149,6 +150,9 @@ public class ScannerFileImpl implements ScannerFile {
         }
     }
 
+    /**
+     * @info у моделе берется ситиИндекс, если он равен ситиИндексу Альтернативной модели. У последней берется ситиУкрНейм и пересечивается в моделе.
+     */
     public static void setCityUkrName(Collection<Model> ukrCitiesModels, Collection<AlternativeModel> optimizedAlternativeNamesList) {
         if (CollectionUtils.isEmpty(ukrCitiesModels) || CollectionUtils.isEmpty(optimizedAlternativeNamesList))
             throw new IllegalArgumentException("ukrCitiesModels or optimizedAlternativeNamesList can not be null or empty");
@@ -165,10 +169,14 @@ public class ScannerFileImpl implements ScannerFile {
         }
         // TODO: 09.02.2017 delete after testing
         //SHOWS result of changes for DEBUG
-        int a = result;
+        int count = result;
     }
 
-    public static void setInterCyrRegion(Collection<Model> ukrCitiesModels, Collection<RegionInfo> ukrRegionsList) {
+    /**
+     * @info у моделе бертся РегионИД. Ищется такой же в РегионЛисте, если находим, сетим название региона на
+     * укр и лат языках
+     */
+    public static void setInterAndCyrRegion(Collection<Model> ukrCitiesModels, Collection<RegionInfo> ukrRegionsList) {
         if (CollectionUtils.isEmpty(ukrCitiesModels) || CollectionUtils.isEmpty(ukrRegionsList))
             throw new IllegalArgumentException("ukrCitiesModels or ukrRegionsList can not be null or empty");
 
@@ -184,7 +192,10 @@ public class ScannerFileImpl implements ScannerFile {
         }
     }
 
-    public void setCyrNameInRegions(Collection<AlternativeModel> optimizedAlternativeNamesList, Collection<RegionInfo> regions) {
+    /**
+     * @info Если АльтНэйм ситиИНдекс == Регион СитиИНдекс, то пересечиваем название региона на укрЯзыке
+     */
+    public void setCyrNameIntoRegions(Collection<AlternativeModel> optimizedAlternativeNamesList, Collection<RegionInfo> regions) {
         if (CollectionUtils.isEmpty(optimizedAlternativeNamesList) || CollectionUtils.isEmpty(regions))
             throw new IllegalArgumentException("optimizedAlternativeNamesList or regions List can not be null or empty");
 
@@ -218,6 +229,7 @@ public class ScannerFileImpl implements ScannerFile {
             RegionInfo model = new RegionInfo();
             if (splitLine[FEATURE_CODE].equals(REGION_CODE)) {
                 model.setRegionId(splitLine[REGION_ID]);
+                model.setFeatureCode(splitLine[FEATURE_CODE]);
                 model.setCityIndex(Integer.parseInt(splitLine[CITY_INDEX]));
                 model.setRegionInternationalName(splitLine[INTERNATIONAL_NAME]);
                 String[] splitedStrings = splitLine[CYRILLIC_NAME].split(COMMA);
