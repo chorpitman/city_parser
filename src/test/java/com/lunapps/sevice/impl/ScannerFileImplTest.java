@@ -13,7 +13,11 @@ import static junit.framework.Assert.*;
 
 public class ScannerFileImplTest {
     private final static String PATH = "src/main/resources/dbtxt/UA.txt";
-    private final String EMPTY_PATH = "";
+    private final static String EMPTY_PATH = "";
+    private final static String CYR_NAME = "Дніпропетровська область";
+    private final static String LATIN_NAME = "Dnipropetrovska Oblast'";
+    private final static String NON_CYRILLIC = "non cyrillic";
+
 
     private ScannerFileImpl scannerFile;
 
@@ -108,17 +112,65 @@ public class ScannerFileImplTest {
 
     }
 
-
-    //    @Test
-    public void languageCheckString() throws Exception {
-
+    @Test(expected = IllegalArgumentException.class)
+    public void should_return_exception_if_string_empty_language_check() throws Exception {
+        //GIVEN
+        final String emptyString = "";
+        //WHEN
+        ScannerFileImpl.languageCheck(emptyString);
     }
 
-    //    @Test
-    public void languageCheckArrays() throws Exception {
-
+    @Test(expected = IllegalArgumentException.class)
+    public void should_return_exception_if_string_null_language_check() throws Exception {
+        //GIVEN
+        final String nullString = null;
+        //WHEN
+        ScannerFileImpl.languageCheck(nullString);
     }
 
+    @Test
+    public void should_return_is_true_after_string_language_check() throws Exception {
+        //GIVEN
+        //WHEN
+        boolean cyrName = ScannerFileImpl.languageCheck(CYR_NAME);
+        boolean latinName = ScannerFileImpl.languageCheck(LATIN_NAME);
+        //THEN
+        assertNotNull(cyrName);
+        assertNotNull(latinName);
+        assertNotSame(cyrName, latinName);
+        assertTrue(cyrName);
+        assertNotSame(latinName, true);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_return_exception_if_array_empty_language_check() throws Exception {
+        //GIVEN
+        final String[] emptyArray = {};
+        //WHEN
+        String checkedWord = ScannerFileImpl.languageCheck(emptyArray);
+    }
+
+
+    @Test
+    public void should_return_first_cyrillic_word_or_non_cyr_from_array_after_language_check() throws Exception {
+        //GIVEN
+        final String[] wordsArray = {LATIN_NAME, CYR_NAME};
+        final String[] latinWord = {LATIN_NAME};
+        final String[] emptyString = {""};
+        //WHEN
+        String checkedWord = ScannerFileImpl.languageCheck(wordsArray);
+        String checkedLatinWord = ScannerFileImpl.languageCheck(latinWord);
+        String checkedEmptyString = ScannerFileImpl.languageCheck(emptyString);
+        //THEN
+        assertNotNull(checkedWord);
+        assertEquals(checkedWord, CYR_NAME);
+
+        assertNotNull(checkedLatinWord);
+        assertEquals(checkedLatinWord, NON_CYRILLIC);
+
+        assertNotNull(checkedEmptyString);
+        assertEquals(checkedEmptyString, NON_CYRILLIC);
+    }
 
     //    @Test
     public void print() throws Exception {
