@@ -1,7 +1,9 @@
 package com.lunapps;
 
 import com.lunapps.configuration.AppConfig;
+import com.lunapps.model.AlternativeModel;
 import com.lunapps.model.Model;
+import com.lunapps.repository.AlternativeRepository;
 import com.lunapps.repository.ModelRepository;
 import com.lunapps.sevice.impl.ScannerFileImpl;
 import com.lunapps.utils.Utils;
