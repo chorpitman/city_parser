@@ -1,15 +1,14 @@
 package com.lunapps.utils.impl;
 
-import com.lunapps.model.Model;
 import com.lunapps.model.RegionInfo;
 import com.lunapps.sevice.impl.ScannerFileImpl;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collection;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class ScannerFileImplTest {
     private final static String COMMA = ",";

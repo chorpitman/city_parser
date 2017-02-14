@@ -112,8 +112,10 @@ public class ScannerFileImpl implements ScannerFile {
                 model.setLatitude(Double.parseDouble(splitLine[LATITUDE]));
                 model.setLongitude(Double.parseDouble(splitLine[LONGITUDE]));
                 model.setRegionId(splitLine[REGION_ID]);
-                //// FIXME: 2/14/17 Add constatnta into 7
+                // FIXME: 2/14/17 Add constatnta into 7
                 model.setFeatureCode(splitLine[7]);
+                // FIXME: 2/14/17 add constatnta
+                model.setPopolation(splitLine[14]);
                 ukrCitiesModels.add(model);
             }
         }
@@ -214,8 +216,8 @@ public class ScannerFileImpl implements ScannerFile {
     }
 
     /**
-     * @info this method find all entity, which has feature code ADM1
      * @return model with fields, which has ADM1 feature param
+     * @info this method find all entity, which has feature code ADM1
      */
     public List<RegionInfo> findRegions(final String filePath) {
         if (StringUtils.isBlank(filePath)) throw new IllegalArgumentException("Filepath can not be null");
