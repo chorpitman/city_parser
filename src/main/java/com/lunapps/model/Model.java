@@ -38,6 +38,9 @@ public class Model {
     @Column(name = "feature_codes")
     private String featureCode;
 
+    @Column(name = "population")
+    private String population;
+
     public Model() {
         this.id = ++Model.NEXT_ID;
     }
@@ -122,6 +125,14 @@ public class Model {
         this.featureCode = featureCode;
     }
 
+    public String getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(String population) {
+        this.population = population;
+    }
+
     @Override
     public String toString() {
         return "Model{" +
@@ -135,6 +146,7 @@ public class Model {
                 ", regionCyrillicName='" + regionCyrillicName + '\'' +
                 ", regionInternationalName='" + regionInternationalName + '\'' +
                 ", featureCode='" + featureCode + '\'' +
+                ", population='" + population + '\'' +
                 '}';
     }
 }

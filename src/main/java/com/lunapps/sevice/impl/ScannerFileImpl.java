@@ -115,7 +115,7 @@ public class ScannerFileImpl implements ScannerFile {
                 // FIXME: 2/14/17 Add constatnta into 7
                 model.setFeatureCode(splitLine[7]);
                 // FIXME: 2/14/17 add constatnta
-                model.setPopolation(splitLine[14]);
+                model.setPopulation(splitLine[14]);
                 ukrCitiesModels.add(model);
             }
         }
