@@ -44,23 +44,22 @@ public class ScannerFileImplTest {
         assertNotNull(scanner);
     }
 
-    //    @Test
-    public void print() throws Exception {
-
-    }
-
-    //    @Test
-    public void parseDbFiles() throws Exception {
-
-    }
-
-    //    @Test
-    public void setCityUkrName1() throws Exception {
-
-    }
+//    @Test
+//    public void print() throws Exception {
+//
+//    }
 
     @Test
-    public void setCityUkrName() throws Exception {
+    public void parseDbFiles() throws Exception {
+        //GIVEN
+        //WHEN
+        //THEN
+//        scannerFile.parseDbFiles();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shoud_return_exception_for_empty_collection_setCityUkrName() throws Exception {
+        // TODO: 2/13/17 continue impl test
         //GIVEN
         final int modelCityIndex = 11078435;
         final String modelCityUkrName = "Андріївка";
@@ -74,7 +73,33 @@ public class ScannerFileImplTest {
 
         final String UKR_NAME = "Станція Славута Перша";
         final long GEO_NAME_ID = 11078435;
+        //GIVEN
+        AlternativeModel aUkrModel = getAlternativeModel(GEO_NAME_ID, ISO_LANG, UKR_NAME);
+        Model model = getModel(modelCityIndex, modelCityUkrName, modelCityInterName, modelLatitude, modelLongitude,
+                modelRegionId, modelRegionCyrName, modelRegionInterName, featureCode);
+        //WHEN
+        ScannerFileImpl.setCityUkrName(Collections.EMPTY_LIST, Collections.singletonList(aUkrModel));
+        ScannerFileImpl.setCityUkrName(Collections.singletonList(model), Collections.EMPTY_LIST);
+        ScannerFileImpl.setCityUkrName(Collections.EMPTY_LIST, Collections.EMPTY_LIST);
+        //THEN
+        fail("Method should throw IllegalArgumentException");
+    }
 
+    @Test
+    public void should_set_ukr_city_into_model_setCityUkrName() throws Exception {
+        //GIVEN
+        final int modelCityIndex = 11078435;
+        final String modelCityUkrName = "Андріївка";
+        final String modelCityInterName = "Andriyivka";
+        final double modelLatitude = 48.25781;
+        final double modelLongitude = 33.90547;
+        final String modelRegionId = "04";
+        final String modelRegionCyrName = "";
+        final String modelRegionInterName = "";
+        final String featureCode = "PPL";
+
+        final String UKR_NAME = "Станція Славута Перша";
+        final long GEO_NAME_ID = 11078435;
         //GIVEN
         AlternativeModel aUkrModel = getAlternativeModel(GEO_NAME_ID, ISO_LANG, UKR_NAME);
         Model model = getModel(modelCityIndex, modelCityUkrName, modelCityInterName, modelLatitude, modelLongitude,
@@ -82,7 +107,9 @@ public class ScannerFileImplTest {
         // TODO: 2/13/17 continue impl test
         //WHEN
         ScannerFileImpl.setCityUkrName(Collections.singletonList(model), Collections.singletonList(aUkrModel));
-        System.out.println(model);
+        //THEN
+        assertNotNull(model);
+        assertNotSame(modelCityUkrName, model.getCityUkrName());
         assertEquals(UKR_NAME, model.getCityUkrName());
     }
 
@@ -119,7 +146,6 @@ public class ScannerFileImplTest {
         final String modelRegionCyrName = "";
         final String modelRegionInterName = "";
         final String featureCode = "PPL";
-
 
         final int GEO_CITY_INDEX = 8458701;
         final String REGION_ID = "04";
