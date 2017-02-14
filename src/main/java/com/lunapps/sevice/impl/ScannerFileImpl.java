@@ -112,7 +112,7 @@ public class ScannerFileImpl implements ScannerFile {
                 model.setLatitude(Double.parseDouble(splitLine[LATITUDE]));
                 model.setLongitude(Double.parseDouble(splitLine[LONGITUDE]));
                 model.setRegionId(splitLine[REGION_ID]);
-                //todo feature code move to constant
+                //// FIXME: 2/14/17 Add constatnta into 7
                 model.setFeatureCode(splitLine[7]);
                 ukrCitiesModels.add(model);
             }
