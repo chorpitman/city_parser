@@ -13,7 +13,7 @@ public class Utils {
         if (CollectionUtils.isEmpty(models)) throw new IllegalArgumentException("Collection can not be empty or null");
 
         int count = 0;
-        if (!CollectionUtils.isEmpty(models)) {
+        if (CollectionUtils.isNotEmpty(models)) {
             for (Model entity : models) {
                 String name = entity.getCityUkrName();
                 if (Objects.equals(name, NAME_NON_CYR)) {
