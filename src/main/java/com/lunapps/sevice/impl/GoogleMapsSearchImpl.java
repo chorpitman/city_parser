@@ -18,7 +18,7 @@ public class GoogleMapsSearchImpl implements GoogleMapsSearch {
     private final static String GOOGLE_API_KEY = "AIzaSyDLBD0Lu4EU3JKChRLEli4K_ZQ7ZhLKMEg";
     private final static String QUERY_RETURN_LANGUAGE = "uk";
 
-    private final static int QUERY_COUNT = 10;
+    private final static int QUERY_COUNT = 1547;
 
     @Override
     public Collection<Model> searchCityCyrNameByCoordinatesUsingGoogle(Collection<Model> nonCyrModelList) throws Exception {
