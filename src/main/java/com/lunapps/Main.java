@@ -3,13 +3,11 @@ package com.lunapps;
 import com.lunapps.configuration.AppConfig;
 import com.lunapps.model.Model;
 import com.lunapps.repository.ModelRepository;
-import com.lunapps.sevice.impl.GoogleMapsSearchImpl;
+import com.lunapps.sevice.impl.GooglePlacesSearchImpl;
 import com.lunapps.sevice.impl.ScannerFileImpl;
 import com.lunapps.utils.Utils;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class Main {
@@ -41,26 +39,30 @@ public class Main {
         System.out.println(models.size());
         System.out.println("non cyr -->" + Utils.countNonCyrillic(models));
 
-        //Create NON CYR DB
-        Collection<Model> nonCyrModelList = Main.getNonCyrModels(models);
-        System.out.println("nonCyrModelList size->" + nonCyrModelList.size());
+        //CREATE LIST WITH NON_CYR CITY NAME
+        Collection<Model> modelWithNonCyrCityName = Utils.returnListModelWithNonCyrCityName(models);
+        System.out.println("modelWithNonCyrCityName size->" + modelWithNonCyrCityName.size());
 
-        //REMOVE REDUNDANT ENTITY//
-        // FIXME: 2/15/17 create method which will remove nonCyrFromMainDb
-        models.removeIf(model -> model.getCityUkrName().equals("non cyrillic"));
+        //REMOVE FROM MODEL LIST ENTITY WITH NON_CYR CITY NAME
+        Utils.removeEntityWithNonCyrCityName(models);
         System.out.println("model size after remove non cyr entity -> " + models.size());
         System.out.println("non cyr size " + Utils.countNonCyrillic(models));
 
+        //GOOGLE PLACES API
+        GooglePlacesSearchImpl placesSearch = new GooglePlacesSearchImpl();
+        Collection<Model> googleNearbySearch = placesSearch.nearbySearch(modelWithNonCyrCityName, "uk");
+        System.out.println("googleNearbySearch" + googleNearbySearch.size());
+
         //GOOGLE MAPS API
-        GoogleMapsSearchImpl googleMaps = new GoogleMapsSearchImpl();
-        Collection<Model> geoDecodedModelList = googleMaps.searchCityCyrNameByCoordinatesUsingGoogle(nonCyrModelList);
-        System.out.println("geoDecodedModelList count non cyr " + Utils.countNonCyrillic(geoDecodedModelList));
+//        GoogleMapsSearchImpl googleMaps = new GoogleMapsSearchImpl();
+//        Collection<Model> geoDecodedModelList = googleMaps.searchCityCyrNameByCoordinatesUsingGoogle(nonCyrModelList);
+//        System.out.println("geoDecodedModelList count non cyr " + Utils.countNonCyrillic(geoDecodedModelList));
 
         //SPRING START
         //save model
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         ModelRepository cityDao = context.getBean("modelRepository", ModelRepository.class);
-        cityDao.save(geoDecodedModelList);
+        cityDao.save(googleNearbySearch);
 
         //save alter table
 //        AlternativeRepository repository = context.getBean("alterRepository", AlternativeRepository.class);
@@ -69,18 +71,6 @@ public class Main {
 
         long finish = System.currentTimeMillis();
         System.out.println("time for save -->" + (finish - start) / 1000 + " sec");
-    }
-
-    private static Collection<Model> getNonCyrModels(Collection<Model> models) {
-        if (CollectionUtils.isEmpty(models)) throw new IllegalArgumentException("");
-
-        ArrayList<Model> nonCyrList = new ArrayList<>();
-        for (Model model : models) {
-            if (model.getCityUkrName().equals("non cyrillic")) {
-                nonCyrList.add(model);
-            }
-        }
-        return nonCyrList;
     }
 }
 
