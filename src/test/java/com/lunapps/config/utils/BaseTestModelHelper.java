@@ -20,6 +20,13 @@ public class BaseTestModelHelper {
         return model;
     }
 
+    public static Model getModel(String cityUkrName) {
+        Model model = new Model();
+        model.setCityUkrName(cityUkrName);
+
+        return model;
+    }
+
     public static Model getModel() {
         Model model = new Model();
         return model;
