@@ -89,5 +89,12 @@
             <version>LATEST</version>
         </dependency>
 
+        <!--Google Places-->
+        <dependency>
+            <groupId>net.sf.sprockets</groupId>
+            <artifactId>sprockets</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
     </dependencies>
 </project>

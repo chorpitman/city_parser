@@ -34,11 +34,17 @@ public class GoogleMapsSearchImpl implements GoogleMapsSearch {
                 break;
             } else {
                 LatLng latLng = new LatLng(model.getLatitude(), model.getLongitude());
-                GeocodingResult[] geocodingResults = GeocodingApi.reverseGeocode(apiContext, latLng).language(QUERY_RETURN_LANGUAGE).resultType(AddressType.POLITICAL).await();
+                GeocodingResult[] geocodingResults = GeocodingApi.reverseGeocode(apiContext, latLng)
+                        .language(QUERY_RETURN_LANGUAGE)
+                        .resultType(AddressType.POLITICAL).await();
                 AddressComponent[] addressComponents = geocodingResults[0].addressComponents;
-                String longName = addressComponents[0].longName;
-                model.setCityUkrName(longName);
-                count++;
+                if (addressComponents != null & addressComponents.length != 0) {
+                    String longName = addressComponents[0].longName;
+                    if (StringUtils.isNotBlank(longName)) {
+                        model.setCityUkrName(longName);
+                        count++;
+                    }
+                }
             }
         }
         return decodedList;
