@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GooglePlacesSearchImpl implements GooglePlacesSearch {
     private final static int RADIUS = 500;
-    public static final int QUERY_COUNT = 10;
+    public static final int QUERY_COUNT = 8800;
 
     @Override
     public Collection<Model> nearbySearch(Collection<Model> nonCyrList, String language) {
@@ -24,25 +24,31 @@ public class GooglePlacesSearchImpl implements GooglePlacesSearch {
         ArrayList<Model> nearbySearchedList = new ArrayList<>(nonCyrList);
 
         int count = 0;
+        int countQuery = 0;
         for (Model model : nearbySearchedList) {
-            if (count == QUERY_COUNT) {
-                break;
-            }
+            if (countQuery == QUERY_COUNT) break;
+
             final Double latitude = model.getLatitude();
             final Double longitude = model.getLongitude();
 
-            if (latitude != 0 & longitude != 0) {
+            if ((latitude != 0) & (longitude != 0)) {
                 try {
-                    List<Place> placeList = Places.nearbySearch(Places.Params.create()
+                    List<Place> placeList = Places.nearbySearch(Places.Params
+                            .create()
                             .latitude(latitude)
                             .longitude(longitude)
                             .radius(RADIUS)
-                            .language(LANGUAGE), Places.FIELD_NAME)
+                            .language(LANGUAGE), Places.FIELD_VICINITY)
                             .getResult();
-                    if (placeList.size() >= 1) {
+                    countQuery++;
+                    if (placeList.size() != 0) {
                         String vicinity = placeList.get(0).getVicinity();
                         if (StringUtils.isNotBlank(vicinity)) {
+                            double lat = placeList.get(0).getLatitude();
+                            double lon = placeList.get(0).getLongitude();
                             model.setCityUkrName(vicinity);
+                            model.setLatitude(lat);
+                            model.setLongitude(lon);
                             count++;
                         }
                     }
@@ -51,7 +57,6 @@ public class GooglePlacesSearchImpl implements GooglePlacesSearch {
                 }
             }
         }
-
         return nearbySearchedList;
     }
 }
