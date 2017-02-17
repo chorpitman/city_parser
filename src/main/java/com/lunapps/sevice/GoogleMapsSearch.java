@@ -6,5 +6,5 @@ import java.util.Collection;
 
 public interface GoogleMapsSearch {
 
-    Collection<Model> searchCityCyrNameByCoordinatesUsingGoogle(Collection<Model> nonCyrModelList) throws Exception;
+    Collection<Model> searchCityNameByCoordinatesUsingGoogleMaps(Collection<Model> nonCyrModelList) throws Exception;
 }
