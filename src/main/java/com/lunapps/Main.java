@@ -3,6 +3,7 @@ package com.lunapps;
 import com.lunapps.configuration.AppConfig;
 import com.lunapps.model.Model;
 import com.lunapps.repository.ModelRepository;
+import com.lunapps.sevice.impl.GoogleMapsSearchImpl;
 import com.lunapps.sevice.impl.GooglePlacesSearchImpl;
 import com.lunapps.sevice.impl.ScannerFileImpl;
 import com.lunapps.utils.Utils;
@@ -51,12 +52,15 @@ public class Main {
         //GOOGLE PLACES API
         GooglePlacesSearchImpl placesSearch = new GooglePlacesSearchImpl();
         Collection<Model> googleNearbySearch = placesSearch.nearbySearch(modelWithNonCyrCityName, "uk");
-        System.out.println("googleNearbySearch" + googleNearbySearch.size());
+        System.out.println("googleNearbySearch size" + Utils.countNonCyrillic(googleNearbySearch));
 
         //GOOGLE MAPS API
-//        GoogleMapsSearchImpl googleMaps = new GoogleMapsSearchImpl();
-//        Collection<Model> geoDecodedModelList = googleMaps.searchCityCyrNameByCoordinatesUsingGoogle(nonCyrModelList);
-//        System.out.println("geoDecodedModelList count non cyr " + Utils.countNonCyrillic(geoDecodedModelList));
+        GoogleMapsSearchImpl googleMaps = new GoogleMapsSearchImpl();
+        Collection<Model> geoDecodedModelList = googleMaps.searchCityNameByCoordinatesUsingGoogleMaps(googleNearbySearch);
+        System.out.println("geoDecodedModelList count non cyr " + Utils.countNonCyrillic(geoDecodedModelList));
+
+        //UNION TWO COLLECTION (MODEL WITH GOOGLE COLLECTION)
+//        models.addAll(geoDecodedModelList);
 
         //SPRING START
         //save model
