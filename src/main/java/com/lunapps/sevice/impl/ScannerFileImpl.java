@@ -76,16 +76,18 @@ public class ScannerFileImpl implements ScannerFile {
 
         //OPTIMIZE ALTERNATIVE UKR REGION = REMOVE REDUNDANT ENTITY WHICH HAS SAME CITY ID
         Collection<AlternativeModel> optimizedAlternativeNamesList = ScannerFileImpl.getOptimizedAlternativeNamesList(nonOptimizeAlternativeNamesList);
-        System.out.println("alternative name size = " + optimizedAlternativeNamesList.size());
+        System.out.println("alternative name size after optimize= " + optimizedAlternativeNamesList.size());
 
         //GET UKR REGIONS
         List<RegionInfo> ukrRegionsList = new ScannerFileImpl().findRegions(ukrDbPath);
-        System.out.println("regions size = " + ukrRegionsList.size());
+        // TODO: 2/17/17 remove
+        System.out.println("ukr regions size == " + ukrRegionsList.size());
 
         //SET CYRILLIC CYRILLIC_NAME INTO REGIONS
         setCyrNameIntoRegions(optimizedAlternativeNamesList, ukrRegionsList);
         print(ukrRegionsList);
-        System.out.println(ukrRegionsList.size() + "====================================");
+        // TODO: 2/17/17 remove
+        System.out.println(ukrRegionsList.size() + " ====================================");
 
         Scanner scanner = getScanner(ukrDbPath);
 
@@ -112,9 +114,9 @@ public class ScannerFileImpl implements ScannerFile {
                 model.setLatitude(Double.parseDouble(splitLine[LATITUDE]));
                 model.setLongitude(Double.parseDouble(splitLine[LONGITUDE]));
                 model.setRegionId(splitLine[REGION_ID]);
-                // FIXME: 2/14/17 Add constatnta into 7
+                // FIXME: 2/14/17 Add constant into or remove from model
                 model.setFeatureCode(splitLine[7]);
-                // FIXME: 2/14/17 add constatnta
+                // FIXME: 2/14/17 add constant or remove from model
                 model.setPopulation(splitLine[14]);
                 ukrCitiesModels.add(model);
             }
@@ -183,10 +185,10 @@ public class ScannerFileImpl implements ScannerFile {
             throw new IllegalArgumentException("ukrCitiesModels or ukrRegionsList can not be null or empty");
 
         for (Model model : ukrCitiesModels) {
-            String regionId = model.getRegionId();
+            String modelRegionId = model.getRegionId();
 
             for (RegionInfo region : ukrRegionsList) {
-                if (Objects.equals(regionId, region.getRegionId())) {
+                if (Objects.equals(modelRegionId, region.getRegionId())) {
                     model.setRegionInternationalName(region.getRegionInternationalName());
                     model.setRegionCyrillicName(region.getRegionCyrillicName());
                 }
@@ -202,10 +204,10 @@ public class ScannerFileImpl implements ScannerFile {
             throw new IllegalArgumentException("optimizedAlternativeNamesList or regions List can not be null or empty");
 
         for (RegionInfo region : regions) {
-            int cityIndex = region.getCityIndex();
+            int regionCityIndex = region.getCityIndex();
 
             for (AlternativeModel alternativeRegion : optimizedAlternativeNamesList) {
-                if (alternativeRegion.getGeoNameId() == cityIndex) {
+                if (alternativeRegion.getGeoNameId() == regionCityIndex) {
                     if (languageCheck(alternativeRegion.getCyrillicName())) {
                         region.setRegionCyrillicName(alternativeRegion.getCyrillicName());
                         break;
