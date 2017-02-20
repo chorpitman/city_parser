@@ -43,7 +43,7 @@ public class GooglePlacesSearchImpl implements GooglePlacesSearch {
                     countQuery++;
                     if (placeList.size() != 0) {
                         String vicinity = placeList.get(0).getVicinity();
-                        if (StringUtils.isNotBlank(vicinity)) {
+                        if (StringUtils.isNotBlank(vicinity) & ScannerFileImpl.languageCheck(vicinity)) {
                             double lat = placeList.get(0).getLatitude();
                             double lon = placeList.get(0).getLongitude();
                             model.setCityUkrName(vicinity);
