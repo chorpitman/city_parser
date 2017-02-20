@@ -65,6 +65,8 @@ public class ScannerFileImpl implements ScannerFile {
      */
     private final static String GEO_CODE_PPLA = "PPLA";
 
+    public static final int POPULATION = 14;
+
     @Override
     public Collection<Model> parseDbFiles(final String ukrDbPath, final String alterNameDb) {
         if (StringUtils.isBlank(ukrDbPath) || StringUtils.isBlank(alterNameDb))
@@ -92,7 +94,6 @@ public class ScannerFileImpl implements ScannerFile {
         Scanner scanner = getScanner(ukrDbPath);
 
         //PARSE UKR DB
-        // TODO: 2/9/17 think about Array or LinkedList
         List<Model> ukrCitiesModels = new ArrayList<>();
 
         while (scanner.hasNextLine()) {
@@ -116,8 +117,7 @@ public class ScannerFileImpl implements ScannerFile {
                 model.setRegionId(splitLine[REGION_ID]);
                 // FIXME: 2/14/17 Add constant into or remove from model
                 model.setFeatureCode(splitLine[7]);
-                // FIXME: 2/14/17 add constant or remove from model
-                model.setPopulation(splitLine[14]);
+                model.setPopulation(splitLine[POPULATION]);
                 ukrCitiesModels.add(model);
             }
         }
@@ -161,19 +161,14 @@ public class ScannerFileImpl implements ScannerFile {
         if (CollectionUtils.isEmpty(ukrCitiesModels) || CollectionUtils.isEmpty(optimizedAlternativeNamesList))
             throw new IllegalArgumentException("ukrCitiesModels or optimizedAlternativeNamesList can not be null or empty");
 
-        int result = 0;
         for (Model model : ukrCitiesModels) {
             int cityIndex = model.getCityIndex();
             for (AlternativeModel altRegion : optimizedAlternativeNamesList) {
                 if (cityIndex == altRegion.getGeoNameId()) {
                     model.setCityUkrName(altRegion.getCyrillicName());
-                    result++;
                 }
             }
         }
-        // TODO: 09.02.2017 delete after testing
-        //SHOWS result of changes for DEBUG
-        int count = result;
     }
 
     /**
@@ -265,10 +260,7 @@ public class ScannerFileImpl implements ScannerFile {
                     if (languageCheck(splitLine[CYRILL_NAME])) {
                         model.setCyrillicName(splitLine[CYRILL_NAME]);
                     } else {
-                        // TODO: 09.02.2017 think может просто забывать про эту сущность???
                         continue;
-                        //если нет кириллицы добавляем
-//                        model.setCyrillicName(NON_CYRILLIC);
                     }
                     models.add(model);
                 }
@@ -282,14 +274,12 @@ public class ScannerFileImpl implements ScannerFile {
         if (Objects.isNull(splittedLine) || splittedLine.length == 0)
             throw new IllegalArgumentException("String for language check can not be null");
 
-        String checkedName = "";
-
         for (int i = splittedLine.length - 1; i >= 0; i--) {
             if (splittedLine[i].codePoints().anyMatch(
                     c -> Character.UnicodeScript.of(c) == Character.UnicodeScript.CYRILLIC))
-                return checkedName = splittedLine[i];
+                return splittedLine[i];
         }
-        return checkedName = NON_CYRILLIC;
+        return NON_CYRILLIC;
     }
 
     public static boolean languageCheck(final String splittedLine) {
