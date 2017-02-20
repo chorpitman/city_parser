@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static com.lunapps.sevice.impl.ScannerFileImpl.*;
+
 public class GooglePlacesSearchImpl implements GooglePlacesSearch {
     private final static int RADIUS = 500;
 
@@ -23,7 +25,7 @@ public class GooglePlacesSearchImpl implements GooglePlacesSearch {
         final int QUERY_COUNT = nonCyrList.size();
         ArrayList<Model> nearbySearchedList = new ArrayList<>(nonCyrList);
 
-        int count = 0;
+        int countModelSet = 0;
         int countQuery = 0;
         for (Model model : nearbySearchedList) {
             if (countQuery == QUERY_COUNT) break;
@@ -43,13 +45,15 @@ public class GooglePlacesSearchImpl implements GooglePlacesSearch {
                     countQuery++;
                     if (placeList.size() != 0) {
                         String vicinity = placeList.get(0).getVicinity();
-                        if (StringUtils.isNotBlank(vicinity) & ScannerFileImpl.languageCheck(vicinity)) {
-                            double lat = placeList.get(0).getLatitude();
-                            double lon = placeList.get(0).getLongitude();
-                            model.setCityUkrName(vicinity);
-                            model.setLatitude(lat);
-                            model.setLongitude(lon);
-                            count++;
+                        if (StringUtils.isNotBlank(vicinity)) {
+                            if (languageCheck(vicinity)) {
+                                double lat = placeList.get(0).getLatitude();
+                                double lon = placeList.get(0).getLongitude();
+                                model.setCityUkrName(vicinity);
+                                model.setLatitude(lat);
+                                model.setLongitude(lon);
+                                countModelSet++;
+                            }
                         }
                     }
                 } catch (IOException e) {
