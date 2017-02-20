@@ -19,12 +19,13 @@ public class GoogleMapsSearchImpl implements GoogleMapsSearch {
     private final static String GOOGLE_API_KEY = "AIzaSyDLBD0Lu4EU3JKChRLEli4K_ZQ7ZhLKMEg";
     private final static String LANGUAGE_QUERY = "en";
 
-    private final static int QUERY_COUNT = 8800;
 
     @Override
     public Collection<Model> searchCityNameByCoordinatesUsingGoogleMaps(Collection<Model> nonCyrModelList) throws Exception {
         if (CollectionUtils.isEmpty(nonCyrModelList))
             throw new IllegalArgumentException("nonCyrModelList or googleApi cannot be null or empty");
+
+        final int QUERY_COUNT = nonCyrModelList.size();
 
         GeoApiContext apiContext = new GeoApiContext().setApiKey(GOOGLE_API_KEY);
         ArrayList<Model> decodedList = new ArrayList<>(nonCyrModelList);

@@ -14,13 +14,13 @@ import java.util.List;
 
 public class GooglePlacesSearchImpl implements GooglePlacesSearch {
     private final static int RADIUS = 500;
-    public static final int QUERY_COUNT = 8800;
 
     @Override
     public Collection<Model> nearbySearch(Collection<Model> nonCyrList, String language) {
         final String LANGUAGE = language;
         if (CollectionUtils.isEmpty(nonCyrList)) throw new IllegalArgumentException("nonCyrList can bot be null");
 
+        final int QUERY_COUNT = nonCyrList.size();
         ArrayList<Model> nearbySearchedList = new ArrayList<>(nonCyrList);
 
         int count = 0;
