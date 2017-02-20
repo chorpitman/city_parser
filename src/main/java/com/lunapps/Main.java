@@ -74,13 +74,13 @@ public class Main {
         //save model
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         ModelRepository cityDao = context.getBean(ModelRepository.class);
-        List<Model> all = cityDao.findAll();
-        System.out.println(all);
+        List<Model> modelList = cityDao.save(models);
+        System.out.println("final size: " +modelList.size());
 
         //save alter table
-        AlternativeRepository repository = context.getBean("alterRepository", AlternativeRepository.class);
-        Collection<AlternativeModel> optimizedAlternativeNamesList = ScannerFileImpl.getOptimizedAlternativeNamesList(ScannerFileImpl.findAlternativeRegions(PARSE_ALTER_NAME_DB));
-        repository.save(optimizedAlternativeNamesList);
+//        AlternativeRepository repository = context.getBean("alterRepository", AlternativeRepository.class);
+//        Collection<AlternativeModel> optimizedAlternativeNamesList = ScannerFileImpl.getOptimizedAlternativeNamesList(ScannerFileImpl.findAlternativeRegions(PARSE_ALTER_NAME_DB));
+//        repository.save(optimizedAlternativeNamesList);
 
         long finish = System.currentTimeMillis();
         System.out.println("time for save -->" + (finish - start) / 1000 + " sec");
