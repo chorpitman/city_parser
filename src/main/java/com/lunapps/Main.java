@@ -1,7 +1,9 @@
 package com.lunapps;
 
 import com.lunapps.configuration.AppConfig;
+import com.lunapps.model.AlternativeModel;
 import com.lunapps.model.Model;
+import com.lunapps.repository.AlternativeRepository;
 import com.lunapps.repository.ModelRepository;
 import com.lunapps.sevice.impl.GoogleMapsSearchImpl;
 import com.lunapps.sevice.impl.GooglePlacesSearchImpl;
@@ -10,6 +12,7 @@ import com.lunapps.utils.Utils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.Collection;
+import java.util.List;
 
 public class Main {
     private final static String PARSE_UKR_DB = "src/main/resources/UA.txt";
@@ -59,19 +62,25 @@ public class Main {
         Collection<Model> geoDecodedModelList = googleMaps.searchCityNameByCoordinatesUsingGoogleMaps(googleNearbySearch);
         System.out.println("geoDecodedModelList count non cyr " + Utils.countNonCyrillic(geoDecodedModelList));
 
+        //REMOVE FROM MODEL LIST ENTITY WITH NON_CYR CITY NAME
+        Utils.removeEntityWithNonCyrCityName(geoDecodedModelList);
+        System.out.println("model size after remove non cyr entity -> " + geoDecodedModelList.size());
+        System.out.println("non cyr size " + Utils.countNonCyrillic(geoDecodedModelList));
+
         //UNION TWO COLLECTION (MODEL WITH GOOGLE COLLECTION)
-//        models.addAll(geoDecodedModelList);
+        models.addAll(geoDecodedModelList);
 
         //SPRING START
         //save model
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-        ModelRepository cityDao = context.getBean("modelRepository", ModelRepository.class);
-        cityDao.save(googleNearbySearch);
+        ModelRepository cityDao = context.getBean(ModelRepository.class);
+        List<Model> all = cityDao.findAll();
+        System.out.println(all);
 
         //save alter table
-//        AlternativeRepository repository = context.getBean("alterRepository", AlternativeRepository.class);
-//        Collection<AlternativeModel> optimizedAlternativeNamesList = ScannerFileImpl.getOptimizedAlternativeNamesList(ScannerFileImpl.findAlternativeRegions(PARSE_ALTER_NAME_DB));
-//        repository.save(optimizedAlternativeNamesList);
+        AlternativeRepository repository = context.getBean("alterRepository", AlternativeRepository.class);
+        Collection<AlternativeModel> optimizedAlternativeNamesList = ScannerFileImpl.getOptimizedAlternativeNamesList(ScannerFileImpl.findAlternativeRegions(PARSE_ALTER_NAME_DB));
+        repository.save(optimizedAlternativeNamesList);
 
         long finish = System.currentTimeMillis();
         System.out.println("time for save -->" + (finish - start) / 1000 + " sec");
