@@ -38,21 +38,6 @@ public class Utils {
         return nonCyrList;
     }
 
-    public static void transliterate(Collection<Model> models) {
-        if (CollectionUtils.isEmpty(models)) throw new IllegalArgumentException("Collection can not be empty or null");
-
-        for (Model entity : models) {
-            String name = entity.getCityUkrName();
-            if (Objects.equals(name, NAME_NON_CYR)) {
-                System.out.println(entity.getInternationalName());
-                String s = Transliterator.lat2cyr(entity.getInternationalName());
-                System.out.println(s);
-                entity.setCityUkrName(s);
-                System.out.println();
-            }
-        }
-    }
-
     public static void removeEntityWithNonCyrCityName(Collection<Model> models) {
         if (CollectionUtils.isEmpty(models)) throw new IllegalArgumentException("models can not be empty or null");
         models.removeIf(model -> model.getCityUkrName().equals(NAME_NON_CYR));
