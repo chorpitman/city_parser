@@ -4,7 +4,7 @@ Prerequisites
 | --- | --- | --- | --- |
 | Java | 1.8.x | java -version | |
 | Maven | 3.2.3 or 3.2.5 | mvn -version | Newer versions should also work |
-| Git | any (latest preferrable) | git --version | |
+| Git | any (latest preferable) | git --version | |
 | MySQL | 5.6.x (or newer) | mysql --version | |
 
 Setup
