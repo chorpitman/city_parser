@@ -37,18 +37,18 @@ public class Main {
 
         //PARSE FILE
         ScannerFileImpl scannerfile = new ScannerFileImpl();
-        Collection<Model> models = scannerfile.parseDbFiles(PARSE_UKR_DB, PARSE_ALTER_NAME_DB);
-        System.out.println(models.size());
-        System.out.println("non cyr -->" + Utils.countNonCyrillic(models));
+        Collection<Model> ukrModels = scannerfile.parseDbFiles(PARSE_UKR_DB, PARSE_ALTER_NAME_DB);
+        System.out.println(ukrModels.size());
+        System.out.println("non cyr -->" + Utils.countNonCyrillic(ukrModels));
 
         //CREATE LIST WITH NON_CYR CITY NAME
-        Collection<Model> modelWithNonCyrCityName = Utils.returnListModelWithNonCyrCityName(models);
+        Collection<Model> modelWithNonCyrCityName = Utils.returnListModelWithNonCyrCityName(ukrModels);
         System.out.println("modelWithNonCyrCityName size->" + modelWithNonCyrCityName.size());
 
         //REMOVE FROM MODEL LIST ENTITY WITH NON_CYR CITY NAME
-        Utils.removeEntityWithNonCyrCityName(models);
-        System.out.println("model size after remove non cyr entity -> " + models.size());
-        System.out.println("non cyr size " + Utils.countNonCyrillic(models));
+        Utils.removeEntityWithNonCyrCityName(ukrModels);
+        System.out.println("model size after remove non cyr entity -> " + ukrModels.size());
+        System.out.println("non cyr size " + Utils.countNonCyrillic(ukrModels));
 
         //GOOGLE PLACES API
         GooglePlacesSearchImpl placesSearch = new GooglePlacesSearchImpl();
@@ -66,13 +66,15 @@ public class Main {
         System.out.println("non cyr size " + Utils.countNonCyrillic(geoDecodedModelList));
 
         //UNION TWO COLLECTION (MODEL WITH GOOGLE COLLECTION)
-        models.addAll(geoDecodedModelList);
+        ukrModels.addAll(geoDecodedModelList);
+        System.out.println("new model size 22625 + " + geoDecodedModelList.size() + " = " + ukrModels.size());
 
         //SPRING START
         //save model
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         ModelRepository cityDao = context.getBean(ModelRepository.class);
-        List<Model> modelList = cityDao.save(models);
+
+        List<Model> modelList = cityDao.save(ukrModels);
         System.out.println("final size: " + modelList.size());
 
         //save alter table
