@@ -16,12 +16,12 @@ public class ScannerFileImplTest {
     private ScannerFileImpl utils;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         utils = new ScannerFileImpl();
     }
 
     @Test
-    public void should_return_region_info() throws Exception {
+    public void should_return_region_info() {
         //GIVEN
         String FILE_PATH_TEST = "src/main/resources/dbtxt/UA_test=one_area.txt";
         //WHEN
@@ -33,7 +33,7 @@ public class ScannerFileImplTest {
     }
 
     @Test
-    public void should_return_false_for_non_cyrillic_chars() throws Exception {
+    public void should_return_false_for_non_cyrillic_chars() {
         //GIVEN
         final String CHINESE = "xxx已下架xxx";
         final String korean = "드니프로페트로우시크";
@@ -64,7 +64,7 @@ public class ScannerFileImplTest {
     }
 
     @Test
-    public void should_return_entity_only_without_special_region_id_00() throws Exception {
+    public void should_return_entity_only_without_special_region_id_00() {
         //GIVEN
         String FILE_PATH_TEST = "src/main/resources/dbtxt/UA_region==00.txt";
         //WHEN
@@ -77,8 +77,8 @@ public class ScannerFileImplTest {
 
     private static boolean containsHanScriptStream(String s, String split) {
         String[] splittedLine = s.split(split);
-        for (int i = 0; i < splittedLine.length; i++) {
-            if (splittedLine[i].codePoints().anyMatch(
+        for (String aSplittedLine : splittedLine) {
+            if (aSplittedLine.codePoints().anyMatch(
                     c -> Character.UnicodeScript.of(c) == Character.UnicodeScript.CYRILLIC)) return true;
         }
         return false;

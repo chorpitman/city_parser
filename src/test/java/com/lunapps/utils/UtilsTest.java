@@ -12,7 +12,7 @@ import static junit.framework.Assert.*;
 
 public class UtilsTest {
     @Test
-    public void should_return_count_non_cyr_entity_countNonCyrillic() throws Exception {
+    public void should_return_count_non_cyr_entity_countNonCyrillic()  {
         final String NON_CYR_NAME = "non cyrillic";
         final String CYR_NAME = "Львівська область";
         final int EXPECTED_SIZE = 2;
@@ -32,7 +32,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void createModelWithNonCyrCityName() throws Exception {
+    public void createModelWithNonCyrCityName()  {
         final String NON_CYR_NAME = "non cyrillic";
         final String CYR_NAME = "Львівська область";
         final int EXPECTED_COUNT = 1;
@@ -52,7 +52,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void should_remove_with_non_cyr_city_name_EntityWithNonCyrCityName() throws Exception {
+    public void should_remove_with_non_cyr_city_name_EntityWithNonCyrCityName()  {
         final String NON_CYR_NAME = "non cyrillic";
         final String CYR_NAME = "Львівська область";
         final int EXPECTED_COUNT = 1;

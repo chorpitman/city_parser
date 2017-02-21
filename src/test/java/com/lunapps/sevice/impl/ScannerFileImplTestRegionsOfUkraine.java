@@ -20,7 +20,7 @@ public class ScannerFileImplTestRegionsOfUkraine {
     private ScannerFileImpl scannerFile;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         scannerFile = new ScannerFileImpl();
     }
 

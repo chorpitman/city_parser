@@ -26,18 +26,18 @@ public class ScannerFileImplTest {
     private ScannerFileImpl scannerFile;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         scannerFile = new ScannerFileImpl();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_return_exception_scanner() throws Exception {
+    public void should_return_exception_scanner()   {
         //WHEN
         Scanner scanner = ScannerFileImpl.getScanner(EMPTY_PATH);
     }
 
     @Test
-    public void should_return_scanner() throws Exception {
+    public void should_return_scanner()  {
         //WHEN
         Scanner scanner = ScannerFileImpl.getScanner(PATH);
         //THEN
@@ -45,12 +45,12 @@ public class ScannerFileImplTest {
     }
 
 //    @Test
-//    public void print() throws Exception {
+//    public void print()  {
 //
 //    }
 
     @Test// TODO: 2/17/17 impl test
-    public void parseDbFiles() throws Exception {
+    public void parseDbFiles()  {
         //GIVEN
         //WHEN
         //THEN
@@ -58,7 +58,7 @@ public class ScannerFileImplTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void shoud_return_exception_for_empty_collection_setCityUkrName() throws Exception {
+    public void shoud_return_exception_for_empty_collection_setCityUkrName()   {
         // TODO: 2/13/17 continue impl test
         //GIVEN
         final int modelCityIndex = 11078435;
@@ -86,7 +86,7 @@ public class ScannerFileImplTest {
     }
 
     @Test
-    public void should_set_ukr_city_into_model_setCityUkrName() throws Exception {
+    public void should_set_ukr_city_into_model_setCityUkrName()  {
         //GIVEN
         final int modelCityIndex = 11078435;
         final String modelCityUkrName = "Андріївка";
@@ -114,7 +114,7 @@ public class ScannerFileImplTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_return_exception_for_empty_collection_setInterAndCyrRegion() throws Exception {
+    public void should_return_exception_for_empty_collection_setInterAndCyrRegion()  {
         //GIVEN
         final int GEO_CITY_INDEX = 8458701;
         final String REGION_ID = "01";
@@ -135,7 +135,7 @@ public class ScannerFileImplTest {
     }
 
     @Test
-    public void setInterAndCyrRegion() throws Exception {
+    public void setInterAndCyrRegion()  {
         //GIVEN
         final int modelCityIndex = 11078435;
         final String modelCityUkrName = "Андріївка";
@@ -167,7 +167,7 @@ public class ScannerFileImplTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_return_exception_for_empty_collection_setCyrNameInRegion() throws Exception {
+    public void should_return_exception_for_empty_collection_setCyrNameInRegion()  {
         //GIVEN
         final int GEO_CITY_INDEX = 8458701;
         final String REGION_ID = "01";
@@ -185,7 +185,7 @@ public class ScannerFileImplTest {
     }
 
     @Test
-    public void should_return_region_with_new_cyr_name_region_setCyrNameInRegions() throws Exception {
+    public void should_return_region_with_new_cyr_name_region_setCyrNameInRegions()  {
         //GIVEN
         final int GEO_CITY_INDEX = 8458701;
         final String REGION_ID = "01";
@@ -209,7 +209,7 @@ public class ScannerFileImplTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_return_exception_for_empty_path_findAlternativeRegions() throws Exception {
+    public void should_return_exception_for_empty_path_findAlternativeRegions()  {
         //GIVEN
         //WHEN
         ScannerFileImpl.findAlternativeRegions(EMPTY_PATH);
@@ -218,7 +218,7 @@ public class ScannerFileImplTest {
     }
 
     @Test
-    public void should_return_alternativeRegions() throws Exception {
+    public void should_return_alternativeRegions()  {
         //GIVEN
         final int EXPECTED_SIZE = 7;
         final int EXPECTED_MATCH_FOR_468196 = 2;
@@ -251,7 +251,7 @@ public class ScannerFileImplTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_return_exception_if_path_empty_findRegions() throws Exception {
+    public void should_return_exception_if_path_empty_findRegions()   {
         //GIVEN
         //WHEN
         List<RegionInfo> foundRegions = scannerFile.findRegions(EMPTY_PATH);
@@ -260,7 +260,7 @@ public class ScannerFileImplTest {
     }
 
     @Test
-    public void should_return_regions_with_feature_code_ADM1_findRegions() throws Exception {
+    public void should_return_regions_with_feature_code_ADM1_findRegions()  {
         //GIVEN
         final int EXPECTED_REGIONS_SIZE = 27;
         final String EXPECTED_FEATURE_CODE = "ADM1";
@@ -352,7 +352,7 @@ public class ScannerFileImplTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_return_exception_if_string_empty_language_check() throws Exception {
+    public void should_return_exception_if_string_empty_language_check()   {
         //GIVEN
         final String emptyString = "";
         //WHEN
@@ -362,7 +362,7 @@ public class ScannerFileImplTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_return_exception_if_string_null_language_check() throws Exception {
+    public void should_return_exception_if_string_null_language_check()   {
         //GIVEN
         final String nullString = null;
         //WHEN
@@ -372,7 +372,7 @@ public class ScannerFileImplTest {
     }
 
     @Test
-    public void should_return_is_true_after_string_language_check() throws Exception {
+    public void should_return_is_true_after_string_language_check()  {
         //GIVEN
         //WHEN
         boolean cyrName = ScannerFileImpl.languageCheck(CYR_NAME);
@@ -386,7 +386,7 @@ public class ScannerFileImplTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_return_exception_for_empty_array_languageCheck() throws Exception {
+    public void should_return_exception_for_empty_array_languageCheck()   {
         //GIVEN
         final String[] emptyArray = {};
         //WHEN
@@ -396,7 +396,7 @@ public class ScannerFileImplTest {
     }
 
     @Test
-    public void should_return_first_cyrillic_word_or_non_cyr_from_array_after_language_check() throws Exception {
+    public void should_return_first_cyrillic_word_or_non_cyr_from_array_after_language_check()  {
         //GIVEN
         final String[] wordsArray = {LATIN_NAME, CYR_NAME};
         final String[] latinWord = {LATIN_NAME};
@@ -417,7 +417,7 @@ public class ScannerFileImplTest {
     }
 
     @Test
-    public void should_return_optimizedAlternativeNamesList() throws Exception {
+    public void should_return_optimizedAlternativeNamesList()  {
         final String UKR_NAME = "Станція Славута Перша";
         final String UKR_NAME1 = "Зупиночний Пункт Нове Депо";
         final String NON_CYR = "non cyrillic";
@@ -425,7 +425,7 @@ public class ScannerFileImplTest {
         final long GEO_NAME_ID1 = 859659;
         final int DUPLICATE_COUNT = 5;
         final int DUPLICATE_COUNT1 = 3;
-        final int EXPEXTED_SIZE = 1;
+        final int EXPECTED_SIZE = 1;
 
         //GIVEN
         AlternativeModel aUkrModel = getAlternativeModel(GEO_NAME_ID, ISO_LANG, UKR_NAME);
@@ -461,9 +461,9 @@ public class ScannerFileImplTest {
         assertNotNull(aOptimizedList);
         assertNotNull(aOptimizedList1);
         assertNotNull(aOptimizedList2);
-        assertEquals(EXPEXTED_SIZE, aOptimizedList.size());
-        assertEquals(EXPEXTED_SIZE, aOptimizedList1.size());
-        assertEquals(EXPEXTED_SIZE + EXPEXTED_SIZE, aOptimizedList2.size());
+        assertEquals(EXPECTED_SIZE, aOptimizedList.size());
+        assertEquals(EXPECTED_SIZE, aOptimizedList1.size());
+        assertEquals(EXPECTED_SIZE + EXPECTED_SIZE, aOptimizedList2.size());
         assertEquals(UKR_NAME, new ArrayList<>(aOptimizedList).get(0).getCyrillicName());
         assertEquals(UKR_NAME1, new ArrayList<>(aOptimizedList1).get(0).getCyrillicName());
         assertEquals(UKR_NAME, new ArrayList<>(aOptimizedList2).get(0).getCyrillicName());

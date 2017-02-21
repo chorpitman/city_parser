@@ -269,23 +269,23 @@ public class ScannerFileImpl implements ScannerFile {
         return models;
     }
 
-    public static String languageCheck(String[] splittedLine) {
-        if (Objects.isNull(splittedLine) || splittedLine.length == 0)
+    public static String languageCheck(String[] splitedLine) {
+        if (Objects.isNull(splitedLine) || splitedLine.length == 0)
             throw new IllegalArgumentException("String for language check can not be null");
 
-        for (int i = splittedLine.length - 1; i >= 0; i--) {
-            if (splittedLine[i].codePoints().anyMatch(
+        for (int i = splitedLine.length - 1; i >= 0; i--) {
+            if (splitedLine[i].codePoints().anyMatch(
                     c -> Character.UnicodeScript.of(c) == Character.UnicodeScript.CYRILLIC))
-                return splittedLine[i];
+                return splitedLine[i];
         }
         return NON_CYRILLIC;
     }
 
-    public static boolean languageCheck(final String splittedLine) {
-        if (StringUtils.isBlank(splittedLine))
+    public static boolean languageCheck(final String splitedLine) {
+        if (StringUtils.isBlank(splitedLine))
             throw new IllegalArgumentException("String for language check can not be null");
 
-        if (splittedLine.codePoints().anyMatch(
+        if (splitedLine.codePoints().anyMatch(
                 c -> Character.UnicodeScript.of(c) == Character.UnicodeScript.CYRILLIC)) return true;
         else return false;
     }
