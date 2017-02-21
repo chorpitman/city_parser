@@ -77,7 +77,6 @@ public class ScannerFileImplTest {
 
     private static boolean containsHanScriptStream(String s, String split) {
         String[] splittedLine = s.split(split);
-        String INFO = "";
         for (int i = 0; i < splittedLine.length; i++) {
             if (splittedLine[i].codePoints().anyMatch(
                     c -> Character.UnicodeScript.of(c) == Character.UnicodeScript.CYRILLIC)) return true;
