@@ -15,7 +15,7 @@ public class BaseTestModelHelper {
         model.setRegionId(regId);
         model.setRegionCyrillicName(regCyrName);
         model.setRegionInternationalName(regInterName);
-        model.setFeatureCode(regId);
+        model.setFeatureCode(featureCode);
 
         return model;
     }
@@ -28,7 +28,6 @@ public class BaseTestModelHelper {
     }
 
     public static Model getModel() {
-        Model model = new Model();
-        return model;
+        return new Model();
     }
 }
