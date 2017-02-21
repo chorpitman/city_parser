@@ -5,8 +5,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "city_names")
 public class Model {
-    private static long NEXT_ID = 0;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -42,7 +40,6 @@ public class Model {
     private String population;
 
     public Model() {
-        this.id = ++Model.NEXT_ID;
     }
 
     public Long getId() {

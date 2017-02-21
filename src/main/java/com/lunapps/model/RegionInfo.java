@@ -1,7 +1,6 @@
 package com.lunapps.model;
 
 public class RegionInfo {
-    private static long NEXT_ID = 0;
 
     private long id;
     private String regionId;
@@ -11,7 +10,6 @@ public class RegionInfo {
     private String featureCode;
 
     public RegionInfo() {
-        this.id = ++RegionInfo.NEXT_ID;
     }
 
     public long getId() {
