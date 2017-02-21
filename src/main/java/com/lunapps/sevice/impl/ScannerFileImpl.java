@@ -33,16 +33,16 @@ public class ScannerFileImpl implements ScannerFile {
     private final static int CYRILL_NAME = 3;
     private final static String UKR = "uk";
     private final static int START_UKR_CITY_INDEX = 468196;
+    private final static int POPULATION = 14;
 
     /**
-     * @param feature code - element in array which can help find
-     * administrative division
+     * @param feature code - element in array which can find administrative division
      * @link http://www.geonames.org/export/codes.html
      */
     private final static int FEATURE_CODE = 7;
 
     /**
-     * @param first-order administrative division
+     * @param administrative division
      * @link http://www.geonames.org/export/codes.html
      */
     private final static String REGION_CODE = "ADM1";
@@ -65,7 +65,6 @@ public class ScannerFileImpl implements ScannerFile {
      */
     private final static String GEO_CODE_PPLA = "PPLA";
 
-    public static final int POPULATION = 14;
 
     @Override
     public Collection<Model> parseDbFiles(final String ukrDbPath, final String alterNameDb) {
@@ -123,7 +122,7 @@ public class ScannerFileImpl implements ScannerFile {
         }
         scanner.close();
 
-        //SET INTO UKR REGIONS INTERNATIONAL AND CYRILLIC CYRILLIC_NAME
+        //SET INTO UKR REGIONS INTERNATIONAL AND CYRILLIC_NAME
         setInterAndCyrRegion(ukrCitiesModels, ukrRegionsList);
 
         //SET INTO UKR CITIES UKR CYRILLIC_NAME
@@ -155,7 +154,7 @@ public class ScannerFileImpl implements ScannerFile {
     }
 
     /**
-     * @info у моделе берется ситиИндекс, если он равен ситиИндексу Альтернативной модели. У последней берется ситиУкрНейм и пересечивается в моделе.
+     * @info у модели берется ситиИндекс, если он равен ситиИндексу Альтернативной модели. У последней берется ситиУкрНейм и пересечивается в модель.
      */
     public static void setCityUkrName(Collection<Model> ukrCitiesModels, Collection<AlternativeModel> optimizedAlternativeNamesList) {
         if (CollectionUtils.isEmpty(ukrCitiesModels) || CollectionUtils.isEmpty(optimizedAlternativeNamesList))
