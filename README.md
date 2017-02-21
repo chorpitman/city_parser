@@ -31,8 +31,14 @@ Manual installation
 
   * Grant permissions to created user for our database 
   
-  > *GRANT ALL PRIVILEGES ON dinner.* TO 'city_parser'@'localhost';*
-  > *flush privileges;*
+MySQL
+-----------
+ * Create and activate GoogleKeyAPI. Additional info: `https://support.google.com/googleapi/answer/6158857?hl=ru`
+ * Go to https://console.developers.google.com
+ * Enable `Google Places API Web Service`
+ * Enable `Google Maps Geocoding API`
   
 Building/running a project
 =================
+1. Insert GoogleKeyAPI into following files: **sprockets.xml**, **GoogleMapsSearchImpl.class**;
+2. Go to Main.class and run project
