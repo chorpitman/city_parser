@@ -94,6 +94,7 @@ public class Utils {
                         Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         Double distance = R * c;
+        // FIXME: 2/23/17 remove after test
         System.out.println("The distance between two lat and long is -> " + distance);
         return distance;
     }
