@@ -1,12 +1,10 @@
 package com.lunapps.sevice.impl;
 
-import com.lunapps.model.AlternativeModel;
 import com.lunapps.model.RegionInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -14,13 +12,12 @@ import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 public class ScannerFileImplTestRegionsOfUkraine {
     private ScannerFileImpl scannerFile;
 
     @Before
-    public void setUp()  {
+    public void setUp() {
         scannerFile = new ScannerFileImpl();
     }
 
