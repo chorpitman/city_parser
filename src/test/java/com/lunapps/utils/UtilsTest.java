@@ -1,16 +1,32 @@
 package com.lunapps.utils;
 
 import com.lunapps.config.utils.BaseTestModelHelper;
+import com.lunapps.configuration.AppConfig;
 import com.lunapps.model.Model;
+import com.lunapps.repository.ModelRepository;
+import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static junit.framework.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 
 public class UtilsTest {
+    private ModelRepository repository;
+
+    @Before
+    public void setUp() throws Exception {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        repository = context.getBean(ModelRepository.class);
+    }
+
     @Test
     public void should_return_count_non_cyr_entity_countNonCyrillic()  {
         final String NON_CYR_NAME = "non cyrillic";
@@ -69,5 +85,21 @@ public class UtilsTest {
         assertEquals(list.size(), EXPECTED_COUNT);
         assertEquals(list.get(0).getCityUkrName(), CYR_NAME);
         assertEquals(list.get(0).getId(), cyr.getId());
+    }
+
+    @Test
+    public void should_return_model_list_of_duplicates() {
+        //GIVEN
+        List<Model> duplicatesList = repository.findAll();
+        List<Model> sortedDuplicatesList = Utils.sortModelByRegCityLat(duplicatesList);
+        //WHEN
+        List<Model> foundListWithDuplicates = Utils.getListWithDuplicatesCoordinates(sortedDuplicatesList);
+        //THEN
+        assertNotNull(duplicatesList);
+        assertNotNull(sortedDuplicatesList);
+        assertNotNull(foundListWithDuplicates);
+        assertNotSame(duplicatesList, sortedDuplicatesList);
+        assertNotSame(sortedDuplicatesList, foundListWithDuplicates);
+        assertEquals(6, foundListWithDuplicates.size());
     }
 }

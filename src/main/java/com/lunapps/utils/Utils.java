@@ -4,10 +4,7 @@ import com.lunapps.model.Model;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Utils {
     private static final String NAME_NON_CYR = "non cyrillic";
@@ -43,7 +40,6 @@ public class Utils {
     public static void removeEntityWithNonCyrCityName(Collection<Model> models) {
         if (CollectionUtils.isEmpty(models)) throw new IllegalArgumentException("models can not be empty or null");
         models.removeIf(model -> model.getCityUkrName().equals(NAME_NON_CYR));
-
     }
 
     public static List<Model> getListWithDuplicatesCoordinates(List<Model> modelsList) {
@@ -79,8 +75,17 @@ public class Utils {
                 lon = model.getLongitude();
             }
         }
+        // FIXME: 2/23/17 remove after test
 //        duplicatesList.removeAll(list);
         return duplicatesList;
+    }
+
+    public static List<Model> sortModelByRegCityLat(List<Model> list) {
+        List<Model> sortedList = new LinkedList<>(list);
+        Collections.sort(sortedList, Comparator.comparing(Model::getRegionCyrillicName)
+                .thenComparing(Model::getCityUkrName)
+                .thenComparing(Model::getLatitude));
+        return sortedList;
     }
 
     public static Double getDistanceBitween2Points(Double lat1, Double lon1, Double lat2, Double lon2) {
