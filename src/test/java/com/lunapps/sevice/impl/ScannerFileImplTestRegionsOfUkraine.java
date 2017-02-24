@@ -17,7 +17,7 @@ public class ScannerFileImplTestRegionsOfUkraine {
     private ScannerFileImpl scannerFile;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         scannerFile = new ScannerFileImpl();
     }
 
@@ -121,8 +121,8 @@ public class ScannerFileImplTestRegionsOfUkraine {
 
     @Test
     public void experimentWithMatchers() {
-        final String text1= "Київська область";
-        final String text2= "Кіеўская вобласць";
+        final String text1 = "Київська область";
+        final String text2 = "Кіеўская вобласць";
 
         String pattern = "йїі";
         Pattern patternString = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
@@ -130,6 +130,7 @@ public class ScannerFileImplTestRegionsOfUkraine {
         System.out.println(matcher.matches());
 
     }
+
 
     @Test
     public void should_return_name_of_the_Ukraine_areas() {

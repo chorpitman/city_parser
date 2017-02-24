@@ -1,12 +1,13 @@
 package com.lunapps.model;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "city_names")
 public class Model {
-    private static long NEXT_ID = 0;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -14,10 +15,10 @@ public class Model {
     @Column(name = "city_index")
     private int cityIndex;
 
-    @Column(name = "city_name")
-    private String name;
+    @Column(name = "city_ukr_name")
+    private String cityUkrName;
 
-    @Column(name = "inter_name")
+    @Column(name = "city_inter_name")
     private String internationalName;
 
     @Column(name = "latitude")
@@ -29,14 +30,19 @@ public class Model {
     @Column(name = "reg_id")
     private String regionId;
 
-    @Column(name = "city_ukr_name")
-    private String cityCyrillicName;
+    @Column(name = "region_ukr_name")
+    private String regionCyrillicName;
 
-    @Column(name = "city_inter_name")
-    private String cityInternationalName;
+    @Column(name = "region_inter_name")
+    private String regionInternationalName;
+
+    @Column(name = "feature_codes")
+    private String featureCode;
+
+    @Column(name = "population")
+    private String population;
 
     public Model() {
-        this.id = ++Model.NEXT_ID;
     }
 
     public Long getId() {
@@ -55,12 +61,12 @@ public class Model {
         this.cityIndex = cityIndex;
     }
 
-    public String getName() {
-        return name;
+    public String getCityUkrName() {
+        return cityUkrName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCityUkrName(String cityUkrName) {
+        this.cityUkrName = cityUkrName;
     }
 
     public String getInternationalName() {
@@ -95,20 +101,36 @@ public class Model {
         this.regionId = regionId;
     }
 
-    public String getCityCyrillicName() {
-        return cityCyrillicName;
+    public String getRegionCyrillicName() {
+        return regionCyrillicName;
     }
 
-    public void setCityCyrillicName(String cityCyrillicName) {
-        this.cityCyrillicName = cityCyrillicName;
+    public void setRegionCyrillicName(String regionCyrillicName) {
+        this.regionCyrillicName = regionCyrillicName;
     }
 
-    public String getCityInternationalName() {
-        return cityInternationalName;
+    public String getRegionInternationalName() {
+        return regionInternationalName;
     }
 
-    public void setCityInternationalName(String cityInternationalName) {
-        this.cityInternationalName = cityInternationalName;
+    public void setRegionInternationalName(String regionInternationalName) {
+        this.regionInternationalName = regionInternationalName;
+    }
+
+    public String getFeatureCode() {
+        return featureCode;
+    }
+
+    public void setFeatureCode(String featureCode) {
+        this.featureCode = featureCode;
+    }
+
+    public String getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(String population) {
+        this.population = population;
     }
 
     @Override
@@ -116,13 +138,55 @@ public class Model {
         return "Model{" +
                 "id=" + id +
                 ", cityIndex=" + cityIndex +
-                ", name='" + name + '\'' +
+                ", cityUkrName='" + cityUkrName + '\'' +
                 ", internationalName='" + internationalName + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", regionId='" + regionId + '\'' +
-                ", cityCyrillicName='" + cityCyrillicName + '\'' +
-                ", cityInternationalName='" + cityInternationalName + '\'' +
+                ", regionCyrillicName='" + regionCyrillicName + '\'' +
+                ", regionInternationalName='" + regionInternationalName + '\'' +
+                ", featureCode='" + featureCode + '\'' +
+                ", population='" + population + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Model model = (Model) o;
+
+        return new EqualsBuilder()
+                .append(cityIndex, model.cityIndex)
+                .append(id, model.id)
+                .append(cityUkrName, model.cityUkrName)
+                .append(internationalName, model.internationalName)
+                .append(latitude, model.latitude)
+                .append(longitude, model.longitude)
+                .append(regionId, model.regionId)
+                .append(regionCyrillicName, model.regionCyrillicName)
+                .append(regionInternationalName, model.regionInternationalName)
+                .append(featureCode, model.featureCode)
+                .append(population, model.population)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(cityIndex)
+                .append(cityUkrName)
+                .append(internationalName)
+                .append(latitude)
+                .append(longitude)
+                .append(regionId)
+                .append(regionCyrillicName)
+                .append(regionInternationalName)
+                .append(featureCode)
+                .append(population)
+                .toHashCode();
     }
 }

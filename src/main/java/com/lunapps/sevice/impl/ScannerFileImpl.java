@@ -1,5 +1,6 @@
 package com.lunapps.sevice.impl;
 
+import com.lunapps.model.AlternativeModel;
 import com.lunapps.model.Model;
 import com.lunapps.model.RegionInfo;
 import com.lunapps.sevice.ScannerFile;
@@ -12,90 +13,209 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-import static java.util.Objects.nonNull;
-
 @Service
 @Transactional
 public class ScannerFileImpl implements ScannerFile {
+    //ARRAYS DELIMITERS
     private final static String TABULATION = "\\t";
     private final static String COMMA = ",";
-
+    //ARRAY MAPPING
     private final static int CITY_INDEX = 0;
     private final static int INTERNATIONAL_NAME = 2;
-    private final static int NAME = 3;
+    private final static int CYRILLIC_NAME = 3;
     private final static int LATITUDE = 4;
     private final static int LONGITUDE = 5;
     private final static int REGION_ID = 10;
     private final static String UNNECESSARY_REGION_ID = "00";
+    private final static String NON_CYRILLIC = "non cyrillic";
+    private final static int ALTERNATIVE_CITY_INDEX = 1;
+    private final static int ISO_LANG = 2;
+    private final static int CYRILL_NAME = 3;
+    private final static String UKR = "uk";
+    private final static int START_UKR_CITY_INDEX = 468196;
+    private final static int POPULATION = 14;
+
     /**
-     * @param feature code - element in array which can help find
-     * administrative division
+     * @param feature code - element in array which can find administrative division
      * @link http://www.geonames.org/export/codes.html
      */
     private final static int FEATURE_CODE = 7;
+
     /**
-     * @param first-order administrative division
+     * @param administrative division
      * @link http://www.geonames.org/export/codes.html
      */
-    private final static String GEO_NAME_ADMINISTRATE_DIVISION_CODE = "ADM1";
+    private final static String REGION_CODE = "ADM1";
+
     /**
      * @param populated place.
      * @link http://www.geonames.org/export/codes.html
      */
-    private final static String GEO_NAME_POPULATED_PLACE = "PPL";
+    private final static String GEO_CODE_PPL = "PPL";
+
+    /**
+     * @param capital of a political entity.
+     * @link http://www.geonames.org/export/codes.html
+     */
+    private final static String GEO_CODE_PPLC = "PPLC";
+
+    /**
+     * @param seat of a first-order administrative division.
+     * @link http://www.geonames.org/export/codes.html
+     */
+    private final static String GEO_CODE_PPLA = "PPLA";
 
 
-    public Collection<Model> scanPath(String filepath) {
-        if (StringUtils.isBlank(filepath)) throw new IllegalArgumentException("Filepath can not be null");
-        Scanner scanner = getScanner(filepath);
-        List<RegionInfo> regionCodes = new ScannerFileImpl().findRegions(filepath);
+    @Override
+    public Collection<Model> parseDbFiles(final String ukrDbPath, final String alterNameDb) {
+        if (StringUtils.isBlank(ukrDbPath) || StringUtils.isBlank(alterNameDb))
+            throw new IllegalArgumentException("Filepath can not be null or empty");
 
-        print(regionCodes);
-        System.out.println("=========================");
+        //GET ALTERNATIVE UKR REGIONS AND SORT BY geoNameId (NATURAL)
+        List<AlternativeModel> nonOptimizeAlternativeNamesList = findAlternativeRegions(alterNameDb);
+        sortByCityIndex(nonOptimizeAlternativeNamesList);
 
-        List<Model> models = new ArrayList<>();
+        //OPTIMIZE ALTERNATIVE UKR REGION = REMOVE REDUNDANT ENTITY WHICH HAS SAME CITY ID
+        Collection<AlternativeModel> optimizedAlternativeNamesList = ScannerFileImpl.getOptimizedAlternativeNamesList(nonOptimizeAlternativeNamesList);
+        System.out.println("alternative name size after optimize= " + optimizedAlternativeNamesList.size());
+
+        //GET UKR REGIONS
+        List<RegionInfo> ukrRegionsList = new ScannerFileImpl().findRegions(ukrDbPath);
+        // TODO: 2/17/17 remove
+        System.out.println("ukr regions size == " + ukrRegionsList.size());
+
+        //SET CYRILLIC CYRILLIC_NAME INTO REGIONS
+        setCyrNameIntoRegions(optimizedAlternativeNamesList, ukrRegionsList);
+        print(ukrRegionsList);
+        // TODO: 2/17/17 remove
+        System.out.println(ukrRegionsList.size() + " ====================================");
+
+        Scanner scanner = getScanner(ukrDbPath);
+
+        //PARSE UKR DB
+        List<Model> ukrCitiesModels = new ArrayList<>();
+
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] splitLine = line.split(TABULATION);
             if (Objects.equals(splitLine[REGION_ID], UNNECESSARY_REGION_ID)) {
                 continue;
             }
-            if (!(Objects.equals(splitLine[FEATURE_CODE], GEO_NAME_ADMINISTRATE_DIVISION_CODE) || Objects.equals(splitLine[FEATURE_CODE], GEO_NAME_POPULATED_PLACE))) {
+            if (!(Objects.equals(splitLine[FEATURE_CODE], REGION_CODE) ||
+                    Objects.equals(splitLine[FEATURE_CODE], GEO_CODE_PPL) ||
+                    Objects.equals(splitLine[FEATURE_CODE], GEO_CODE_PPLA) ||
+                    Objects.equals(splitLine[FEATURE_CODE], GEO_CODE_PPLC))) {
                 continue;
             } else {
                 Model model = new Model();
                 model.setCityIndex(Integer.parseInt(splitLine[CITY_INDEX]));
+                model.setCityUkrName(languageCheck(splitLine[CYRILLIC_NAME].split(COMMA)));
+                model.setInternationalName((splitLine[INTERNATIONAL_NAME]));
                 model.setLatitude(Double.parseDouble(splitLine[LATITUDE]));
                 model.setLongitude(Double.parseDouble(splitLine[LONGITUDE]));
                 model.setRegionId(splitLine[REGION_ID]);
-                model.setInternationalName((splitLine[INTERNATIONAL_NAME]));
-                String[] splitedName = splitLine[NAME].split(COMMA);
-                if (splitedName.length == 0) {
-                    for (RegionInfo element : regionCodes) {
-                        if (Objects.equals(model.getRegionId(), element.getRegionId())) {
-                            model.setCityCyrillicName(element.getRegionCyrillicName());
-                            model.setCityInternationalName(element.getRegionInternationalName());
-                            model.setName(element.getRegionCyrillicName());
-                        }
-                    }
-                    models.add(model);
-                } else {
-                    model.setName(languageCheck(splitedName));
-                    for (RegionInfo element : regionCodes) {
-                        if (Objects.equals(model.getRegionId(), element.getRegionId())) {
-                            model.setCityCyrillicName(element.getRegionCyrillicName());
-                            model.setCityInternationalName(element.getRegionInternationalName());
-                        }
-                    }
-                    models.add(model);
-                }
+                // FIXME: 2/14/17 Add constant into or remove from model
+                model.setFeatureCode(splitLine[7]);
+                model.setPopulation(splitLine[POPULATION]);
+                ukrCitiesModels.add(model);
             }
         }
         scanner.close();
-        return models;
+
+        //SET INTO UKR REGIONS INTERNATIONAL AND CYRILLIC_NAME
+        setInterAndCyrRegion(ukrCitiesModels, ukrRegionsList);
+
+        //SET INTO UKR CITIES UKR CYRILLIC_NAME
+        setCityUkrName(ukrCitiesModels, optimizedAlternativeNamesList);
+
+        //SEARCH UKR NAME IN EXIST MODEL BY NON CYRILLIC == INTER == CYR NAME
+        findExistCyr(ukrCitiesModels);
+
+        return ukrCitiesModels;
     }
 
-    public List<RegionInfo> findRegions(String filePath) {
+    public void findExistCyr(List<Model> ukrCitiesModels) {
+        if (CollectionUtils.isEmpty(ukrCitiesModels))
+            throw new IllegalArgumentException("ukrCitiesModels can not be null or empty");
+
+        for (Model ukrModel : ukrCitiesModels) {
+            if (ukrModel.getCityUkrName().equals(NON_CYRILLIC)) {
+                String ukrModelInternationalName = ukrModel.getInternationalName();
+                for (Model element : ukrCitiesModels) {
+                    if (ukrModelInternationalName.equals(element.getInternationalName())) {
+                        if (languageCheck(element.getCityUkrName())) {
+                            ukrModel.setCityUkrName(element.getCityUkrName());
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @info у модели берется ситиИндекс, если он равен ситиИндексу Альтернативной модели. У последней берется ситиУкрНейм и пересечивается в модель.
+     */
+    public static void setCityUkrName(Collection<Model> ukrCitiesModels, Collection<AlternativeModel> optimizedAlternativeNamesList) {
+        if (CollectionUtils.isEmpty(ukrCitiesModels) || CollectionUtils.isEmpty(optimizedAlternativeNamesList))
+            throw new IllegalArgumentException("ukrCitiesModels or optimizedAlternativeNamesList can not be null or empty");
+
+        for (Model model : ukrCitiesModels) {
+            int cityIndex = model.getCityIndex();
+            for (AlternativeModel altRegion : optimizedAlternativeNamesList) {
+                if (cityIndex == altRegion.getGeoNameId()) {
+                    model.setCityUkrName(altRegion.getCyrillicName());
+                }
+            }
+        }
+    }
+
+    /**
+     * @info у моделе бертся РегионИД. Ищется такой же в РегионЛисте, если находим, сетим название региона на
+     * укр и лат языках
+     */
+    public static void setInterAndCyrRegion(Collection<Model> ukrCitiesModels, Collection<RegionInfo> ukrRegionsList) {
+        if (CollectionUtils.isEmpty(ukrCitiesModels) || CollectionUtils.isEmpty(ukrRegionsList))
+            throw new IllegalArgumentException("ukrCitiesModels or ukrRegionsList can not be null or empty");
+
+        for (Model model : ukrCitiesModels) {
+            String modelRegionId = model.getRegionId();
+
+            for (RegionInfo region : ukrRegionsList) {
+                if (Objects.equals(modelRegionId, region.getRegionId())) {
+                    model.setRegionInternationalName(region.getRegionInternationalName());
+                    model.setRegionCyrillicName(region.getRegionCyrillicName());
+                }
+            }
+        }
+    }
+
+    /**
+     * @info Если АльтНэйм ситиИНдекс == Регион СитиИНдекс, то пересечиваем название региона на укрЯзыке
+     */
+    public void setCyrNameIntoRegions(Collection<AlternativeModel> optimizedAlternativeNamesList, Collection<RegionInfo> regions) {
+        if (CollectionUtils.isEmpty(optimizedAlternativeNamesList) || CollectionUtils.isEmpty(regions))
+            throw new IllegalArgumentException("optimizedAlternativeNamesList or regions List can not be null or empty");
+
+        for (RegionInfo region : regions) {
+            int regionCityIndex = region.getCityIndex();
+
+            for (AlternativeModel alternativeRegion : optimizedAlternativeNamesList) {
+                if (alternativeRegion.getGeoNameId() == regionCityIndex) {
+                    if (languageCheck(alternativeRegion.getCyrillicName())) {
+                        region.setRegionCyrillicName(alternativeRegion.getCyrillicName());
+                        break;
+                    } else continue;
+                }
+            }
+        }
+    }
+
+    /**
+     * @return model with fields, which has ADM1 feature param
+     * @info this method find all entity, which has feature code ADM1
+     */
+    public List<RegionInfo> findRegions(final String filePath) {
         if (StringUtils.isBlank(filePath)) throw new IllegalArgumentException("Filepath can not be null");
 
         Scanner scanner = getScanner(filePath);
@@ -105,14 +225,13 @@ public class ScannerFileImpl implements ScannerFile {
             String[] splitLine = line.split(TABULATION);
 
             RegionInfo model = new RegionInfo();
-            if (splitLine[FEATURE_CODE].equals(GEO_NAME_ADMINISTRATE_DIVISION_CODE) & !splitLine[REGION_ID].equals(UNNECESSARY_REGION_ID)) {
+            if (splitLine[FEATURE_CODE].equals(REGION_CODE)) {
                 model.setRegionId(splitLine[REGION_ID]);
-                model.setRegionInternationalName(splitLine[INTERNATIONAL_NAME]);
+                model.setFeatureCode(splitLine[FEATURE_CODE]);
                 model.setCityIndex(Integer.parseInt(splitLine[CITY_INDEX]));
-                String[] splitedStrings = splitLine[NAME].split(COMMA);
+                model.setRegionInternationalName(splitLine[INTERNATIONAL_NAME]);
+                String[] splitedStrings = splitLine[CYRILLIC_NAME].split(COMMA);
                 model.setRegionCyrillicName(languageCheck(splitedStrings));
-            }
-            if (nonNull(model.getRegionCyrillicName())) {
                 models.add(model);
             }
         }
@@ -120,18 +239,58 @@ public class ScannerFileImpl implements ScannerFile {
         return models;
     }
 
-    private static String languageCheck(String[] splittedLine) {
-        if (Objects.isNull(splittedLine)) throw new IllegalArgumentException("String for language check can not be null");
-        String checkedName = "";
-        for (int i = splittedLine.length - 1; i >= 0; i--) {
-            if (splittedLine[i].codePoints().anyMatch(
-                    c -> Character.UnicodeScript.of(c) == Character.UnicodeScript.CYRILLIC))
-                return checkedName = splittedLine[i];
+    /**
+     * @return create alternativeName model
+     */
+    public static List<AlternativeModel> findAlternativeRegions(final String filePath) {
+        if (StringUtils.isBlank(filePath)) throw new IllegalArgumentException("Filepath can not be null");
+
+        Scanner scanner = getScanner(filePath);
+        List<AlternativeModel> models = new ArrayList<>();
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            String[] splitLine = line.split(TABULATION);
+
+            AlternativeModel model = new AlternativeModel();
+            if (Integer.parseInt(splitLine[ALTERNATIVE_CITY_INDEX]) >= START_UKR_CITY_INDEX) {
+                if (splitLine[ISO_LANG].equals(UKR)) {
+                    model.setGeoNameId(Integer.parseInt(splitLine[ALTERNATIVE_CITY_INDEX]));
+                    model.setIsoLang(splitLine[ISO_LANG]);
+                    if (languageCheck(splitLine[CYRILL_NAME])) {
+                        model.setCyrillicName(splitLine[CYRILL_NAME]);
+                    } else {
+                        continue;
+                    }
+                    models.add(model);
+                }
+            }
         }
-        return checkedName = "non cyrillic";
+        scanner.close();
+        return models;
     }
 
-    private static Scanner getScanner(String filepath) {
+    public static String languageCheck(String[] splitedLine) {
+        if (Objects.isNull(splitedLine) || splitedLine.length == 0)
+            throw new IllegalArgumentException("String for language check can not be null");
+
+        for (int i = splitedLine.length - 1; i >= 0; i--) {
+            if (splitedLine[i].codePoints().anyMatch(
+                    c -> Character.UnicodeScript.of(c) == Character.UnicodeScript.CYRILLIC))
+                return splitedLine[i];
+        }
+        return NON_CYRILLIC;
+    }
+
+    public static boolean languageCheck(final String splitedLine) {
+        if (StringUtils.isBlank(splitedLine))
+            throw new IllegalArgumentException("String for language check can not be null");
+
+        if (splitedLine.codePoints().anyMatch(
+                c -> Character.UnicodeScript.of(c) == Character.UnicodeScript.CYRILLIC)) return true;
+        else return false;
+    }
+
+    public static Scanner getScanner(final String filepath) {
         if (StringUtils.isBlank(filepath)) throw new IllegalArgumentException("Filepath can not be null");
         File file = new File(filepath);
         Scanner scanner = null;
@@ -145,9 +304,56 @@ public class ScannerFileImpl implements ScannerFile {
     }
 
     @Override
-    public void print(java.util.Collection<?> modelList) {
-        if (CollectionUtils.isEmpty(modelList))
-            throw new IllegalArgumentException("Model list cannot be null or Empty");
-        for (Object o : modelList) System.out.println(o);
+    public void print(Collection<?> collection) {
+        if (CollectionUtils.isEmpty(collection))
+            throw new IllegalArgumentException("collectionList can not be null or empty");
+
+        for (Object o : collection) {
+            System.out.println(o);
+        }
+    }
+
+    /**
+     * @info this method works well if cityIndex has natural ordering
+     * for example: 1,2,3,4
+     */
+    public static Collection<AlternativeModel> getOptimizedAlternativeNamesList(Collection<AlternativeModel> nonOptimizeList) {
+        if (CollectionUtils.isEmpty(nonOptimizeList))
+            throw new IllegalArgumentException("nonOptimizeList can not be null or empty");
+
+        // TODO: 09.02.2017 test if we remove copyNonOptimized
+//        Collection<AlternativeModel> copyNonOptimizeList = new LinkedList<>(nonOptimizeList);
+        List<AlternativeModel> optimizedList = new ArrayList<>();
+        long result = 0;
+        for (AlternativeModel element : nonOptimizeList) {
+            long geoNameId = element.getGeoNameId();
+            if (result == geoNameId) {
+                continue;
+            }
+            for (AlternativeModel model : nonOptimizeList) {
+                if (model.getGeoNameId() == geoNameId) {
+                    String cyrillicName = model.getCyrillicName();
+                    if (ScannerFileImpl.languageCheck(cyrillicName)) {
+                        AlternativeModel alternativeModel = new AlternativeModel();
+                        alternativeModel.setCyrillicName(cyrillicName);
+                        alternativeModel.setGeoNameId(model.getGeoNameId());
+                        alternativeModel.setIsoLang(model.getIsoLang());
+                        optimizedList.add(alternativeModel);
+                        result = geoNameId;
+                        break;
+                    }
+                }
+            }
+        }
+        return optimizedList;
+    }
+
+    private static void sortByCityIndex(List<AlternativeModel> nonOptimizeAlternativeNamesList) {
+        Collections.sort(nonOptimizeAlternativeNamesList, new Comparator<AlternativeModel>() {
+            @Override
+            public int compare(AlternativeModel o1, AlternativeModel o2) {
+                return (int) (o2.getGeoNameId() - o1.getGeoNameId());
+            }
+        });
     }
 }

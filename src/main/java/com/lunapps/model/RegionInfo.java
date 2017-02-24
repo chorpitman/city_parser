@@ -1,16 +1,15 @@
 package com.lunapps.model;
 
 public class RegionInfo {
-    private static long NEXT_ID = 0;
 
     private long id;
     private String regionId;
     private int cityIndex;
     private String regionCyrillicName;
     private String regionInternationalName;
+    private String featureCode;
 
     public RegionInfo() {
-        this.id = ++RegionInfo.NEXT_ID;
     }
 
     public long getId() {
@@ -53,6 +52,14 @@ public class RegionInfo {
         this.cityIndex = cityIndex;
     }
 
+    public String getFeatureCode() {
+        return featureCode;
+    }
+
+    public void setFeatureCode(String featureCode) {
+        this.featureCode = featureCode;
+    }
+
     @Override
     public String toString() {
         return "RegionInfo{" +
@@ -61,6 +68,7 @@ public class RegionInfo {
                 ", cityIndex=" + cityIndex +
                 ", regionCyrillicName='" + regionCyrillicName + '\'' +
                 ", regionInternationalName='" + regionInternationalName + '\'' +
+                ", featureCode='" + featureCode + '\'' +
                 '}';
     }
 }

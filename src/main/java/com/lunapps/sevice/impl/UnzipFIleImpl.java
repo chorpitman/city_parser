@@ -6,9 +6,6 @@ import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-/**
- * Created by olegchorpita on 1/24/17.
- */
 public class UnzipFIleImpl implements UnzipFIle {
 
     private static final int BUFFER_SIZE = 4096;

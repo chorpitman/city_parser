@@ -7,7 +7,7 @@ import java.util.Collection;
 
 @Service("scanFileService")
 public interface ScannerFile {
-    Collection<Model> scanPath(String filepath);
+    Collection<Model> parseDbFiles(String ukrDbPath, String alterNameDb);
 
-    void print(Collection<?> c);
+    void print(Collection<?> coll);
 }
