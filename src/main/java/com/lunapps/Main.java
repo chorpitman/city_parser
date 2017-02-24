@@ -39,48 +39,48 @@ public class Main {
         ScannerFileImpl scannerfile = new ScannerFileImpl();
         Collection<Model> ukrModels = scannerfile.parseDbFiles(PARSE_UKR_DB, PARSE_ALTER_NAME_DB);
         System.out.println(ukrModels.size());
-        System.out.println("non cyr -->" + Utils.countNonCyrillic(ukrModels));
+        System.out.println("non cyr -->" + Utils.countNonCyrillicModel(ukrModels));
 
         //CREATE LIST WITH NON_CYR CITY NAME
-        Collection<Model> modelWithNonCyrCityName = Utils.returnListModelWithNonCyrCityName(ukrModels);
+        Collection<Model> modelWithNonCyrCityName = Utils.getNonCyrCityNameModels(ukrModels);
         System.out.println("modelWithNonCyrCityName size->" + modelWithNonCyrCityName.size());
 
         //REMOVE FROM MODEL LIST ENTITY WITH NON_CYR CITY NAME
-        Utils.removeEntityWithNonCyrCityName(ukrModels);
+        Utils.removeNonCyrCityNameModels(ukrModels);
         System.out.println("model size after remove non cyr entity -> " + ukrModels.size());
-        System.out.println("non cyr size " + Utils.countNonCyrillic(ukrModels));
+        System.out.println("non cyr size " + Utils.countNonCyrillicModel(ukrModels));
 
         //GOOGLE PLACES API
         GooglePlacesSearchImpl placesSearch = new GooglePlacesSearchImpl();
         Collection<Model> googleNearbySearch = placesSearch.nearbySearch(modelWithNonCyrCityName, "uk");
-        System.out.println("googleNearbySearch size" + Utils.countNonCyrillic(googleNearbySearch));
+        System.out.println("googleNearbySearch noncyr size after nearby search ->" + Utils.countNonCyrillicModel(googleNearbySearch));
 
         //GOOGLE MAPS API
         GoogleMapsSearchImpl googleMaps = new GoogleMapsSearchImpl();
         Collection<Model> geoDecodedModelList = googleMaps.searchCityNameByCoordinatesUsingGoogleMaps(googleNearbySearch);
-        System.out.println("geoDecodedModelList count non cyr " + Utils.countNonCyrillic(geoDecodedModelList));
+        System.out.println("geoDecodedModelList count non cyr " + Utils.countNonCyrillicModel(geoDecodedModelList));
 
         //REMOVE FROM MODEL LIST ENTITY WITH NON_CYR CITY NAME
-        Utils.removeEntityWithNonCyrCityName(geoDecodedModelList);
+        Utils.removeNonCyrCityNameModels(geoDecodedModelList);
         System.out.println("model size after remove non cyr entity -> " + geoDecodedModelList.size());
-        System.out.println("non cyr size " + Utils.countNonCyrillic(geoDecodedModelList));
+        System.out.println("non cyr size " + Utils.countNonCyrillicModel(geoDecodedModelList));
 
         //UNION TWO COLLECTION (MODEL WITH GOOGLE COLLECTION)
         ukrModels.addAll(geoDecodedModelList);
         System.out.println("new model size 22625 + " + geoDecodedModelList.size() + " = " + ukrModels.size());
 
+        //REMOVE DUPLICATES BY COORDINATES
+        Utils.removeNonCyrCityNameModels(ukrModels);
+        List<Model> sortedUkrModel = Utils.sortModelByRegCityLat(ukrModels);
+        Collection<Model> duplicatesCoordinates = Utils.getModelsWithDuplicatesCoordinates(sortedUkrModel);
+        sortedUkrModel.removeAll(duplicatesCoordinates);
+
         //SPRING START
         //save model
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-        ModelRepository cityDao = context.getBean(ModelRepository.class);
-
-        List<Model> modelList = cityDao.save(ukrModels);
-        System.out.println("final size: " + modelList.size());
-
-        //save alter table
-//        AlternativeRepository repository = context.getBean("alterRepository", AlternativeRepository.class);
-//        Collection<AlternativeModel> optimizedAlternativeNamesList = ScannerFileImpl.getOptimizedAlternativeNamesList(ScannerFileImpl.findAlternativeRegions(PARSE_ALTER_NAME_DB));
-//        repository.save(optimizedAlternativeNamesList);
+        ModelRepository modelRepository = context.getBean(ModelRepository.class);
+        modelRepository.save(sortedUkrModel);
+        System.out.println(sortedUkrModel.size());
 
         long finish = System.currentTimeMillis();
         System.out.println("time for save -->" + (finish - start) / 1000 + " sec");
