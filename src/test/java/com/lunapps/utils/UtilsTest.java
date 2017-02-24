@@ -6,7 +6,12 @@ import com.lunapps.model.Model;
 import com.lunapps.repository.ModelRepository;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +23,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 
+// FIXME: 2/24/17 continue implement test
+@RunWith(SpringJUnit4ClassRunner.class)
+@ActiveProfiles("tmp-data")
+@Sql(scripts = {"classpath:sql/drop.sql"})
+//@ContextConfiguration(classes = {HibernateConfig.class, TemporaryDataPopulationConfig.class})
+@TestPropertySource(value = "classpath:app-config-test.properties")
 public class UtilsTest {
     private ModelRepository repository;
 
@@ -39,7 +50,7 @@ public class UtilsTest {
         ArrayList<Model> list = new ArrayList<>();
         list.addAll(Arrays.asList(non_cyr, cyr));
         //WHEN
-        int count = Utils.countNonCyrillic(list);
+        int count = Utils.countNonCyrillicModel(list);
         //THEN
         assertNotNull(non_cyr);
         assertNotNull(cyr);
@@ -58,7 +69,7 @@ public class UtilsTest {
         ArrayList<Model> list = new ArrayList<>();
         list.addAll(Arrays.asList(non_cyr, cyr));
         //WHEN
-        Collection<Model> listModelWithNonCyrCityName = Utils.returnListModelWithNonCyrCityName(list);
+        Collection<Model> listModelWithNonCyrCityName = Utils.getNonCyrCityNameModels(list);
         //THEN
         assertNotNull(cyr);
         assertNotNull(non_cyr);
@@ -78,7 +89,7 @@ public class UtilsTest {
         ArrayList<Model> list = new ArrayList<>();
         list.addAll(Arrays.asList(non_cyr, cyr));
         //WHEN
-        Utils.removeEntityWithNonCyrCityName(list);
+        Utils.removeNonCyrCityNameModels(list);
         //THEN
         assertNotNull(non_cyr);
         assertNotNull(cyr);
@@ -88,18 +99,19 @@ public class UtilsTest {
     }
 
     @Test
-    public void should_return_model_list_of_duplicates() {
+    public void should_return_model_list_of_duplicates_coordinates() {
+        final int EXPECTED_COUNT = 6;
         //GIVEN
         List<Model> duplicatesList = repository.findAll();
         List<Model> sortedDuplicatesList = Utils.sortModelByRegCityLat(duplicatesList);
         //WHEN
-        List<Model> foundListWithDuplicates = Utils.getListWithDuplicatesCoordinates(sortedDuplicatesList);
+        List<Model> foundListWithDuplicates = Utils.getModelsWithDuplicatesCoordinates(sortedDuplicatesList);
         //THEN
         assertNotNull(duplicatesList);
         assertNotNull(sortedDuplicatesList);
         assertNotNull(foundListWithDuplicates);
         assertNotSame(duplicatesList, sortedDuplicatesList);
         assertNotSame(sortedDuplicatesList, foundListWithDuplicates);
-        assertEquals(6, foundListWithDuplicates.size());
+        assertEquals(EXPECTED_COUNT, foundListWithDuplicates.size());
     }
 }
