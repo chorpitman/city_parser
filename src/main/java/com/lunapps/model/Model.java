@@ -1,5 +1,8 @@
 package com.lunapps.model;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import javax.persistence.*;
 
 @Entity
@@ -145,5 +148,45 @@ public class Model {
                 ", featureCode='" + featureCode + '\'' +
                 ", population='" + population + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Model model = (Model) o;
+
+        return new EqualsBuilder()
+                .append(cityIndex, model.cityIndex)
+                .append(id, model.id)
+                .append(cityUkrName, model.cityUkrName)
+                .append(internationalName, model.internationalName)
+                .append(latitude, model.latitude)
+                .append(longitude, model.longitude)
+                .append(regionId, model.regionId)
+                .append(regionCyrillicName, model.regionCyrillicName)
+                .append(regionInternationalName, model.regionInternationalName)
+                .append(featureCode, model.featureCode)
+                .append(population, model.population)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(cityIndex)
+                .append(cityUkrName)
+                .append(internationalName)
+                .append(latitude)
+                .append(longitude)
+                .append(regionId)
+                .append(regionCyrillicName)
+                .append(regionInternationalName)
+                .append(featureCode)
+                .append(population)
+                .toHashCode();
     }
 }
