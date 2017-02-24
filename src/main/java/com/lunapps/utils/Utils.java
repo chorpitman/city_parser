@@ -1,6 +1,7 @@
 package com.lunapps.utils;
 
 import com.lunapps.model.Model;
+import com.lunapps.sevice.impl.ScannerFileImpl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -9,7 +10,7 @@ import java.util.*;
 public class Utils {
     private static final String NAME_NON_CYR = "non cyrillic";
 
-    public static int countNonCyrillic(Collection<Model> models) {
+    public static int countNonCyrillicModel(Collection<Model> models) {
         if (CollectionUtils.isEmpty(models)) throw new IllegalArgumentException("Collection can not be empty or null");
 
         int count = 0;
@@ -24,7 +25,7 @@ public class Utils {
         return count;
     }
 
-    public static Collection<Model> returnListModelWithNonCyrCityName(Collection<Model> modelList) {
+    public static Collection<Model> getNonCyrCityNameModels(Collection<Model> modelList) {
         if (CollectionUtils.isEmpty(modelList))
             throw new IllegalArgumentException("modelList can not be null or empty");
 
@@ -37,12 +38,15 @@ public class Utils {
         return nonCyrList;
     }
 
-    public static void removeEntityWithNonCyrCityName(Collection<Model> models) {
+    public static void removeNonCyrCityNameModels(Collection<Model> models) {
         if (CollectionUtils.isEmpty(models)) throw new IllegalArgumentException("models can not be empty or null");
         models.removeIf(model -> model.getCityUkrName().equals(NAME_NON_CYR));
     }
 
-    public static List<Model> getListWithDuplicatesCoordinates(List<Model> modelsList) {
+    public static List<Model> getModelsWithDuplicatesCoordinates(List<Model> modelsList) {
+        // FIXME: 2/24/17 think about distance between 2 points (km)
+        final int DISTANCE = 1;
+
         if (CollectionUtils.isEmpty(modelsList)) throw new IllegalArgumentException();
         String currentCityUkrName = "";
         String currentRegionUkrName = "";
@@ -61,9 +65,23 @@ public class Utils {
 
             } else if (Objects.equals(currentRegionUkrName, model.getRegionCyrillicName()) &
                     Objects.equals(currentCityUkrName, model.getCityUkrName())) {
-                if (Utils.getDistanceBitween2Points(lat, lon, model.getLatitude(), model.getLongitude()) <= 1) {
-                    System.out.println("distance <= 0.5 " + model.getCityIndex());
-                    duplicatesList.add(model);
+                if (Utils.getDistanceBetween2Points(lat, lon, model.getLatitude(), model.getLongitude()) <= DISTANCE) {
+                    // FIXME: 2/24/17 create constants
+                    if (Objects.equals(model.getFeatureCode(), "PPLA") ||
+                            Objects.equals(model.getFeatureCode(), "PPLC") ||
+                            Objects.equals(model.getFeatureCode(), "ADM1")) {
+
+                        if (Objects.equals(modelsList.get(i - 1).getFeatureCode(), "PPL")) {
+                            duplicatesList.add(modelsList.get(i - 1));
+                            continue;
+                        }
+                        continue;
+
+                    } else {
+                        // FIXME: 2/24/17 Remove after test
+//                        System.out.println("distance <= 1 " + model.getCityIndex() + "coordinates lat-> " + model.getLatitude());
+                        duplicatesList.add(model);
+                    }
                 } else {
                     lat = model.getLatitude();
                     lon = model.getLongitude();
@@ -77,10 +95,12 @@ public class Utils {
         }
         // FIXME: 2/23/17 remove after test
 //        duplicatesList.removeAll(list);
+        new ScannerFileImpl().print(duplicatesList);
+        System.out.println(duplicatesList.size());
         return duplicatesList;
     }
 
-    public static List<Model> sortModelByRegCityLat(List<Model> list) {
+    public static List<Model> sortModelByRegCityLat(Collection<Model> list) {
         List<Model> sortedList = new LinkedList<>(list);
         Collections.sort(sortedList, Comparator.comparing(Model::getRegionCyrillicName)
                 .thenComparing(Model::getCityUkrName)
@@ -88,7 +108,7 @@ public class Utils {
         return sortedList;
     }
 
-    public static Double getDistanceBitween2Points(Double lat1, Double lon1, Double lat2, Double lon2) {
+    public static Double getDistanceBetween2Points(Double lat1, Double lon1, Double lat2, Double lon2) {
         final int R = 6371; // Radious of the earth
 
         Double latDistance = toRad(lat2 - lat1);
