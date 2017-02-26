@@ -31,7 +31,7 @@ Manual installation
 
   * Grant permissions to created user for our database 
   
-MySQL
+GOOGLE API
 -----------
  * Create and activate GoogleKeyAPI. Additional info: `https://support.google.com/googleapi/answer/6158857?hl=ru`
  * Go to https://console.developers.google.com
