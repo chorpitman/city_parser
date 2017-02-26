@@ -6,14 +6,16 @@ import net.sf.sprockets.google.Place;
 import net.sf.sprockets.google.Places;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.lunapps.sevice.impl.ScannerFileImpl.*;
+import static com.lunapps.sevice.impl.ScannerFileImpl.languageCheck;
 
+@Service("GooglePlacesSearch")
 public class GooglePlacesSearchImpl implements GooglePlacesSearch {
     private final static int RADIUS = 500;
 

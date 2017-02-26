@@ -10,11 +10,13 @@ import com.lunapps.model.Model;
 import com.lunapps.sevice.GoogleMapsSearch;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
+@Service("GoogleMapsSearch")
 public class GoogleMapsSearchImpl implements GoogleMapsSearch {
     private final static String GOOGLE_API_KEY = "AIzaSyDLBD0Lu4EU3JKChRLEli4K_ZQ7ZhLKMEg";
     private final static String LANGUAGE_QUERY = "en";

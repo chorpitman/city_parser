@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-@Service
+@Service("scanFileService")
 @Transactional
 public class ScannerFileImpl implements ScannerFile {
     //ARRAYS DELIMITERS

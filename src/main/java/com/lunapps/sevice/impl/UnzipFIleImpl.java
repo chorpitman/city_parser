@@ -1,11 +1,13 @@
 package com.lunapps.sevice.impl;
 
 import com.lunapps.sevice.UnzipFIle;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+@Service("unzipFileService")
 public class UnzipFIleImpl implements UnzipFIle {
 
     private static final int BUFFER_SIZE = 4096;

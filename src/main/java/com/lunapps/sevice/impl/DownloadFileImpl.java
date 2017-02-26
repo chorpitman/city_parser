@@ -1,6 +1,7 @@
 package com.lunapps.sevice.impl;
 
 import com.lunapps.sevice.DownloadFile;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,6 +10,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+@Service("downLoadFileService")
 public class DownloadFileImpl implements DownloadFile {
     private static final int BUFFER_SIZE = 4096;
 
