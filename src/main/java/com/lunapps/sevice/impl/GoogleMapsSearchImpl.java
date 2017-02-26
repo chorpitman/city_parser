@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
-@Service("GoogleMapsSearch")
+@Service()
 public class GoogleMapsSearchImpl implements GoogleMapsSearch {
     private final static String GOOGLE_API_KEY = "AIzaSyDLBD0Lu4EU3JKChRLEli4K_ZQ7ZhLKMEg";
     private final static String LANGUAGE_QUERY = "en";

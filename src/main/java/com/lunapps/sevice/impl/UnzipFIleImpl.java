@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-@Service("unzipFileService")
+@Service()
 public class UnzipFIleImpl implements UnzipFIle {
 
     private static final int BUFFER_SIZE = 4096;

@@ -13,8 +13,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-@Service("scanFileService")
-@Transactional
+@Service()
 public class ScannerFileImpl implements ScannerFile {
     //ARRAYS DELIMITERS
     private final static String TABULATION = "\\t";

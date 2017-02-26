@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-@Service("downLoadFileService")
+@Service()
 public class DownloadFileImpl implements DownloadFile {
     private static final int BUFFER_SIZE = 4096;
 
