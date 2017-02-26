@@ -3,9 +3,7 @@ package com.lunapps;
 import com.lunapps.configuration.AppConfig;
 import com.lunapps.model.Model;
 import com.lunapps.repository.ModelRepository;
-import com.lunapps.sevice.impl.GoogleMapsSearchImpl;
-import com.lunapps.sevice.impl.GooglePlacesSearchImpl;
-import com.lunapps.sevice.impl.ScannerFileImpl;
+import com.lunapps.sevice.impl.*;
 import com.lunapps.utils.Utils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -24,19 +22,21 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         long start = System.currentTimeMillis();
+        //GET SPRING CONTEXT
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         //DOWNLOAD FILE
-//        DownloadFile downloadFile = new DownloadFileImpl();
-//        downloadFile.downloadFile(DOWNLOAD_UKR_DB, DOWNLOAD_DIRECTORY);
-//        downloadFile.downloadFile(DOWNLOAD_ALTER_NAMES_DB, DOWNLOAD_DIRECTORY);
+        DownloadFileImpl downloadFile = context.getBean(DownloadFileImpl.class);
+        downloadFile.downloadFile(DOWNLOAD_UKR_DB, DOWNLOAD_DIRECTORY);
+        downloadFile.downloadFile(DOWNLOAD_ALTER_NAMES_DB, DOWNLOAD_DIRECTORY);
 
         //UNZIP FILE
-//        UnzipFIle unzipFIle = new UnzipFIleImpl();
-//        unzipFIle.unzip(ZIP_UKR_DB, UNZIP_DIRECTORY);
-//        unzipFIle.unzip(ZIP_ALTER_NAMES_DB, UNZIP_DIRECTORY);
+        UnzipFIleImpl unzipFile = context.getBean(UnzipFIleImpl.class);
+        unzipFile.unzip(ZIP_UKR_DB, UNZIP_DIRECTORY);
+        unzipFile.unzip(ZIP_ALTER_NAMES_DB, UNZIP_DIRECTORY);
 
         //PARSE FILE
-        ScannerFileImpl scannerfile = new ScannerFileImpl();
+        ScannerFileImpl scannerfile = context.getBean(ScannerFileImpl.class);
         Collection<Model> ukrModels = scannerfile.parseDbFiles(PARSE_UKR_DB, PARSE_ALTER_NAME_DB);
         System.out.println(ukrModels.size());
         System.out.println("non cyr -->" + Utils.countNonCyrillicModel(ukrModels));
@@ -51,12 +51,12 @@ public class Main {
         System.out.println("non cyr size " + Utils.countNonCyrillicModel(ukrModels));
 
         //GOOGLE PLACES API
-        GooglePlacesSearchImpl placesSearch = new GooglePlacesSearchImpl();
+        GooglePlacesSearchImpl placesSearch = context.getBean(GooglePlacesSearchImpl.class);
         Collection<Model> googleNearbySearch = placesSearch.nearbySearch(modelWithNonCyrCityName, "uk");
         System.out.println("googleNearbySearch noncyr size after nearby search ->" + Utils.countNonCyrillicModel(googleNearbySearch));
 
         //GOOGLE MAPS API
-        GoogleMapsSearchImpl googleMaps = new GoogleMapsSearchImpl();
+        GoogleMapsSearchImpl googleMaps = context.getBean(GoogleMapsSearchImpl.class);
         Collection<Model> geoDecodedModelList = googleMaps.searchCityNameByCoordinatesUsingGoogleMaps(googleNearbySearch);
         System.out.println("geoDecodedModelList count non cyr " + Utils.countNonCyrillicModel(geoDecodedModelList));
 
@@ -77,7 +77,6 @@ public class Main {
 
         //SPRING START
         //save model
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         ModelRepository modelRepository = context.getBean(ModelRepository.class);
         modelRepository.save(sortedUkrModel);
         System.out.println(sortedUkrModel.size());
