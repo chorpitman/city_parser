@@ -7,7 +7,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
 
 import static com.lunapps.config.utils.BaseTestAltModelHelper.getAlternativeModel;
 import static com.lunapps.config.utils.BaseTestModelHelper.getModel;
@@ -495,33 +497,33 @@ public class ScannerFileImplTest {
         //THEN
         assertNotNull(models);
         assertEquals(EXPECTED_SIZE, models.size());
-        assertEquals("ADM1",models.get(0).getFeatureCode());
-        assertEquals(703446,models.get(0).getCityIndex());
-        assertEquals("Kyiv Oblast",models.get(0).getInternationalName());
-        assertEquals("Кіеўская вобласць",models.get(0).getCityUkrName());
-        assertEquals(new Double(50.25),models.get(0).getLatitude());
-        assertEquals(new Double(30.5),models.get(0).getLongitude());
+        assertEquals("ADM1", models.get(0).getFeatureCode());
+        assertEquals(703446, models.get(0).getCityIndex());
+        assertEquals("Kyiv Oblast", models.get(0).getInternationalName());
+        assertEquals("Кіеўская вобласць", models.get(0).getCityUkrName());
+        assertEquals(new Double(50.25), models.get(0).getLatitude());
+        assertEquals(new Double(30.5), models.get(0).getLongitude());
 
-        assertEquals("PPLC",models.get(1).getFeatureCode());
-        assertEquals(703448,models.get(1).getCityIndex());
-        assertEquals("Kiev",models.get(1).getInternationalName());
-        assertEquals("Кꙑѥвъ",models.get(1).getCityUkrName());
-        assertEquals(new Double( 50.45466),models.get(1).getLatitude());
-        assertEquals(new Double(30.5238),models.get(1).getLongitude());
+        assertEquals("PPLC", models.get(1).getFeatureCode());
+        assertEquals(703448, models.get(1).getCityIndex());
+        assertEquals("Kiev", models.get(1).getInternationalName());
+        assertEquals("Кꙑѥвъ", models.get(1).getCityUkrName());
+        assertEquals(new Double(50.45466), models.get(1).getLatitude());
+        assertEquals(new Double(30.5238), models.get(1).getLongitude());
 
-        assertEquals("PPLA",models.get(2).getFeatureCode());
-        assertEquals(687700,models.get(2).getCityIndex());
-        assertEquals("Zaporizhia",models.get(2).getInternationalName());
-        assertEquals("Запоріжжя",models.get(2).getCityUkrName());
-        assertEquals(new Double( 47.82289),models.get(2).getLatitude());
-        assertEquals(new Double(35.19031),models.get(2).getLongitude());
+        assertEquals("PPLA", models.get(2).getFeatureCode());
+        assertEquals(687700, models.get(2).getCityIndex());
+        assertEquals("Zaporizhia", models.get(2).getInternationalName());
+        assertEquals("Запоріжжя", models.get(2).getCityUkrName());
+        assertEquals(new Double(47.82289), models.get(2).getLatitude());
+        assertEquals(new Double(35.19031), models.get(2).getLongitude());
 
-        assertEquals("PPL",models.get(3).getFeatureCode());
-        assertEquals(687703,models.get(3).getCityIndex());
-        assertEquals("Zapillya",models.get(3).getInternationalName());
-        assertEquals("Запілля",models.get(3).getCityUkrName());
-        assertEquals(new Double( 51.13277),models.get(3).getLatitude());
-        assertEquals(new Double(28.09011),models.get(3).getLongitude());
+        assertEquals("PPL", models.get(3).getFeatureCode());
+        assertEquals(687703, models.get(3).getCityIndex());
+        assertEquals("Zapillya", models.get(3).getInternationalName());
+        assertEquals("Запілля", models.get(3).getCityUkrName());
+        assertEquals(new Double(51.13277), models.get(3).getLatitude());
+        assertEquals(new Double(28.09011), models.get(3).getLongitude());
     }
 
     //UTILS METHODS
