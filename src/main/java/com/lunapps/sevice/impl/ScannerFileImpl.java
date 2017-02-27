@@ -7,7 +7,6 @@ import com.lunapps.sevice.ScannerFile;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -89,6 +88,24 @@ public class ScannerFileImpl implements ScannerFile {
         // TODO: 2/17/17 remove
         System.out.println(ukrRegionsList.size() + " ====================================");
 
+        //PARSE UKR DB
+        List<Model> ukrCitiesModels = parserFileToModel(ukrDbPath);
+
+        //SET INTO UKR REGIONS INTERNATIONAL AND CYRILLIC_NAME
+        setInterAndCyrRegion(ukrCitiesModels, ukrRegionsList);
+
+        //SET INTO UKR CITIES UKR CYRILLIC_NAME
+        setCityUkrName(ukrCitiesModels, optimizedAlternativeNamesList);
+
+        //SEARCH UKR NAME IN EXIST MODEL BY NON CYRILLIC == INTER == CYR NAME
+        findExistCyr(ukrCitiesModels);
+
+        return ukrCitiesModels;
+    }
+
+    public List<Model> parserFileToModel(String ukrDbPath) {
+        if (StringUtils.isEmpty(ukrDbPath)) throw new IllegalArgumentException("ukrDbPath can not be null or empty");
+
         Scanner scanner = getScanner(ukrDbPath);
 
         //PARSE UKR DB
@@ -120,16 +137,6 @@ public class ScannerFileImpl implements ScannerFile {
             }
         }
         scanner.close();
-
-        //SET INTO UKR REGIONS INTERNATIONAL AND CYRILLIC_NAME
-        setInterAndCyrRegion(ukrCitiesModels, ukrRegionsList);
-
-        //SET INTO UKR CITIES UKR CYRILLIC_NAME
-        setCityUkrName(ukrCitiesModels, optimizedAlternativeNamesList);
-
-        //SEARCH UKR NAME IN EXIST MODEL BY NON CYRILLIC == INTER == CYR NAME
-        findExistCyr(ukrCitiesModels);
-
         return ukrCitiesModels;
     }
 
