@@ -21,41 +21,11 @@ public class ScannerFileImplTestRegionsOfUkraine {
         scannerFile = new ScannerFileImpl();
     }
 
-    @Test
-    public void should_return_empty_list_of_the_Ukraine_areas() {
-        final int ACTUAL_SIZE = 0;
-        //GIVEN
-        final String FILE_PATH = "src/main/resources/dbtxt/UA_empty.txt";
-        //WHEN
-        List<RegionInfo> regionCodes = scannerFile.findRegions(FILE_PATH);
-        //THEN
-        assertEquals(regionCodes.size(), ACTUAL_SIZE);
-        assertNotNull(regionCodes);
-    }
-
-    @Test
-    public void should_return_one_name_of_the_Ukraine_areas() {
-        //GIVEN
-        final String FILE_PATH = "src/main/resources/dbtxt/UA_test=one_area.txt";
-        final String NAME = "Дніпропетровська область";
-        final String INT_NAME = "Dnipropetrovska Oblast'";
-        final String REGION_ID = "04";
-        final int ACTUAL_SIZE = 1;
-        final int CITY_INDEX = 709929;
-        //WHEN
-        List<RegionInfo> regionCodes = scannerFile.findRegions(FILE_PATH);
-        //THEN
-        assertEquals(regionCodes.size(), ACTUAL_SIZE);
-        assertEquals(regionCodes.get(0).getRegionCyrillicName(), NAME);
-        assertEquals(regionCodes.get(0).getRegionId(), REGION_ID);
-        assertEquals(regionCodes.get(0).getCityIndex(), CITY_INDEX);
-        assertEquals(regionCodes.get(0).getRegionInternationalName(), INT_NAME);
-    }
-
+    // FIXME: 2/27/17 maybe need this test
     @Test
     public void should_return_correct_ukr_name_of_the_Ukraine_areas() {
         //GIVEN
-        final String FILE_PATH = "src/main/resources/dbtxt/UA_test=Ukr_regions.txt";
+        final String FILE_PATH = "src/main/resources/dbtxt/UA.txt";
 
         final String ZHITOMIR = "Житомирська область";
         final String ZAPOR = "Запорізька область";
@@ -118,19 +88,6 @@ public class ScannerFileImplTestRegionsOfUkraine {
 //        assertEquals(KHARKIV, searchRegion(regionCodes, KHARKIV));
 
     }
-
-    @Test
-    public void experimentWithMatchers() {
-        final String text1 = "Київська область";
-        final String text2 = "Кіеўская вобласць";
-
-        String pattern = "йїі";
-        Pattern patternString = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = patternString.matcher(text1);
-        System.out.println(matcher.matches());
-
-    }
-
 
     @Test
     public void should_return_name_of_the_Ukraine_areas() {
