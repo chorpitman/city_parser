@@ -24,8 +24,7 @@ public class GooglePlacesSearchImpl implements GooglePlacesSearch {
         final String LANGUAGE = language;
         if (CollectionUtils.isEmpty(nonCyrList)) throw new IllegalArgumentException("nonCyrList can bot be null");
 
-//        final int QUERY_COUNT = nonCyrList.size();
-        final int QUERY_COUNT = 10;
+        final int QUERY_COUNT = nonCyrList.size();
         ArrayList<Model> nearbySearchedList = new ArrayList<>(nonCyrList);
 
         int countModelSet = 0;
