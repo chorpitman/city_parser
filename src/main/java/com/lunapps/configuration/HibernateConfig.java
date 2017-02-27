@@ -25,7 +25,7 @@ import java.util.Properties;
 @Configuration
 @EnableJpaRepositories("com.lunapps.repository")
 @EnableTransactionManagement
-@ComponentScan({"com.lunapps"})
+@ComponentScan({"com.lunapps.service"})
 @PropertySource(value = {"classpath:application.properties"})
 public class HibernateConfig {
 
