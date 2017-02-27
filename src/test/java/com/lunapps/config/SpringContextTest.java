@@ -53,6 +53,7 @@ public class SpringContextTest {
     @Test
     public void should_return_unzip() {
         assertThat(unzipFIle, instanceOf(UnzipFIleImpl.class));
+        System.out.println("hello test");
     }
 }
 
