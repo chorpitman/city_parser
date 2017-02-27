@@ -10,10 +10,9 @@ import org.junit.Test;
 import java.util.*;
 
 import static com.lunapps.config.utils.BaseTestAltModelHelper.getAlternativeModel;
-import static com.lunapps.config.utils.BaseTestAltModelHelper.makeDuplicate;
 import static com.lunapps.config.utils.BaseTestModelHelper.getModel;
 import static com.lunapps.config.utils.BaseTestRegionInfoModelHelper.getRegionInfoModel;
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 public class ScannerFileImplTest {
     private final static String PATH = "src/main/resources/dbtxt/UA.txt";
@@ -26,40 +25,29 @@ public class ScannerFileImplTest {
     private ScannerFileImpl scannerFile;
 
     @Before
-    public void setUp()  {
+    public void setUp() {
         scannerFile = new ScannerFileImpl();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_return_exception_scanner()   {
+    public void should_return_exception_scanner_getScanner() {
         //WHEN
         Scanner scanner = ScannerFileImpl.getScanner(EMPTY_PATH);
     }
 
     @Test
-    public void should_return_scanner()  {
+    public void should_return_scanner_getScanner() {
         //WHEN
         Scanner scanner = ScannerFileImpl.getScanner(PATH);
+
         //THEN
         assertNotNull(scanner);
-    }
 
-//    @Test
-//    public void print()  {
-//
-//    }
-
-    @Test// TODO: 2/17/17 impl test
-    public void parseDbFiles()  {
-        //GIVEN
-        //WHEN
         //THEN
-//        scannerFile.parseDbFiles();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void shoud_return_exception_for_empty_collection_setCityUkrName()   {
-        // TODO: 2/13/17 continue impl test
+    public void shoud_return_exception_for_empty_collection_setCityUkrName() {
         //GIVEN
         final int modelCityIndex = 11078435;
         final String modelCityUkrName = "Андріївка";
@@ -82,11 +70,13 @@ public class ScannerFileImplTest {
         ScannerFileImpl.setCityUkrName(Collections.singletonList(model), Collections.EMPTY_LIST);
         ScannerFileImpl.setCityUkrName(Collections.EMPTY_LIST, Collections.EMPTY_LIST);
         //THEN
+        assertNotNull(aUkrModel);
+        assertNotNull(model);
         fail("Method should throw IllegalArgumentException");
     }
 
     @Test
-    public void should_set_ukr_city_into_model_setCityUkrName()  {
+    public void should_set_ukr_city_into_model_setCityUkrName() {
         //GIVEN
         final int modelCityIndex = 11078435;
         final String modelCityUkrName = "Андріївка";
@@ -97,24 +87,25 @@ public class ScannerFileImplTest {
         final String modelRegionCyrName = "";
         final String modelRegionInterName = "";
         final String featureCode = "PPL";
-
         final String UKR_NAME = "Станція Славута Перша";
         final long GEO_NAME_ID = 11078435;
-        //GIVEN
+
         AlternativeModel aUkrModel = getAlternativeModel(GEO_NAME_ID, ISO_LANG, UKR_NAME);
         Model model = getModel(modelCityIndex, modelCityUkrName, modelCityInterName, modelLatitude, modelLongitude,
                 modelRegionId, modelRegionCyrName, modelRegionInterName, featureCode);
-        // TODO: 2/13/17 continue impl test
+
         //WHEN
         ScannerFileImpl.setCityUkrName(Collections.singletonList(model), Collections.singletonList(aUkrModel));
+
         //THEN
         assertNotNull(model);
+        assertNotNull(aUkrModel);
         assertNotSame(modelCityUkrName, model.getCityUkrName());
         assertEquals(UKR_NAME, model.getCityUkrName());
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_return_exception_for_empty_collection_setInterAndCyrRegion()  {
+    public void should_return_exception_for_empty_collection_setInterAndCyrRegion() {
         //GIVEN
         final int GEO_CITY_INDEX = 8458701;
         final String REGION_ID = "01";
@@ -124,10 +115,12 @@ public class ScannerFileImplTest {
         RegionInfo regionInfo = getRegionInfoModel(REGION_ID, GEO_CITY_INDEX, REG_CYR_NAME, REG_INT_NAME, FEATURE_CODE);
         Model model = getModel();
         model.setRegionCyrillicName(REG_CYR_NAME);
+
         //WHEN
         ScannerFileImpl.setInterAndCyrRegion(Collections.EMPTY_LIST, Collections.singletonList(regionInfo));
         ScannerFileImpl.setInterAndCyrRegion(Collections.EMPTY_LIST, Collections.EMPTY_LIST);
         ScannerFileImpl.setInterAndCyrRegion(Collections.singletonList(model), Collections.EMPTY_LIST);
+
         //THEN
         assertNotNull(model);
         assertNotNull(regionInfo);
@@ -135,7 +128,7 @@ public class ScannerFileImplTest {
     }
 
     @Test
-    public void setInterAndCyrRegion()  {
+    public void should_set_inter_and_cyr_region_setInterAndCyrRegion() {
         //GIVEN
         final int modelCityIndex = 11078435;
         final String modelCityUkrName = "Андріївка";
@@ -146,28 +139,31 @@ public class ScannerFileImplTest {
         final String modelRegionCyrName = "";
         final String modelRegionInterName = "";
         final String featureCode = "PPL";
-
         final int GEO_CITY_INDEX = 8458701;
-        final String REGION_ID = "04";
+        final String REG_ID = "04";
         final String REG_CYR_NAME = "Одеська область";
         final String REG_INT_NAME = "Odes'ka Oblast'";
-        final String FEATURE_CODE = "ADM1";
+        final String REG_FEATURE_CODE = "ADM1";
 
-        RegionInfo regionInfo = getRegionInfoModel(REGION_ID, GEO_CITY_INDEX, REG_CYR_NAME, REG_INT_NAME, FEATURE_CODE);
+        RegionInfo regionInfo = getRegionInfoModel(REG_ID, GEO_CITY_INDEX, REG_CYR_NAME, REG_INT_NAME, REG_FEATURE_CODE);
         Model model = getModel(modelCityIndex, modelCityUkrName, modelCityInterName, modelLatitude, modelLongitude,
                 modelRegionId, modelRegionCyrName, modelRegionInterName, featureCode);
 
         assertNotNull(regionInfo);
         assertNotNull(model);
+        assertNotSame(REG_INT_NAME, model.getRegionInternationalName());
+        assertNotSame(REG_CYR_NAME, model.getRegionCyrillicName());
+
         //WHEN
-        ScannerFileImpl.setInterAndCyrRegion(Collections.singletonList(model), Collections.singletonList(regionInfo));
+        scannerFile.setInterAndCyrRegion(Collections.singletonList(model), Collections.singletonList(regionInfo));
+
         //THEN
         assertEquals(REG_CYR_NAME, model.getRegionCyrillicName());
         assertEquals(REG_INT_NAME, model.getRegionInternationalName());
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_return_exception_for_empty_collection_setCyrNameInRegion()  {
+    public void should_return_exception_for_empty_collection_setCyrNameIntoRegions() {
         //GIVEN
         final int GEO_CITY_INDEX = 8458701;
         final String REGION_ID = "01";
@@ -176,16 +172,20 @@ public class ScannerFileImplTest {
         final String FEATURE_CODE = "ADM1";
         AlternativeModel aModel = getAlternativeModel(GEO_CITY_INDEX, ISO_LANG, CYR_NAME);
         RegionInfo regionInfo = getRegionInfoModel(REGION_ID, GEO_CITY_INDEX, REG_CYR_NAME, REG_INT_NAME, FEATURE_CODE);
+
         //WHEN
         scannerFile.setCyrNameIntoRegions(Collections.singletonList(aModel), Collections.EMPTY_LIST);
         scannerFile.setCyrNameIntoRegions(Collections.EMPTY_LIST, Collections.singletonList(regionInfo));
         scannerFile.setCyrNameIntoRegions(Collections.EMPTY_LIST, Collections.EMPTY_LIST);
+
         //THEN
+        assertNotNull(regionInfo);
+        assertNotNull(aModel);
         fail("Method should throw IllegalArgumentException");
     }
 
     @Test
-    public void should_return_region_with_new_cyr_name_region_setCyrNameInRegions()  {
+    public void should_return_region_with_new_cyr_name_region_setCyrNameIntoRegions() {
         //GIVEN
         final int GEO_CITY_INDEX = 8458701;
         final String REGION_ID = "01";
@@ -195,12 +195,13 @@ public class ScannerFileImplTest {
 
         AlternativeModel aModel = getAlternativeModel(GEO_CITY_INDEX, ISO_LANG, CYR_NAME);
         RegionInfo regionInfo = getRegionInfoModel(REGION_ID, GEO_CITY_INDEX, REG_CYR_NAME, REG_INT_NAME, FEATURE_CODE);
-        assertNotNull(regionInfo);
         assertNotNull(aModel);
+        assertNotNull(regionInfo);
+
         //WHEN
         scannerFile.setCyrNameIntoRegions(Collections.singletonList(aModel), Collections.singletonList(regionInfo));
+
         //THEN
-        assertNotNull(regionInfo);
         assertNotSame(REG_CYR_NAME, regionInfo.getRegionCyrillicName());
         assertEquals(CYR_NAME, regionInfo.getRegionCyrillicName());
         assertEquals(REGION_ID, regionInfo.getRegionId());
@@ -209,63 +210,92 @@ public class ScannerFileImplTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_return_exception_for_empty_path_findAlternativeRegions()  {
+    public void should_return_exception_for_empty_path_findAlternativeRegions() {
         //GIVEN
+
         //WHEN
-        ScannerFileImpl.findAlternativeRegions(EMPTY_PATH);
+        scannerFile.findAlternativeRegions(EMPTY_PATH);
+
         //THEN
         fail("Method should throw IllegalArgumentException");
     }
 
     @Test
-    public void should_return_alternativeRegions()  {
+    public void should_return_alternativeRegions_findAlternativeRegions() {
         //GIVEN
         final int EXPECTED_SIZE = 7;
         final int EXPECTED_MATCH_FOR_468196 = 2;
         final int EXPECTED_MATCH_FOR_471101 = 1;
         final int EXPECTED_MATCH_FOR_492094 = 1;
         final int EXPECTED_MATCH_FOR_8458701 = 3;
-        final String ALT_DB_PATH = "src/main/resources/dbtxt/alternativeNamesTest.txt";
+        final String ALT_DB_PATH = "src/main/resources/dbtxt/alt_names/alternativeNamesTest.txt";
         final String EXPECTED_CITY_UKR_NAME = "Катеринівка";
         final String EXPECTED_CITY_UKR_NAME1 = "Всеволожськ";
         final String EXPECTED_CITY_UKR_NAME2 = "Слов'янськ на Кубані";
         final String EXPECTED_CITY_UKR_NAME3 = "Станція Славута Перша";
         final String EXPECTED_CITY_UKR_NAME4 = "Станція Славута I";
         final String EXPECTED_CITY_UKR_NAME5 = "Славута I";
+
         //WHEN
         List<AlternativeModel> aModelList = ScannerFileImpl.findAlternativeRegions(ALT_DB_PATH);
+
         //THEN
         assertNotNull(aModelList);
         assertEquals(aModelList.size(), EXPECTED_SIZE);
-        assertEquals(aModelList.get(0).getCyrillicName(), EXPECTED_CITY_UKR_NAME);
-        assertEquals(aModelList.get(1).getCyrillicName(), EXPECTED_CITY_UKR_NAME);
-        assertEquals(aModelList.get(2).getCyrillicName(), EXPECTED_CITY_UKR_NAME1);
-        assertEquals(aModelList.get(3).getCyrillicName(), EXPECTED_CITY_UKR_NAME2);
-        assertEquals(aModelList.get(4).getCyrillicName(), EXPECTED_CITY_UKR_NAME3);
-        assertEquals(aModelList.get(5).getCyrillicName(), EXPECTED_CITY_UKR_NAME4);
-        assertEquals(aModelList.get(6).getCyrillicName(), EXPECTED_CITY_UKR_NAME5);
-        assertEquals(count(aModelList, aModelList.get(0).getGeoNameId()), EXPECTED_MATCH_FOR_468196);
-        assertEquals(count(aModelList, aModelList.get(2).getGeoNameId()), EXPECTED_MATCH_FOR_471101);
-        assertEquals(count(aModelList, aModelList.get(3).getGeoNameId()), EXPECTED_MATCH_FOR_492094);
-        assertEquals(count(aModelList, aModelList.get(4).getGeoNameId()), EXPECTED_MATCH_FOR_8458701);
+        assertEquals(EXPECTED_CITY_UKR_NAME, aModelList.get(0).getCyrillicName());
+        assertEquals(EXPECTED_CITY_UKR_NAME, aModelList.get(1).getCyrillicName());
+        assertEquals(EXPECTED_CITY_UKR_NAME1, aModelList.get(2).getCyrillicName());
+        assertEquals(EXPECTED_CITY_UKR_NAME2, aModelList.get(3).getCyrillicName());
+        assertEquals(EXPECTED_CITY_UKR_NAME3, aModelList.get(4).getCyrillicName());
+        assertEquals(EXPECTED_CITY_UKR_NAME4, aModelList.get(5).getCyrillicName());
+        assertEquals(EXPECTED_CITY_UKR_NAME5, aModelList.get(6).getCyrillicName());
+        assertEquals(EXPECTED_MATCH_FOR_468196, count(aModelList, aModelList.get(0).getGeoNameId()));
+        assertEquals(EXPECTED_MATCH_FOR_471101, count(aModelList, aModelList.get(2).getGeoNameId()));
+        assertEquals(EXPECTED_MATCH_FOR_492094, count(aModelList, aModelList.get(3).getGeoNameId()));
+        assertEquals(EXPECTED_MATCH_FOR_8458701, count(aModelList, aModelList.get(4).getGeoNameId()));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_return_exception_if_path_empty_findRegions()   {
+    public void should_return_exception_if_path_empty_findRegions() {
         //GIVEN
+
         //WHEN
-        List<RegionInfo> foundRegions = scannerFile.findRegions(EMPTY_PATH);
+        scannerFile.findRegions(EMPTY_PATH);
+
         //THEN
         fail("Method should throw IllegalArgumentException");
     }
 
     @Test
-    public void should_return_regions_with_feature_code_ADM1_findRegions()  {
+    public void should_return_one_region_with_feature_code_ADM1_findRegions() {
+        //GIVEN
+        final String FILE_PATH_ONE_REGION = "src/main/resources/dbtxt/find_regions/one_adm1.txt";
+        final String CYR_NAME = "Дніпропетровська область";
+        final String INT_NAME = "Dnipropetrovska Oblast'";
+        final String REGION_ID = "04";
+        final int ACTUAL_SIZE = 1;
+        final int CITY_INDEX = 709929;
+
+        //WHEN
+        List<RegionInfo> regionCodes = scannerFile.findRegions(FILE_PATH_ONE_REGION);
+
+        //THEN
+        assertEquals(ACTUAL_SIZE, regionCodes.size());
+        assertEquals(CYR_NAME, regionCodes.get(0).getRegionCyrillicName());
+        assertEquals(INT_NAME, regionCodes.get(0).getRegionInternationalName());
+        assertEquals(REGION_ID, regionCodes.get(0).getRegionId());
+        assertEquals(CITY_INDEX, regionCodes.get(0).getCityIndex());
+    }
+
+    @Test
+    public void should_return_regions_with_feature_code_ADM1_findRegions() {
         //GIVEN
         final int EXPECTED_REGIONS_SIZE = 27;
         final String EXPECTED_FEATURE_CODE = "ADM1";
+
         //WHEN
         List<RegionInfo> foundRegions = scannerFile.findRegions(PATH);
+
         //THEN
         assertNotNull(foundRegions);
         assertEquals(EXPECTED_REGIONS_SIZE, foundRegions.size());
@@ -352,17 +382,19 @@ public class ScannerFileImplTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_return_exception_if_string_empty_language_check()   {
+    public void should_return_exception_if_string_empty_languageCheck() {
         //GIVEN
         final String emptyString = "";
+
         //WHEN
-        ScannerFileImpl.languageCheck(emptyString);
+        scannerFile.languageCheck(emptyString);
+
         //THEN
         fail("Method should throw IllegalArgumentException");
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_return_exception_if_string_null_language_check()   {
+    public void should_return_exception_if_string_null_languageCheck() {
         //GIVEN
         final String nullString = null;
         //WHEN
@@ -372,102 +404,124 @@ public class ScannerFileImplTest {
     }
 
     @Test
-    public void should_return_is_true_after_string_language_check()  {
+    public void should_return_is_true_after_string_languageCheck() {
         //GIVEN
+
         //WHEN
-        boolean cyrName = ScannerFileImpl.languageCheck(CYR_NAME);
-        boolean latinName = ScannerFileImpl.languageCheck(LATIN_NAME);
+        boolean cyrName = scannerFile.languageCheck(CYR_NAME);
+        boolean latinName1 = scannerFile.languageCheck(LATIN_NAME);
+        boolean latinName2 = scannerFile.languageCheck(NON_CYRILLIC);
+        boolean latinName3 = scannerFile.languageCheck(ISO_LANG);
+
         //THEN
         assertNotNull(cyrName);
-        assertNotNull(latinName);
-        assertNotSame(cyrName, latinName);
+        assertNotNull(latinName1);
+        assertNotNull(latinName2);
+        assertNotNull(latinName3);
         assertTrue(cyrName);
-        assertNotSame(true, latinName);
+        assertFalse(latinName1);
+        assertFalse(latinName2);
+        assertFalse(latinName3);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_return_exception_for_empty_array_languageCheck()   {
+    public void should_return_exception_for_empty_array_languageCheck() {
         //GIVEN
         final String[] emptyArray = {};
+
         //WHEN
-        String checkedWord = ScannerFileImpl.languageCheck(emptyArray);
+        scannerFile.languageCheck(emptyArray);
+
         //THEN
         fail("Method should throw IllegalArgumentException");
     }
 
     @Test
-    public void should_return_first_cyrillic_word_or_non_cyr_from_array_after_language_check()  {
+    public void should_return_first_cyrillic_word_or_non_cyrillic_languageCheck() {
         //GIVEN
         final String[] wordsArray = {LATIN_NAME, CYR_NAME};
         final String[] latinWord = {LATIN_NAME};
         final String[] emptyString = {""};
+
         //WHEN
-        String checkedWord = ScannerFileImpl.languageCheck(wordsArray);
-        String checkedLatinWord = ScannerFileImpl.languageCheck(latinWord);
-        String checkedEmptyString = ScannerFileImpl.languageCheck(emptyString);
+        String checkedWord = scannerFile.languageCheck(wordsArray);
+        String checkedLatinWord = scannerFile.languageCheck(latinWord);
+        String checkedEmptyString = scannerFile.languageCheck(emptyString);
+
         //THEN
         assertNotNull(checkedWord);
-        assertEquals(checkedWord, CYR_NAME);
+        assertEquals(CYR_NAME, checkedWord);
 
         assertNotNull(checkedLatinWord);
-        assertEquals(checkedLatinWord, NON_CYRILLIC);
+        assertEquals(NON_CYRILLIC, checkedLatinWord);
 
         assertNotNull(checkedEmptyString);
         assertEquals(NON_CYRILLIC, checkedEmptyString);
     }
 
-    @Test
-    public void should_return_optimizedAlternativeNamesList()  {
-        final String UKR_NAME = "Станція Славута Перша";
-        final String UKR_NAME1 = "Зупиночний Пункт Нове Депо";
-        final String NON_CYR = "non cyrillic";
-        final long GEO_NAME_ID = 8458701;
-        final long GEO_NAME_ID1 = 859659;
-        final int DUPLICATE_COUNT = 5;
-        final int DUPLICATE_COUNT1 = 3;
-        final int EXPECTED_SIZE = 1;
-
+    @Test(expected = IllegalArgumentException.class)
+    public void should_return_exception_getOptimizedAlternativeNamesList() {
         //GIVEN
-        AlternativeModel aUkrModel = getAlternativeModel(GEO_NAME_ID, ISO_LANG, UKR_NAME);
-        List<AlternativeModel> aUkrModelsList = makeDuplicate(aUkrModel, DUPLICATE_COUNT);
-        AlternativeModel aNonUkrModel = getAlternativeModel(GEO_NAME_ID, ISO_LANG, NON_CYR);
-        List<AlternativeModel> aNonUkrModelsList = makeDuplicate(aNonUkrModel, DUPLICATE_COUNT);
 
-        AlternativeModel aUkrModel1 = getAlternativeModel(GEO_NAME_ID1, ISO_LANG, UKR_NAME1);
-        List<AlternativeModel> aUkrModelsList1 = makeDuplicate(aUkrModel1, DUPLICATE_COUNT1);
-        AlternativeModel aNonUkrModel1 = getAlternativeModel(GEO_NAME_ID1, ISO_LANG, NON_CYR);
-        List<AlternativeModel> aNonUkrModelsList1 = makeDuplicate(aNonUkrModel1, DUPLICATE_COUNT);
-
-        AlternativeModel aUkrModel2 = getAlternativeModel(GEO_NAME_ID, ISO_LANG, UKR_NAME);
-        AlternativeModel aUkrModel3 = getAlternativeModel(GEO_NAME_ID1, ISO_LANG, UKR_NAME1);
-
-        aUkrModelsList.addAll(aNonUkrModelsList);
-        aUkrModelsList1.addAll(aNonUkrModelsList1);
-        List<AlternativeModel> aModelList3 = Arrays.asList(aNonUkrModel, aUkrModel2, aUkrModel2, aUkrModel3, aNonUkrModel1);
         //WHEN
-        Collection<AlternativeModel> aOptimizedList = ScannerFileImpl.getOptimizedAlternativeNamesList(aUkrModelsList);
-        Collection<AlternativeModel> aOptimizedList1 = ScannerFileImpl.getOptimizedAlternativeNamesList(aUkrModelsList1);
-        Collection<AlternativeModel> aOptimizedList2 = ScannerFileImpl.getOptimizedAlternativeNamesList(aModelList3);
+        scannerFile.getOptimizedAlternativeNamesList(Collections.EMPTY_LIST);
+
         //THEN
-        assertNotNull(aUkrModelsList);
-        assertNotNull(aUkrModelsList1);
-        assertNotNull(aModelList3);
-        assertNotSame(aUkrModelsList, aUkrModelsList1);
-        assertNotSame(aUkrModelsList, aModelList3);
-        assertNotSame(aUkrModelsList1, aModelList3);
-        assertEquals(DUPLICATE_COUNT + DUPLICATE_COUNT, aUkrModelsList.size());
-        assertEquals(DUPLICATE_COUNT1 + DUPLICATE_COUNT, aUkrModelsList1.size());
-        assertEquals(DUPLICATE_COUNT, aModelList3.size());
-        assertNotNull(aOptimizedList);
-        assertNotNull(aOptimizedList1);
-        assertNotNull(aOptimizedList2);
-        assertEquals(EXPECTED_SIZE, aOptimizedList.size());
-        assertEquals(EXPECTED_SIZE, aOptimizedList1.size());
-        assertEquals(EXPECTED_SIZE + EXPECTED_SIZE, aOptimizedList2.size());
-        assertEquals(UKR_NAME, new ArrayList<>(aOptimizedList).get(0).getCyrillicName());
-        assertEquals(UKR_NAME1, new ArrayList<>(aOptimizedList1).get(0).getCyrillicName());
-        assertEquals(UKR_NAME, new ArrayList<>(aOptimizedList2).get(0).getCyrillicName());
-        assertEquals(UKR_NAME1, new ArrayList<>(aOptimizedList2).get(1).getCyrillicName());
+        fail("Method should throw IllegalArgumentException");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_return_exception_parserFileToModel() {
+        //GIVEN
+        final String EMPTY_STRING = "";
+        final String NULL_STRING = null;
+
+        //WHEN
+        scannerFile.parserFileToModel(EMPTY_STRING);
+        scannerFile.parserFileToModel(NULL_STRING);
+
+        //THEN
+        fail("Method should throw IllegalArgumentException");
+    }
+
+    @Test()
+    public void should_return_model_from_txt_file_parserFileToModel() {
+        //GIVEN
+        final int EXPECTED_SIZE = 4;
+        final String FILE_PATH_ONE_REGION = "src/main/resources/dbtxt/parse_file/parse.txt";
+
+        //WHEN
+        List<Model> models = scannerFile.parserFileToModel(FILE_PATH_ONE_REGION);
+        //THEN
+        assertNotNull(models);
+        assertEquals(EXPECTED_SIZE, models.size());
+        assertEquals("ADM1",models.get(0).getFeatureCode());
+        assertEquals(703446,models.get(0).getCityIndex());
+        assertEquals("Kyiv Oblast",models.get(0).getInternationalName());
+        assertEquals("Кіеўская вобласць",models.get(0).getCityUkrName());
+        assertEquals(new Double(50.25),models.get(0).getLatitude());
+        assertEquals(new Double(30.5),models.get(0).getLongitude());
+
+        assertEquals("PPLC",models.get(1).getFeatureCode());
+        assertEquals(703448,models.get(1).getCityIndex());
+        assertEquals("Kiev",models.get(1).getInternationalName());
+        assertEquals("Кꙑѥвъ",models.get(1).getCityUkrName());
+        assertEquals(new Double( 50.45466),models.get(1).getLatitude());
+        assertEquals(new Double(30.5238),models.get(1).getLongitude());
+
+        assertEquals("PPLA",models.get(2).getFeatureCode());
+        assertEquals(687700,models.get(2).getCityIndex());
+        assertEquals("Zaporizhia",models.get(2).getInternationalName());
+        assertEquals("Запоріжжя",models.get(2).getCityUkrName());
+        assertEquals(new Double( 47.82289),models.get(2).getLatitude());
+        assertEquals(new Double(35.19031),models.get(2).getLongitude());
+
+        assertEquals("PPL",models.get(3).getFeatureCode());
+        assertEquals(687703,models.get(3).getCityIndex());
+        assertEquals("Zapillya",models.get(3).getInternationalName());
+        assertEquals("Запілля",models.get(3).getCityUkrName());
+        assertEquals(new Double( 51.13277),models.get(3).getLatitude());
+        assertEquals(new Double(28.09011),models.get(3).getLongitude());
     }
 
     //UTILS METHODS
